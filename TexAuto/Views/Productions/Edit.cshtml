@@ -1,0 +1,114 @@
+﻿@model TexAuto.Models.Domain.Entries.Production
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h1>Edit</h1>
+
+<h4>Production</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Id" />
+            <div class="form-group">
+                <label asp-for="Bale" class="control-label"></label>
+                <input asp-for="Bale" class="form-control" />
+                <span asp-validation-for="Bale" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Lap" class="control-label"></label>
+                <input asp-for="Lap" class="form-control" />
+                <span asp-validation-for="Lap" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="DelHank" class="control-label"></label>
+                <input asp-for="DelHank" class="form-control" />
+                <span asp-validation-for="DelHank" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ProductionEfficiency" class="control-label"></label>
+                <input asp-for="ProductionEfficiency" class="form-control" />
+                <span asp-validation-for="ProductionEfficiency" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Mixing" class="control-label"></label>
+                <input asp-for="Mixing" class="form-control" />
+                <span asp-validation-for="Mixing" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="TotalProduction" class="control-label"></label>
+                <input asp-for="TotalProduction" class="form-control" />
+                <span asp-validation-for="TotalProduction" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="RunTime" class="control-label"></label>
+                <input asp-for="RunTime" class="form-control" />
+                <span asp-validation-for="RunTime" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="IdleTime" class="control-label"></label>
+                <input asp-for="IdleTime" class="form-control" />
+                <span asp-validation-for="IdleTime" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="NoOfDoffs" class="control-label"></label>
+                <input asp-for="NoOfDoffs" class="form-control" />
+                <span asp-validation-for="NoOfDoffs" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ConeWeight" class="control-label"></label>
+                <input asp-for="ConeWeight" class="form-control" />
+                <span asp-validation-for="ConeWeight" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="OpeningKgs" class="control-label"></label>
+                <input asp-for="OpeningKgs" class="form-control" />
+                <span asp-validation-for="OpeningKgs" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Closing" class="control-label"></label>
+                <input asp-for="Closing" class="form-control" />
+                <span asp-validation-for="Closing" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="SliverBreaks" class="control-label"></label>
+                <input asp-for="SliverBreaks" class="form-control" />
+                <span asp-validation-for="SliverBreaks" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ProductIn" class="control-label"></label>
+                <input asp-for="ProductIn" class="form-control" />
+                <span asp-validation-for="ProductIn" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ProductOut" class="control-label"></label>
+                <input asp-for="ProductOut" class="form-control" />
+                <span asp-validation-for="ProductOut" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ExpectedProduction" class="control-label"></label>
+                <input asp-for="ExpectedProduction" class="form-control" />
+                <span asp-validation-for="ExpectedProduction" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ProductionDrop" class="control-label"></label>
+                <input asp-for="ProductionDrop" class="form-control" />
+                <span asp-validation-for="ProductionDrop" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

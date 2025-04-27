@@ -8,14 +8,18 @@
 
         public int TotalShifts { get; set; }
 
-        public DateTime StartTime1 { get; set; }
-        public DateTime EndTime1 { get; set; }
-        public DateTime StartTime2 { get; set; }
-        public DateTime EndTime2 { get; set; }
-        public DateTime StartTime3 { get; set; }
-        public DateTime EndTime3 { get; set; }
-        public DateTime StartTime4 { get; set; }
-        public DateTime EndTime4 { get; set; }
+        public TimeOnly? StartTime1 { get; set; } // Default to 08:00 AM
+        public TimeOnly? EndTime1 { get; set; }     // Default to 04:00 PM
+
+        public TimeOnly? StartTime2 { get; set; }     // Default to 09:00 AM
+        public TimeOnly? EndTime2 { get; set; }       // Default to 05:00 PM
+
+        public TimeOnly? StartTime3 { get; set; }   // Default to 10:00 AM
+        public TimeOnly? EndTime3 { get; set; }     // Default to 06:00 PM
+
+        public TimeOnly? StartTime4 { get; set; }  // Default to 11:00 AM
+        public TimeOnly? EndTime4 { get; set; }     // Default to 07:00 PM
+
 
     }
 }

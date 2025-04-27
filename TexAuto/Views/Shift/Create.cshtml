@@ -17,51 +17,70 @@
                 <input asp-for="EffectiveDate" class="form-control" />
                 <span asp-validation-for="EffectiveDate" class="text-danger"></span>
             </div>
+
             <div class="form-group">
                 <label asp-for="TotalShifts" class="control-label"></label>
-                <input asp-for="TotalShifts" class="form-control" />
+                <input asp-for="TotalShifts" id="totalShifts" class="form-control" />
                 <span asp-validation-for="TotalShifts" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="StartTime1" class="control-label"></label>
-                <input asp-for="StartTime1" class="form-control" />
-                <span asp-validation-for="StartTime1" class="text-danger"></span>
+
+            <!-- StartTime1 and EndTime1 fields -->
+            <div class="shift-group shift-1">
+                <div class="form-group">
+                    <label asp-for="StartTime1" class="control-label"></label>
+                    <input asp-for="StartTime1" type="time" class="form-control" />
+                    <span asp-validation-for="StartTime1" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="EndTime1" class="control-label"></label>
+                    <input asp-for="EndTime1" type="time" class="form-control" />
+                    <span asp-validation-for="EndTime1" class="text-danger"></span>
+                </div>
             </div>
-            <div class="form-group">
-                <label asp-for="EndTime1" class="control-label"></label>
-                <input asp-for="EndTime1" class="form-control" />
-                <span asp-validation-for="EndTime1" class="text-danger"></span>
+
+            <!-- StartTime2 and EndTime2 fields -->
+            <div class="shift-group shift-2">
+                <div class="form-group">
+                    <label asp-for="StartTime2" class="control-label"></label>
+                    <input asp-for="StartTime2" type="time" class="form-control" />
+                    <span asp-validation-for="StartTime2" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="EndTime2" class="control-label"></label>
+                    <input asp-for="EndTime2" type="time" class="form-control" />
+                    <span asp-validation-for="EndTime2" class="text-danger"></span>
+                </div>
             </div>
-            <div class="form-group">
-                <label asp-for="StartTime2" class="control-label"></label>
-                <input asp-for="StartTime2" class="form-control" />
-                <span asp-validation-for="StartTime2" class="text-danger"></span>
+
+            <!-- StartTime3 and EndTime3 fields -->
+            <div class="shift-group shift-3">
+                <div class="form-group">
+                    <label asp-for="StartTime3" class="control-label"></label>
+                    <input asp-for="StartTime3" type="time" class="form-control" />
+                    <span asp-validation-for="StartTime3" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="EndTime3" class="control-label"></label>
+                    <input asp-for="EndTime3" type="time" class="form-control" />
+                    <span asp-validation-for="EndTime3" class="text-danger"></span>
+                </div>
             </div>
-            <div class="form-group">
-                <label asp-for="EndTime2" class="control-label"></label>
-                <input asp-for="EndTime2" class="form-control" />
-                <span asp-validation-for="EndTime2" class="text-danger"></span>
+
+            <!-- StartTime4 and EndTime4 fields -->
+            <div class="shift-group shift-4">
+                <div class="form-group">
+                    <label asp-for="StartTime4" class="control-label"></label>
+                    <input asp-for="StartTime4" type="time" class="form-control" />
+                    <span asp-validation-for="StartTime4" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="EndTime4" class="control-label"></label>
+                    <input asp-for="EndTime4" type="time" class="form-control" />
+                    <span asp-validation-for="EndTime4" class="text-danger"></span>
+                </div>
             </div>
-            <div class="form-group">
-                <label asp-for="StartTime3" class="control-label"></label>
-                <input asp-for="StartTime3" class="form-control" />
-                <span asp-validation-for="StartTime3" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="EndTime3" class="control-label"></label>
-                <input asp-for="EndTime3" class="form-control" />
-                <span asp-validation-for="EndTime3" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="StartTime4" class="control-label"></label>
-                <input asp-for="StartTime4" class="form-control" />
-                <span asp-validation-for="StartTime4" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="EndTime4" class="control-label"></label>
-                <input asp-for="EndTime4" class="form-control" />
-                <span asp-validation-for="EndTime4" class="text-danger"></span>
-            </div>
+
+            <br />
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
             </div>
@@ -74,5 +93,37 @@
 </div>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+    <script>
+        function updateShiftVisibility() {
+            var totalShifts = parseInt(document.getElementById("totalShifts").value) || 0;
+
+            // Hide all shift groups initially
+            document.querySelectorAll('.shift-group').forEach(function(group) {
+                group.style.display = 'none';
+            });
+
+            // Show only required shift groups
+            for (var i = 1; i <= totalShifts; i++) {
+                var group = document.querySelector('.shift-' + i);
+                if (group) {
+                    group.style.display = 'block';
+                }
+            }
+        }
+
+        // Call the function on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            updateShiftVisibility();
+        });
+
+        // Call the function when TotalShifts changes
+        document.getElementById('totalShifts').addEventListener('input', function() {
+            updateShiftVisibility();
+        });
+    </script>
 }
+
