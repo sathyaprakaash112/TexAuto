@@ -1,4 +1,9 @@
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+using TexAuto.Data;
 var builder = WebApplication.CreateBuilder(args);
+builder.Services.AddDbContext<TexAutoContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("TexAutoContext") ?? throw new InvalidOperationException("Connection string 'TexAutoContext' not found.")));
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
