@@ -22,7 +22,8 @@ namespace TexAuto.Controllers
         // GET: Productions
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Productions.ToListAsync());
+            var texAutoContext = _context.Productions.Include(p => p.Shift);
+            return View(await texAutoContext.ToListAsync());
         }
 
         // GET: Productions/Details/5
@@ -34,6 +35,7 @@ namespace TexAuto.Controllers
             }
 
             var production = await _context.Productions
+                .Include(p => p.Shift)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (production == null)
             {
@@ -46,15 +48,17 @@ namespace TexAuto.Controllers
         // GET: Productions/Create
         public IActionResult Create()
         {
+            ViewData["ShiftList"] = new List<SelectListItem>();
+            ViewData["Departments"] = new SelectList(_context.Departments, "Id", "Name");
+            ViewData["Machines"] = new SelectList(_context.Machines, "Id", "Name");
+            ViewData["Products"] = new SelectList(_context.Products, "Id", "Name");
+
             return View();
         }
 
-        // POST: Productions/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Bale,Lap,DelHank,ProductionEfficiency,Mixing,TotalProduction,RunTime,IdleTime,NoOfDoffs,ConeWeight,OpeningKgs,Closing,SliverBreaks,ProductIn,ProductOut,ExpectedProduction,ProductionDrop")] Production production)
+        public async Task<IActionResult> Create([Bind("Id,ProductionDate,ShiftId,DepartmentId,MachineId,ShiftDetails,ShiftTime,RunTime,IdleTime,DelHank,TotalProduction,ProductionEfficiency,Bale,Lap,Mixing,NoOfDoffs,ConeWeight,OpeningKgs,Closing,SliverBreaks,ProductInId,ProductOutId,ExpectedProduction,ProductionDrop")] Production production)
         {
             if (ModelState.IsValid)
             {
@@ -62,31 +66,61 @@ namespace TexAuto.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+
+            // Reload dropdowns on failure
+            ViewData["ShiftList"] = new List<SelectListItem>();
+            ViewData["Departments"] = new SelectList(_context.Departments, "Id", "Name", production.DepartmentId);
+            ViewData["Machines"] = new SelectList(_context.Machines, "Id", "Name", production.MachineId);
+            ViewData["Products"] = new SelectList(_context.Products, "Id", "Name");
+
             return View(production);
         }
+
+
 
         // GET: Productions/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            if (id == null) return NotFound();
 
-            var production = await _context.Productions.FindAsync(id);
-            if (production == null)
+            var production = await _context.Productions
+                .Include(p => p.Shift)
+                .Include(p => p.Department)
+                .Include(p => p.Machine)
+                .Include(p => p.ProductIn)
+                .Include(p => p.ProductOut)
+                .FirstOrDefaultAsync(p => p.Id == id);
+
+            if (production == null) return NotFound();
+
+            // Load shift options based on production date
+            var shifts = await _context.Shifts
+                .Where(s => s.EffectiveDate <= production.ProductionDate)
+                .OrderBy(s => s.EffectiveDate)
+                .ToListAsync();
+
+            // Dropdown lists
+            ViewData["Departments"] = new SelectList(_context.Departments, "Id", "Name", production.DepartmentId);
+            ViewData["Machines"] = new SelectList(_context.Machines, "Id", "Name", production.MachineId);
+            ViewData["Products"] = new SelectList(_context.Products, "Id", "Name");
+
+            // Optional: Shift list for display if needed
+            ViewData["ShiftList"] = shifts.Select((s, index) => new SelectListItem
             {
-                return NotFound();
-            }
+                Value = s.Id.ToString(),
+                Text = (index + 1).ToString()
+            }).ToList();
+
             return View(production);
         }
+
 
         // POST: Productions/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Bale,Lap,DelHank,ProductionEfficiency,Mixing,TotalProduction,RunTime,IdleTime,NoOfDoffs,ConeWeight,OpeningKgs,Closing,SliverBreaks,ProductIn,ProductOut,ExpectedProduction,ProductionDrop")] Production production)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,ProductionDate,ShiftId,DepartmentId,MachineId,ShiftDetails,ShiftTime,RunTime,IdleTime,DelHank,TotalProduction,ProductionEfficiency,Bale,Lap,Mixing,NoOfDoffs,ConeWeight,OpeningKgs,Closing,SliverBreaks,ProductInId,ProductOutId,ExpectedProduction,ProductionDrop")] Production production)
         {
             if (id != production.Id)
             {
@@ -113,6 +147,7 @@ namespace TexAuto.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
+            ViewData["ShiftId"] = new SelectList(_context.Shifts, "Id", "Id", production.ShiftId);
             return View(production);
         }
 
@@ -125,6 +160,7 @@ namespace TexAuto.Controllers
             }
 
             var production = await _context.Productions
+                .Include(p => p.Shift)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (production == null)
             {
@@ -153,5 +189,45 @@ namespace TexAuto.Controllers
         {
             return _context.Productions.Any(e => e.Id == id);
         }
+
+        [HttpGet]
+        public async Task<IActionResult> GetShiftsByDate(DateOnly productionDate)
+        {
+            var shift = await _context.Shifts
+                .Where(s => s.EffectiveDate <= productionDate)
+                .OrderByDescending(s => s.EffectiveDate)
+                .FirstOrDefaultAsync();
+
+            if (shift == null || shift.TotalShifts == 0)
+                return Json(new List<object>());
+
+            var shiftOptions = new List<object>();
+
+            for (int i = 1; i <= shift.TotalShifts; i++)
+            {
+                var (start, end) = i switch
+                {
+                    1 => (shift.StartTime1, shift.EndTime1),
+                    2 => (shift.StartTime2, shift.EndTime2),
+                    3 => (shift.StartTime3, shift.EndTime3),
+                    4 => (shift.StartTime4, shift.EndTime4),
+                    _ => (null, null)
+                };
+
+                if (start.HasValue && end.HasValue)
+                {
+                    shiftOptions.Add(new
+                    {
+                        id = $"{shift.Id}_{i}",
+                        name = $"Shift {i}",
+                        fromTime = start.Value.ToString("HH:mm"),
+                        toTime = end.Value.ToString("HH:mm")
+                    });
+                }
+            }
+
+            return Json(shiftOptions);
+        }
+
     }
 }

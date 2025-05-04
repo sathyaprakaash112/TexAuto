@@ -12,8 +12,8 @@ using TexAuto.Data;
 namespace TexAuto.Migrations
 {
     [DbContext(typeof(TexAutoContext))]
-    [Migration("20250427105644_InitialCreate3")]
-    partial class InitialCreate3
+    [Migration("20250504163921_InitialCleanMigration5")]
+    partial class InitialCleanMigration5
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -46,22 +46,6 @@ namespace TexAuto.Migrations
                     b.ToTable("Departments");
                 });
 
-            modelBuilder.Entity("TexAuto.Models.Domain.Creation.Employee", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Employee");
-                });
-
             modelBuilder.Entity("TexAuto.Models.Domain.Creation.Machine", b =>
                 {
                     b.Property<int>("Id")
@@ -77,6 +61,9 @@ namespace TexAuto.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("MachineTypeId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -84,14 +71,11 @@ namespace TexAuto.Migrations
                     b.Property<int>("Number")
                         .HasColumnType("int");
 
-                    b.Property<int>("TypeId")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
 
                     b.HasIndex("DepartmentId");
 
-                    b.HasIndex("TypeId");
+                    b.HasIndex("MachineTypeId");
 
                     b.ToTable("Machines");
                 });
@@ -104,13 +88,70 @@ namespace TexAuto.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<int>("DepartmentId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
-                    b.ToTable("MachineType");
+                    b.HasIndex("DepartmentId");
+
+                    b.ToTable("MachineTypes");
+                });
+
+            modelBuilder.Entity("TexAuto.Models.Domain.Creation.Product", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("ProductTypeId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProductTypeId");
+
+                    b.ToTable("Products");
+                });
+
+            modelBuilder.Entity("TexAuto.Models.Domain.Creation.ProductType", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("DepartmentId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("DepartmentId");
+
+                    b.ToTable("ProductTypes");
                 });
 
             modelBuilder.Entity("TexAuto.Models.Domain.Creation.WasteType", b =>
@@ -121,7 +162,7 @@ namespace TexAuto.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int?>("DepartmentId")
+                    b.Property<int>("DepartmentId")
                         .HasColumnType("int");
 
                     b.Property<string>("Description")
@@ -167,17 +208,20 @@ namespace TexAuto.Migrations
                     b.Property<decimal>("DelHank")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<int?>("EmployeeId")
+                    b.Property<int>("DepartmentId")
                         .HasColumnType("int");
 
                     b.Property<decimal>("ExpectedProduction")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<decimal>("IdleTime")
-                        .HasColumnType("decimal(18,2)");
+                    b.Property<double>("IdleTime")
+                        .HasColumnType("float");
 
                     b.Property<decimal>("Lap")
                         .HasColumnType("decimal(18,2)");
+
+                    b.Property<int>("MachineId")
+                        .HasColumnType("int");
 
                     b.Property<decimal>("Mixing")
                         .HasColumnType("decimal(18,2)");
@@ -188,11 +232,14 @@ namespace TexAuto.Migrations
                     b.Property<decimal>("OpeningKgs")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<decimal>("ProductIn")
-                        .HasColumnType("decimal(18,2)");
+                    b.Property<int>("ProductInId")
+                        .HasColumnType("int");
 
-                    b.Property<decimal>("ProductOut")
-                        .HasColumnType("decimal(18,2)");
+                    b.Property<int>("ProductOutId")
+                        .HasColumnType("int");
+
+                    b.Property<DateOnly>("ProductionDate")
+                        .HasColumnType("date");
 
                     b.Property<decimal>("ProductionDrop")
                         .HasColumnType("decimal(18,2)");
@@ -200,8 +247,17 @@ namespace TexAuto.Migrations
                     b.Property<decimal>("ProductionEfficiency")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<decimal>("RunTime")
-                        .HasColumnType("decimal(18,2)");
+                    b.Property<double>("RunTime")
+                        .HasColumnType("float");
+
+                    b.Property<string>("ShiftDetails")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("ShiftId")
+                        .HasColumnType("int");
+
+                    b.Property<double>("ShiftTime")
+                        .HasColumnType("float");
 
                     b.Property<decimal>("SliverBreaks")
                         .HasColumnType("decimal(18,2)");
@@ -211,7 +267,15 @@ namespace TexAuto.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("EmployeeId");
+                    b.HasIndex("DepartmentId");
+
+                    b.HasIndex("MachineId");
+
+                    b.HasIndex("ProductInId");
+
+                    b.HasIndex("ProductOutId");
+
+                    b.HasIndex("ShiftId");
 
                     b.ToTable("Productions");
                 });
@@ -224,8 +288,8 @@ namespace TexAuto.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<DateTime>("EffectiveDate")
-                        .HasColumnType("datetime2");
+                    b.Property<DateOnly>("EffectiveDate")
+                        .HasColumnType("date");
 
                     b.Property<TimeOnly?>("EndTime1")
                         .HasColumnType("time");
@@ -289,20 +353,55 @@ namespace TexAuto.Migrations
                         .WithMany("Machines")
                         .HasForeignKey("DepartmentId");
 
-                    b.HasOne("TexAuto.Models.Domain.Creation.MachineType", "Type")
+                    b.HasOne("TexAuto.Models.Domain.Creation.MachineType", "MachineType")
                         .WithMany()
-                        .HasForeignKey("TypeId")
+                        .HasForeignKey("MachineTypeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Type");
+                    b.Navigation("MachineType");
+                });
+
+            modelBuilder.Entity("TexAuto.Models.Domain.Creation.MachineType", b =>
+                {
+                    b.HasOne("TexAuto.Models.Domain.Creation.Department", "Department")
+                        .WithMany()
+                        .HasForeignKey("DepartmentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Department");
+                });
+
+            modelBuilder.Entity("TexAuto.Models.Domain.Creation.Product", b =>
+                {
+                    b.HasOne("TexAuto.Models.Domain.Creation.ProductType", "ProductType")
+                        .WithMany()
+                        .HasForeignKey("ProductTypeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("ProductType");
+                });
+
+            modelBuilder.Entity("TexAuto.Models.Domain.Creation.ProductType", b =>
+                {
+                    b.HasOne("TexAuto.Models.Domain.Creation.Department", "Department")
+                        .WithMany()
+                        .HasForeignKey("DepartmentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Department");
                 });
 
             modelBuilder.Entity("TexAuto.Models.Domain.Creation.WasteType", b =>
                 {
                     b.HasOne("TexAuto.Models.Domain.Creation.Department", "Department")
                         .WithMany()
-                        .HasForeignKey("DepartmentId");
+                        .HasForeignKey("DepartmentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("TexAuto.Models.Domain.Entries.Production", null)
                         .WithMany("Wastes")
@@ -313,11 +412,45 @@ namespace TexAuto.Migrations
 
             modelBuilder.Entity("TexAuto.Models.Domain.Entries.Production", b =>
                 {
-                    b.HasOne("TexAuto.Models.Domain.Creation.Employee", "Employee")
+                    b.HasOne("TexAuto.Models.Domain.Creation.Department", "Department")
                         .WithMany()
-                        .HasForeignKey("EmployeeId");
+                        .HasForeignKey("DepartmentId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
 
-                    b.Navigation("Employee");
+                    b.HasOne("TexAuto.Models.Domain.Creation.Machine", "Machine")
+                        .WithMany()
+                        .HasForeignKey("MachineId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("TexAuto.Models.Domain.Creation.Product", "ProductIn")
+                        .WithMany()
+                        .HasForeignKey("ProductInId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("TexAuto.Models.Domain.Creation.Product", "ProductOut")
+                        .WithMany()
+                        .HasForeignKey("ProductOutId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("TexAuto.Models.Domain.Entries.Shift", "Shift")
+                        .WithMany()
+                        .HasForeignKey("ShiftId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Department");
+
+                    b.Navigation("Machine");
+
+                    b.Navigation("ProductIn");
+
+                    b.Navigation("ProductOut");
+
+                    b.Navigation("Shift");
                 });
 
             modelBuilder.Entity("TexAuto.Models.Domain.Entries.Waste", b =>

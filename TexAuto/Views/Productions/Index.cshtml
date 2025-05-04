@@ -1,131 +1,61 @@
-﻿@model IEnumerable<TexAuto.Models.Domain.Entries.Production>
-
-@{
-    ViewData["Title"] = "Index";
-}
-
-<h1>Index</h1>
-
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Bale)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Lap)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.DelHank)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ProductionEfficiency)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Mixing)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.TotalProduction)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.RunTime)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.IdleTime)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.NoOfDoffs)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ConeWeight)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.OpeningKgs)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Closing)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.SliverBreaks)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ProductIn)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ProductOut)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ExpectedProduction)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ProductionDrop)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Bale)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Lap)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.DelHank)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ProductionEfficiency)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Mixing)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.TotalProduction)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.RunTime)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.IdleTime)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.NoOfDoffs)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ConeWeight)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.OpeningKgs)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Closing)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.SliverBreaks)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ProductIn)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ProductOut)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ExpectedProduction)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ProductionDrop)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+﻿<div class="table-responsive">
+    <table class="table table-bordered table-striped align-middle text-center">
+        <thead class="table-light align-middle">
+            <tr>
+                <th style="min-width: 120px;">Production<br />Date</th>
+                <th style="min-width: 100px;">Shift</th>
+                <th>Bale</th>
+                <th>Lap</th>
+                <th>Del<br />Hank</th>
+                <th>Efficiency</th>
+                <th>Mixing</th>
+                <th>Total</th>
+                <th>Run<br />Time</th>
+                <th>Idle<br />Time</th>
+                <th>Doffs</th>
+                <th>Cone<br />Wt</th>
+                <th>Opening<br />(kg)</th>
+                <th>Closing</th>
+                <th>Breaks</th>
+                <th>In</th>
+                <th>Out</th>
+                <th>Expected</th>
+                <th>Drop</th>
+                <th style="min-width: 140px;">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.ProductionDate.ToString("dd-MM-yyyy")</td>
+                    <td>@item.ShiftDetails</td>
+                    <td>@item.Bale</td>
+                    <td>@item.Lap</td>
+                    <td>@item.DelHank</td>
+                    <td>@item.ProductionEfficiency</td>
+                    <td>@item.Mixing</td>
+                    <td>@item.TotalProduction</td>
+                    <td>@item.RunTime</td>
+                    <td>@item.IdleTime</td>
+                    <td>@item.NoOfDoffs</td>
+                    <td>@item.ConeWeight</td>
+                    <td>@item.OpeningKgs</td>
+                    <td>@item.Closing</td>
+                    <td>@item.SliverBreaks</td>
+                    <td>@item.ProductIn</td>
+                    <td>@item.ProductOut</td>
+                    <td>@item.ExpectedProduction</td>
+                    <td>@item.ProductionDrop</td>
+                    <td>
+                        <div class="btn-group btn-group-sm">
+                            <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-outline-warning">Edit</a>
+                            <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-outline-info">Details</a>
+                            <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-outline-danger">Delete</a>
+                        </div>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

@@ -14,7 +14,7 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="EffectiveDate" class="control-label"></label>
-                <input asp-for="EffectiveDate" class="form-control" />
+                <input asp-for="EffectiveDate" type="date" class="form-control" />
                 <span asp-validation-for="EffectiveDate" class="text-danger"></span>
             </div>
 
@@ -28,12 +28,12 @@
             <div class="shift-group shift-1">
                 <div class="form-group">
                     <label asp-for="StartTime1" class="control-label"></label>
-                    <input asp-for="StartTime1" type="time" class="form-control" />
+                    <input asp-for="StartTime1" class="form-control timepicker" class="form-control" />
                     <span asp-validation-for="StartTime1" class="text-danger"></span>
                 </div>
                 <div class="form-group">
                     <label asp-for="EndTime1" class="control-label"></label>
-                    <input asp-for="EndTime1" type="time" class="form-control" />
+                    <input asp-for="EndTime1" class="form-control timepicker" class="form-control" />
                     <span asp-validation-for="EndTime1" class="text-danger"></span>
                 </div>
             </div>
@@ -42,12 +42,12 @@
             <div class="shift-group shift-2">
                 <div class="form-group">
                     <label asp-for="StartTime2" class="control-label"></label>
-                    <input asp-for="StartTime2" type="time" class="form-control" />
+                    <input asp-for="StartTime2" class="form-control timepicker" class="form-control" />
                     <span asp-validation-for="StartTime2" class="text-danger"></span>
                 </div>
                 <div class="form-group">
                     <label asp-for="EndTime2" class="control-label"></label>
-                    <input asp-for="EndTime2" type="time" class="form-control" />
+                    <input asp-for="EndTime2" class="form-control timepicker" class="form-control" />
                     <span asp-validation-for="EndTime2" class="text-danger"></span>
                 </div>
             </div>
@@ -56,12 +56,12 @@
             <div class="shift-group shift-3">
                 <div class="form-group">
                     <label asp-for="StartTime3" class="control-label"></label>
-                    <input asp-for="StartTime3" type="time" class="form-control" />
+                    <input asp-for="StartTime3" class="form-control timepicker" class="form-control" />
                     <span asp-validation-for="StartTime3" class="text-danger"></span>
                 </div>
                 <div class="form-group">
                     <label asp-for="EndTime3" class="control-label"></label>
-                    <input asp-for="EndTime3" type="time" class="form-control" />
+                    <input asp-for="EndTime3" class="form-control timepicker" class="form-control" />
                     <span asp-validation-for="EndTime3" class="text-danger"></span>
                 </div>
             </div>
@@ -70,12 +70,12 @@
             <div class="shift-group shift-4">
                 <div class="form-group">
                     <label asp-for="StartTime4" class="control-label"></label>
-                    <input asp-for="StartTime4" type="time" class="form-control" />
+                    <input asp-for="StartTime4" class="form-control timepicker" class="form-control" />
                     <span asp-validation-for="StartTime4" class="text-danger"></span>
                 </div>
                 <div class="form-group">
                     <label asp-for="EndTime4" class="control-label"></label>
-                    <input asp-for="EndTime4" type="time" class="form-control" />
+                    <input asp-for="EndTime4" class="form-control timepicker" class="form-control" />
                     <span asp-validation-for="EndTime4" class="text-danger"></span>
                 </div>
             </div>
@@ -123,6 +123,13 @@
         // Call the function when TotalShifts changes
         document.getElementById('totalShifts').addEventListener('input', function() {
             updateShiftVisibility();
+        });
+
+            flatpickr(".timepicker", {
+            enableTime: true,
+            noCalendar: true,
+            dateFormat: "h:i K", // e.g., 3:30 PM
+            time_24hr: false
         });
     </script>
 }

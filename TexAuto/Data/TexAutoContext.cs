@@ -10,6 +10,42 @@ namespace TexAuto.Data
 {
     public class TexAutoContext : DbContext
     {
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Entity<Production>()
+                .HasOne(p => p.ProductIn)
+                .WithMany()
+                .HasForeignKey(p => p.ProductInId)
+                .OnDelete(DeleteBehavior.Restrict); // or NoAction
+
+            modelBuilder.Entity<Production>()
+                .HasOne(p => p.ProductOut)
+                .WithMany()
+                .HasForeignKey(p => p.ProductOutId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<Production>()
+                .HasOne(p => p.Machine)
+                .WithMany()
+                .HasForeignKey(p => p.MachineId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<Production>()
+                .HasOne(p => p.Department)
+                .WithMany()
+                .HasForeignKey(p => p.DepartmentId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<Production>()
+                .HasOne(p => p.Shift)
+                .WithMany()
+                .HasForeignKey(p => p.ShiftId)
+                .OnDelete(DeleteBehavior.Restrict);
+        }
+
+
         public TexAutoContext (DbContextOptions<TexAutoContext> options)
             : base(options)
         {
@@ -20,6 +56,11 @@ namespace TexAuto.Data
         public DbSet<Machine> Machines { get; set; }
         public DbSet<Production> Productions { get; set; }
         public DbSet<Waste> Wastes { get; set; }
+        public DbSet<MachineType> MachineTypes { get; set; }
+        public DbSet<Product> Products { get; set; } = default!;
+        public DbSet<ProductType> ProductTypes { get; set; }
+
+
 
     }
 }

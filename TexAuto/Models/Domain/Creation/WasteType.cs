@@ -8,6 +8,7 @@
 
         public string Description { get; set; } = string.Empty;
         public Department? Department { get; set; }
+        public int DepartmentId { get; set; }
         public bool IsSellable { get; set; }
     }
 }

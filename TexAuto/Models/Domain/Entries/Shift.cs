@@ -4,7 +4,7 @@
     {
         public int Id { get; set; }
 
-        public DateTime EffectiveDate { get; set; }
+        public DateOnly EffectiveDate { get; set; }
 
         public int TotalShifts { get; set; }
 

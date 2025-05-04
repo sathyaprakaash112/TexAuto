@@ -4,72 +4,168 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - TexAuto</title>
+
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/TexAuto.styles.css" asp-append-version="true" />
+    <link href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+
+
+    <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+            background-color: #f5f7fa;
+            color: #333;
+            font-family: "Segoe UI", sans-serif;
+        }
+
+        .page-wrapper {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .main-content {
+            flex: 1 0 auto;
+            padding-top: 20px;
+            padding-bottom: 60px;
+        }
+
+        .footer {
+            background-color: #e0ecff;
+            color: #1a3b5d;
+        }
+
+            .footer a {
+                color: #1a3b5d;
+                text-decoration: underline;
+            }
+
+                .footer a:hover {
+                    color: #0d2b4a;
+                }
+
+        .navbar {
+            background-color: #e0ecff;
+            border-bottom: 1px solid #c0d3ef;
+        }
+
+        .navbar-brand,
+        .nav-link {
+            color: #1a3b5d !important;
+            font-weight: 500;
+        }
+
+            .nav-link:hover {
+                color: #0d2b4a !important;
+            }
+
+        .dropdown-menu {
+            background-color: #ffffff;
+            border: 1px solid #d0dce8;
+            animation: fadeIn 0.2s ease-in-out;
+        }
+
+        .dropdown-item {
+            color: #333;
+            padding: 8px 16px;
+            transition: background-color 0.2s ease;
+        }
+
+            .dropdown-item:hover {
+                background-color: #f1f5fb;
+            }
+
+        .btn-sm {
+            transition: transform 0.2s ease;
+        }
+
+            .btn-sm:hover {
+                transform: scale(1.05);
+            }
+
+        
+
+        
+    </style>
 </head>
 <body>
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">TexAuto</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
+    <div class="page-wrapper">
+        <header>
+            <nav class="navbar navbar-expand-sm navbar-light shadow-sm">
+                <div class="container-fluid">
+                    <a class="navbar-brand fw-bold" asp-controller="Home" asp-action="Index">TexAuto</a>
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse"
+                            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
 
-                        <!-- New Dropdown Menu -->
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle text-dark" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                Master
-                            </a>
-                            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                        <ul class="navbar-nav flex-grow-1">
+                            <li class="nav-item">
+                                <a class="nav-link" asp-controller="Home" asp-action="Index">Home</a>
+                            </li>
 
-                                <li class="d-flex align-items-center justify-content-between px-3">
-                                    <a class="dropdown-item p-0" asp-area="" asp-controller="Department" asp-action="Index">Department</a>
-                                    <a class="btn btn-sm btn-outline-primary ms-2" asp-area="" asp-controller="Department" asp-action="Create">+</a>
-                                </li>
+                            <!-- Master Dropdown -->
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" id="masterDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    Master
+                                </a>
+                                <ul class="dropdown-menu" aria-labelledby="masterDropdown">
+                                    <li class="d-flex align-items-center justify-content-between px-3">
+                                        <a class="dropdown-item p-0" asp-controller="Departments" asp-action="Index">Department</a>
+                                        <a class="btn btn-sm btn-outline-primary ms-2" asp-controller="Departments" asp-action="Create">+</a>
+                                    </li>
+                                    <li class="d-flex align-items-center justify-content-between px-3 mt-2">
+                                        <a class="dropdown-item p-0" asp-controller="Machines" asp-action="Index">Machine</a>
+                                        <a class="btn btn-sm btn-outline-primary ms-2" asp-controller="Machines" asp-action="Create">+</a>
+                                    </li>
+                                    <li class="d-flex align-items-center justify-content-between px-3 mt-2">
+                                        <a class="dropdown-item p-0" asp-controller="Shift" asp-action="Index">Shift</a>
+                                        <a class="btn btn-sm btn-outline-primary ms-2" asp-controller="Shift" asp-action="Create">+</a>
+                                    </li>
+                                    <li class="d-flex align-items-center justify-content-between px-3 mt-2">
+                                        <a class="dropdown-item p-0" asp-controller="MachineTypes" asp-action="Index">Machine Types</a>
+                                        <a class="btn btn-sm btn-outline-primary ms-2" asp-controller="MachineTypes" asp-action="Create">+</a>
+                                    </li>
+                                    <li class="d-flex align-items-center justify-content-between px-3 mt-2">
+                                        <a class="dropdown-item p-0" asp-controller="Products" asp-action="Index">Products</a>
+                                        <a class="btn btn-sm btn-outline-primary ms-2" asp-controller="Products" asp-action="Create">+</a>
+                                    </li>
+                                    <li class="d-flex align-items-center justify-content-between px-3 mt-2">
+                                        <a class="dropdown-item p-0" asp-controller="ProductTypes" asp-action="Index">Product Types</a>
+                                        <a class="btn btn-sm btn-outline-primary ms-2" asp-controller="ProductTypes" asp-action="Create">+</a>
+                                    </li>
+                                </ul>
+                            </li>
 
-                                <li class="d-flex align-items-center justify-content-between px-3 mt-2">
-                                    <a class="dropdown-item p-0" asp-area="" asp-controller="Machine" asp-action="Index">Machine</a>
-                                    <a class="btn btn-sm btn-outline-primary ms-2" asp-area="" asp-controller="Machine" asp-action="Create">+</a>
-                                </li>
-
-                                <li class="d-flex align-items-center justify-content-between px-3 mt-2">
-                                    <a class="dropdown-item p-0" asp-area="" asp-controller="Shift" asp-action="Index">Shift</a>
-                                    <a class="btn btn-sm btn-outline-primary ms-2" asp-area="" asp-controller="Shift" asp-action="Create">+</a>
-                                </li>
-
-
-
-                            </ul>
-                        <li class="d-flex align-items-center justify-content-between px-3 mt-2">
-                            <a class="dropdown-item p-0" asp-area="" asp-controller="Productions" asp-action="Index">Productions</a>
-                        </li>
-
-                    </ul>
+                            <!-- Productions Dropdown -->
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" id="productionsDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    Productions
+                                </a>
+                                <ul class="dropdown-menu" aria-labelledby="productionsDropdown">
+                                    <li><a class="dropdown-item" asp-controller="Productions" asp-action="Index">View All</a></li>
+                                    <li><a class="dropdown-item" asp-controller="Productions" asp-action="Create">Create</a></li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
+            </nav>
+        </header>
+
+        <main class="main-content">
+            <div class="container">
+                @RenderBody()
             </div>
-        </nav>
-    </header>
-
-
-    <div class="container">
-        <main role="main" class="pb-3">
-            @RenderBody()
         </main>
+
+        
     </div>
 
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2025 - TexAuto - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-        </div>
-    </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
