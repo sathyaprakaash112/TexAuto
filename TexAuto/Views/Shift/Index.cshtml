@@ -1,89 +1,67 @@
 ﻿@model IEnumerable<TexAuto.Models.Domain.Entries.Shift>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Shifts";
 }
 
-<h1>Index</h1>
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2>Shift Schedules</h2>
+        <a asp-action="Create" class="btn btn-success">
+            <i class="bi bi-plus-circle"></i> Create New
+        </a>
+    </div>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.EffectiveDate)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.TotalShifts)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.StartTime1)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.EndTime1)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.StartTime2)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.EndTime2)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.StartTime3)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.EndTime3)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.StartTime4)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.EndTime4)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.EffectiveDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.TotalShifts)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.StartTime1)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.EndTime1)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.StartTime2)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.EndTime2)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.StartTime3)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.EndTime3)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.StartTime4)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.EndTime4)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
+    <div class="table-responsive">
+        <table class="table table-bordered table-hover align-middle shadow-sm">
+            <thead class="table-light">
+                <tr class="text-center">
+                    <th>Effective Date</th>
+                    <th>Total Shifts</th>
+                    <th>Start 1</th>
+                    <th>End 1</th>
+                    <th>Start 2</th>
+                    <th>End 2</th>
+                    <th>Start 3</th>
+                    <th>End 3</th>
+                    <th>Start 4</th>
+                    <th>End 4</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr class="text-center">
+                        <td>@item.EffectiveDate.ToString("dd MMM yyyy")</td>
+                        <td>@item.TotalShifts</td>
+                        <td>@(item.StartTime1?.ToString("hh:mm tt") ?? "-")</td>
+                        <td>@(item.EndTime1?.ToString("hh:mm tt") ?? "-")</td>
+                        <td>@(item.StartTime2?.ToString("hh:mm tt") ?? "-")</td>
+                        <td>@(item.EndTime2?.ToString("hh:mm tt") ?? "-")</td>
+                        <td>@(item.StartTime3?.ToString("hh:mm tt") ?? "-")</td>
+                        <td>@(item.EndTime3?.ToString("hh:mm tt") ?? "-")</td>
+                        <td>@(item.StartTime4?.ToString("hh:mm tt") ?? "-")</td>
+                        <td>@(item.EndTime4?.ToString("hh:mm tt") ?? "-")</td>
+                        <td>
+                            <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-outline-primary me-1">
+                                <i class="bi bi-pencil"></i>
+                            </a>
+                            <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-outline-info me-1">
+                                <i class="bi bi-eye"></i>
+                            </a>
+                            <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-outline-danger">
+                                <i class="bi bi-trash"></i>
+                            </a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+@section Scripts {
+    <!-- Bootstrap Icons CDN if not already included -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" />
 }
-    </tbody>
-</table>

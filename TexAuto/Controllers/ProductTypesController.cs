@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -22,25 +20,20 @@ namespace TexAuto.Controllers
         // GET: ProductTypes
         public async Task<IActionResult> Index()
         {
-            var texAutoContext = _context.ProductTypes.Include(p => p.Department);
-            return View(await texAutoContext.ToListAsync());
+            var productTypes = _context.ProductTypes.Include(p => p.Department);
+            return View(await productTypes.ToListAsync());
         }
 
         // GET: ProductTypes/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            if (id == null) return NotFound();
 
             var productType = await _context.ProductTypes
                 .Include(p => p.Department)
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (productType == null)
-            {
-                return NotFound();
-            }
+
+            if (productType == null) return NotFound();
 
             return View(productType);
         }
@@ -48,13 +41,11 @@ namespace TexAuto.Controllers
         // GET: ProductTypes/Create
         public IActionResult Create()
         {
-            ViewData["DepartmentId"] = new SelectList(_context.Departments, "Id", "Id");
+            ViewData["Departments"] = new SelectList(_context.Departments, "Id", "Name");
             return View();
         }
 
         // POST: ProductTypes/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,Name,Description,DepartmentId")] ProductType productType)
@@ -65,38 +56,29 @@ namespace TexAuto.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["DepartmentId"] = new SelectList(_context.Departments, "Id", "Id", productType.DepartmentId);
+
+            ViewData["Departments"] = new SelectList(_context.Departments, "Id", "Name", productType.DepartmentId);
             return View(productType);
         }
 
         // GET: ProductTypes/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            if (id == null) return NotFound();
 
             var productType = await _context.ProductTypes.FindAsync(id);
-            if (productType == null)
-            {
-                return NotFound();
-            }
-            ViewData["DepartmentId"] = new SelectList(_context.Departments, "Id", "Id", productType.DepartmentId);
+            if (productType == null) return NotFound();
+
+            ViewData["Departments"] = new SelectList(_context.Departments, "Id", "Name", productType.DepartmentId);
             return View(productType);
         }
 
         // POST: ProductTypes/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Description,DepartmentId")] ProductType productType)
         {
-            if (id != productType.Id)
-            {
-                return NotFound();
-            }
+            if (id != productType.Id) return NotFound();
 
             if (ModelState.IsValid)
             {
@@ -107,36 +89,27 @@ namespace TexAuto.Controllers
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!ProductTypeExists(productType.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
+                    if (!ProductTypeExists(productType.Id)) return NotFound();
+                    else throw;
                 }
+
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["DepartmentId"] = new SelectList(_context.Departments, "Id", "Id", productType.DepartmentId);
+
+            ViewData["Departments"] = new SelectList(_context.Departments, "Id", "Name", productType.DepartmentId);
             return View(productType);
         }
 
         // GET: ProductTypes/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            if (id == null) return NotFound();
 
             var productType = await _context.ProductTypes
                 .Include(p => p.Department)
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (productType == null)
-            {
-                return NotFound();
-            }
+
+            if (productType == null) return NotFound();
 
             return View(productType);
         }
@@ -150,9 +123,9 @@ namespace TexAuto.Controllers
             if (productType != null)
             {
                 _context.ProductTypes.Remove(productType);
+                await _context.SaveChangesAsync();
             }
 
-            await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 

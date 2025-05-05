@@ -12,8 +12,8 @@ using TexAuto.Data;
 namespace TexAuto.Migrations
 {
     [DbContext(typeof(TexAutoContext))]
-    [Migration("20250504163921_InitialCleanMigration5")]
-    partial class InitialCleanMigration5
+    [Migration("20250505142738_InitialCleanMigration")]
+    partial class InitialCleanMigration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -68,7 +68,7 @@ namespace TexAuto.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("Number")
+                    b.Property<int?>("Number")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -140,7 +140,6 @@ namespace TexAuto.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Description")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
@@ -274,6 +273,8 @@ namespace TexAuto.Migrations
                     b.HasIndex("ProductInId");
 
                     b.HasIndex("ProductOutId");
+
+                    b.HasIndex("ProductionDate");
 
                     b.HasIndex("ShiftId");
 

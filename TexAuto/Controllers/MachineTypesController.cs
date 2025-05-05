@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using TexAuto.Data;
@@ -22,25 +18,20 @@ namespace TexAuto.Controllers
         // GET: MachineTypes
         public async Task<IActionResult> Index()
         {
-            var texAutoContext = _context.MachineTypes.Include(m => m.Department);
-            return View(await texAutoContext.ToListAsync());
+            var machineTypes = _context.MachineTypes.Include(m => m.Department);
+            return View(await machineTypes.ToListAsync());
         }
 
         // GET: MachineTypes/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            if (id == null) return NotFound();
 
             var machineType = await _context.MachineTypes
                 .Include(m => m.Department)
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (machineType == null)
-            {
-                return NotFound();
-            }
+
+            if (machineType == null) return NotFound();
 
             return View(machineType);
         }
@@ -48,13 +39,11 @@ namespace TexAuto.Controllers
         // GET: MachineTypes/Create
         public IActionResult Create()
         {
-            ViewData["DepartmentId"] = new SelectList(_context.Departments, "Id", "Id");
+            ViewData["DepartmentId"] = new SelectList(_context.Departments, "Id", "Name");
             return View();
         }
 
         // POST: MachineTypes/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,Name,DepartmentId")] MachineType machineType)
@@ -65,38 +54,29 @@ namespace TexAuto.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["DepartmentId"] = new SelectList(_context.Departments, "Id", "Id", machineType.DepartmentId);
+
+            ViewData["DepartmentId"] = new SelectList(_context.Departments, "Id", "Name", machineType.DepartmentId);
             return View(machineType);
         }
 
         // GET: MachineTypes/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            if (id == null) return NotFound();
 
             var machineType = await _context.MachineTypes.FindAsync(id);
-            if (machineType == null)
-            {
-                return NotFound();
-            }
-            ViewData["DepartmentId"] = new SelectList(_context.Departments, "Id", "Id", machineType.DepartmentId);
+            if (machineType == null) return NotFound();
+
+            ViewData["DepartmentId"] = new SelectList(_context.Departments, "Id", "Name", machineType.DepartmentId);
             return View(machineType);
         }
 
         // POST: MachineTypes/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Name,DepartmentId")] MachineType machineType)
         {
-            if (id != machineType.Id)
-            {
-                return NotFound();
-            }
+            if (id != machineType.Id) return NotFound();
 
             if (ModelState.IsValid)
             {
@@ -108,35 +88,27 @@ namespace TexAuto.Controllers
                 catch (DbUpdateConcurrencyException)
                 {
                     if (!MachineTypeExists(machineType.Id))
-                    {
                         return NotFound();
-                    }
                     else
-                    {
                         throw;
-                    }
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["DepartmentId"] = new SelectList(_context.Departments, "Id", "Id", machineType.DepartmentId);
+
+            ViewData["DepartmentId"] = new SelectList(_context.Departments, "Id", "Name", machineType.DepartmentId);
             return View(machineType);
         }
 
         // GET: MachineTypes/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            if (id == null) return NotFound();
 
             var machineType = await _context.MachineTypes
                 .Include(m => m.Department)
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (machineType == null)
-            {
-                return NotFound();
-            }
+
+            if (machineType == null) return NotFound();
 
             return View(machineType);
         }
@@ -150,9 +122,8 @@ namespace TexAuto.Controllers
             if (machineType != null)
             {
                 _context.MachineTypes.Remove(machineType);
+                await _context.SaveChangesAsync();
             }
-
-            await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 

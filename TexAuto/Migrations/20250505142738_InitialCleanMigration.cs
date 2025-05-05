@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace TexAuto.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialCleanMigration5 : Migration
+    public partial class InitialCleanMigration : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -74,7 +74,7 @@ namespace TexAuto.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     DepartmentId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -94,7 +94,7 @@ namespace TexAuto.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Number = table.Column<int>(type: "int", nullable: false),
+                    Number = table.Column<int>(type: "int", nullable: true),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     MachineTypeId = table.Column<int>(type: "int", nullable: false),
@@ -147,6 +147,8 @@ namespace TexAuto.Migrations
                     ShiftId = table.Column<int>(type: "int", nullable: false),
                     DepartmentId = table.Column<int>(type: "int", nullable: false),
                     MachineId = table.Column<int>(type: "int", nullable: false),
+                    ProductInId = table.Column<int>(type: "int", nullable: false),
+                    ProductOutId = table.Column<int>(type: "int", nullable: false),
                     ShiftDetails = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ShiftTime = table.Column<double>(type: "float", nullable: false),
                     RunTime = table.Column<double>(type: "float", nullable: false),
@@ -154,8 +156,6 @@ namespace TexAuto.Migrations
                     DelHank = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     TotalProduction = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     ProductionEfficiency = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    ProductInId = table.Column<int>(type: "int", nullable: false),
-                    ProductOutId = table.Column<int>(type: "int", nullable: false),
                     Bale = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     Lap = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     Mixing = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
@@ -280,6 +280,11 @@ namespace TexAuto.Migrations
                 name: "IX_Productions_ProductInId",
                 table: "Productions",
                 column: "ProductInId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Productions_ProductionDate",
+                table: "Productions",
+                column: "ProductionDate");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Productions_ProductOutId",

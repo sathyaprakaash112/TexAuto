@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using TexAuto.Models.Domain.Creation;
 
 namespace TexAuto.Models.Domain.Entries
@@ -9,51 +10,60 @@ namespace TexAuto.Models.Domain.Entries
         public int Id { get; set; }
 
         // Dates
-        public DateOnly ProductionDate { get; set; } // Main production date
+        public DateOnly ProductionDate { get; set; }
 
         // Relationships
-        public int ShiftId { get; set; } // FK for Shift (Radio button)
-        public Shift Shift { get; set; }
+        public int ShiftId { get; set; }
 
-        public int DepartmentId { get; set; } // Dropdown
-        public Department Department { get; set; }
+        [ForeignKey("ShiftId")]
+        public Shift Shift { get; set; } = null!;
 
-        public int MachineId { get; set; } // Dropdown
-        public Machine Machine { get; set; }
+        public int DepartmentId { get; set; }
+
+        [ForeignKey("DepartmentId")]
+        public Department Department { get; set; } = null!;
+
+        public int MachineId { get; set; }
+
+        [ForeignKey("MachineId")]
+        public Machine Machine { get; set; } = null!;
+
+        public int ProductInId { get; set; }
+
+        [ForeignKey("ProductInId")]
+        public Product ProductIn { get; set; } = null!;
+
+        public int ProductOutId { get; set; }
+
+        [ForeignKey("ProductOutId")]
+        public Product ProductOut { get; set; } = null!;
 
         // Shift info
-        public string? ShiftDetails { get; set; } // e.g., Shift 1 (1:00 - 2:00)
+        public string? ShiftDetails { get; set; }
 
         // Time tracking
-        public double ShiftTime { get; set; } // Hours
-        public double RunTime { get; set; }   // Hours
-        public double IdleTime { get; set; }  // Hours
+        public double ShiftTime { get; set; } = 0.0;
+        public double RunTime { get; set; } = 0.0;
+        public double IdleTime { get; set; } = 0.0;
 
         // Production metrics
-        public decimal DelHank { get; set; } // Decimal
-        public decimal TotalProduction { get; set; } // Decimal
-        public decimal ProductionEfficiency { get; set; } // %
+        public decimal DelHank { get; set; } = 0.00m;
+        public decimal TotalProduction { get; set; } = 0.00m;
+        public decimal ProductionEfficiency { get; set; } = 0.00m;
 
-        // Waste entries (Subform)
-        public ICollection<WasteType> Wastes { get; set; } = new List<WasteType>();
+        // Extra fields
+        public decimal Bale { get; set; } = 0.00m;
+        public decimal Lap { get; set; } = 0.00m;
+        public decimal Mixing { get; set; } = 0.00m;
+        public decimal NoOfDoffs { get; set; } = 0.00m;
+        public decimal ConeWeight { get; set; } = 0.00m;
+        public decimal OpeningKgs { get; set; } = 0.00m;
+        public decimal Closing { get; set; } = 0.00m;
+        public decimal SliverBreaks { get; set; } = 0.00m;
+        public decimal ExpectedProduction { get; set; } = 0.00m;
+        public decimal ProductionDrop { get; set; } = 0.00m;
 
-        // Products
-        public int ProductInId { get; set; } // Dropdown
-        public Product ProductIn { get; set; }
-
-        public int ProductOutId { get; set; } // Dropdown
-        public Product ProductOut { get; set; }
-
-        // Extra fields (from original, retained if needed)
-        public decimal Bale { get; set; }
-        public decimal Lap { get; set; }
-        public decimal Mixing { get; set; }
-        public decimal NoOfDoffs { get; set; }
-        public decimal ConeWeight { get; set; }
-        public decimal OpeningKgs { get; set; }
-        public decimal Closing { get; set; }
-        public decimal SliverBreaks { get; set; }
-        public decimal ExpectedProduction { get; set; }
-        public decimal ProductionDrop { get; set; }
+        // Waste entries (optional subform logic)
+        public ICollection<WasteType>? Wastes { get; set; } = new List<WasteType>();
     }
 }
