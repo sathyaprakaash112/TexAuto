@@ -1,61 +1,104 @@
-﻿<div class="table-responsive">
-    <table class="table table-bordered table-striped align-middle text-center">
-        <thead class="table-light align-middle">
-            <tr>
-                <th style="min-width: 120px;">Production<br />Date</th>
-                <th style="min-width: 100px;">Shift</th>
-                <th>Bale</th>
-                <th>Lap</th>
-                <th>Del<br />Hank</th>
-                <th>Efficiency</th>
-                <th>Mixing</th>
-                <th>Total</th>
-                <th>Run<br />Time</th>
-                <th>Idle<br />Time</th>
-                <th>Doffs</th>
-                <th>Cone<br />Wt</th>
-                <th>Opening<br />(kg)</th>
-                <th>Closing</th>
-                <th>Breaks</th>
-                <th>In</th>
-                <th>Out</th>
-                <th>Expected</th>
-                <th>Drop</th>
-                <th style="min-width: 140px;">Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in Model)
-            {
+﻿@model IEnumerable<TexAuto.Models.Domain.Entries.Production>
+
+@{
+    ViewData["Title"] = "Production Index";
+}
+
+<h2 class="mb-4">Production Records</h2>
+
+<p>
+    <a asp-action="Create" class="btn btn-primary">+ Create New</a>
+</p>
+
+<div class="table-wrapper">
+    <div class="table-scroll">
+        <table class="table table-bordered table-striped table-hover mb-0">
+            <thead class="table-light text-nowrap">
                 <tr>
-                    <td>@item.ProductionDate.ToString("dd-MM-yyyy")</td>
-                    <td>@item.ShiftDetails</td>
-                    <td>@item.Bale</td>
-                    <td>@item.Lap</td>
-                    <td>@item.DelHank</td>
-                    <td>@item.ProductionEfficiency</td>
-                    <td>@item.Mixing</td>
-                    <td>@item.TotalProduction</td>
-                    <td>@item.RunTime</td>
-                    <td>@item.IdleTime</td>
-                    <td>@item.NoOfDoffs</td>
-                    <td>@item.ConeWeight</td>
-                    <td>@item.OpeningKgs</td>
-                    <td>@item.Closing</td>
-                    <td>@item.SliverBreaks</td>
-                    <td>@item.ProductIn</td>
-                    <td>@item.ProductOut</td>
-                    <td>@item.ExpectedProduction</td>
-                    <td>@item.ProductionDrop</td>
-                    <td>
-                        <div class="btn-group btn-group-sm">
-                            <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-outline-warning">Edit</a>
-                            <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-outline-info">Details</a>
-                            <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-outline-danger">Delete</a>
-                        </div>
-                    </td>
+                    <th>Production Date</th>
+                    <th>Shift</th>
+                    <th>Department</th>
+                    <th>Machine</th>
+                    <th>Shift Time</th>
+                    <th>Run Time</th>
+                    <th>Idle Time</th>
+                    <th>Del Hank</th>
+                    <th>Total Production</th>
+                    <th>Efficiency</th>
+                    <th>Bale</th>
+                    <th>Lap</th>
+                    <th>Mixing</th>
+                    <th>No Of Doffs</th>
+                    <th>Cone Weight</th>
+                    <th>Opening (kg)</th>
+                    <th>Closing</th>
+                    <th>Sliver Breaks</th>
+                    <th>Product In</th>
+                    <th>Product Out</th>
+                    <th>Expected</th>
+                    <th>Drop</th>
+                    <th class="sticky-action-column bg-light text-center">Actions</th>
                 </tr>
-            }
-        </tbody>
-    </table>
+            </thead>
+            <tbody class="text-nowrap">
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@item.ProductionDate.ToString("yyyy-MM-dd")</td>
+                        <td>@item.ShiftDetails</td>
+                        <td>@item.Department?.Name</td>
+                        <td>@item.Machine?.Name</td>
+                        <td>@item.ShiftTime</td>
+                        <td>@item.RunTime</td>
+                        <td>@item.IdleTime</td>
+                        <td>@item.DelHank</td>
+                        <td>@item.TotalProduction</td>
+                        <td>@item.ProductionEfficiency</td>
+                        <td>@item.Bale</td>
+                        <td>@item.Lap</td>
+                        <td>@item.Mixing</td>
+                        <td>@item.NoOfDoffs</td>
+                        <td>@item.ConeWeight</td>
+                        <td>@item.OpeningKgs</td>
+                        <td>@item.Closing</td>
+                        <td>@item.SliverBreaks</td>
+                        <td>@item.ProductIn?.Name</td>
+                        <td>@item.ProductOut?.Name</td>
+                        <td>@item.ExpectedProduction</td>
+                        <td>@item.ProductionDrop</td>
+                        <td class="sticky-action-column bg-light">
+                            <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-warning text-white">Edit</a>
+                            <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-info text-white">Details</a>
+                            <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-danger">Delete</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
 </div>
+
+<style>
+    .table-wrapper {
+        overflow-x: auto;
+        width: 100%;
+        position: relative;
+    }
+
+    .table-scroll {
+        overflow-x: auto;
+        width: 100%;
+    }
+
+    .sticky-action-column {
+        position: sticky;
+        right: 0;
+        background-color: #f8f9fa !important;
+        z-index: 1;
+    }
+
+    .table th, .table td {
+        white-space: nowrap;
+        vertical-align: middle;
+    }
+</style>

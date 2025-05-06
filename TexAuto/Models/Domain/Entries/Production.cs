@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using TexAuto.Models.Domain.Creation;
 
 namespace TexAuto.Models.Domain.Entries
@@ -9,61 +11,96 @@ namespace TexAuto.Models.Domain.Entries
     {
         public int Id { get; set; }
 
-        // Dates
+        [Display(Name = "Production Date")]
         public DateOnly ProductionDate { get; set; }
 
-        // Relationships
+        [Display(Name = "Shift")]
         public int ShiftId { get; set; }
 
+        [BindNever]
         [ForeignKey("ShiftId")]
-        public Shift Shift { get; set; } = null!;
+        public Shift? Shift { get; set; }
 
+        [Display(Name = "Department")]
         public int DepartmentId { get; set; }
 
+        [BindNever]
         [ForeignKey("DepartmentId")]
-        public Department Department { get; set; } = null!;
+        public Department? Department { get; set; }
 
+        [Display(Name = "Machine")]
         public int MachineId { get; set; }
 
+        [BindNever]
         [ForeignKey("MachineId")]
-        public Machine Machine { get; set; } = null!;
+        public Machine? Machine { get; set; }
 
+        [Display(Name = "Product In")]
         public int ProductInId { get; set; }
 
+        [BindNever]
         [ForeignKey("ProductInId")]
-        public Product ProductIn { get; set; } = null!;
+        public Product? ProductIn { get; set; }
 
+        [Display(Name = "Product Out")]
         public int ProductOutId { get; set; }
 
+        [BindNever]
         [ForeignKey("ProductOutId")]
-        public Product ProductOut { get; set; } = null!;
+        public Product? ProductOut { get; set; }
 
-        // Shift info
+        [Display(Name = "Shift Details")]
         public string? ShiftDetails { get; set; }
 
-        // Time tracking
+        [Display(Name = "Shift Time")]
         public double ShiftTime { get; set; } = 0.0;
+
+        [Display(Name = "Run Time")]
         public double RunTime { get; set; } = 0.0;
+
+        [Display(Name = "Idle Time")]
         public double IdleTime { get; set; } = 0.0;
 
-        // Production metrics
+        [Display(Name = "Del Hank")]
         public decimal DelHank { get; set; } = 0.00m;
+
+        [Display(Name = "Total Production")]
         public decimal TotalProduction { get; set; } = 0.00m;
+
+        [Display(Name = "Production Efficiency")]
         public decimal ProductionEfficiency { get; set; } = 0.00m;
 
-        // Extra fields
+        [Display(Name = "Bale")]
         public decimal Bale { get; set; } = 0.00m;
+
+        [Display(Name = "Lap")]
         public decimal Lap { get; set; } = 0.00m;
+
+        [Display(Name = "Mixing")]
         public decimal Mixing { get; set; } = 0.00m;
+
+        [Display(Name = "No Of Doffs")]
         public decimal NoOfDoffs { get; set; } = 0.00m;
+
+        [Display(Name = "Cone Weight")]
         public decimal ConeWeight { get; set; } = 0.00m;
+
+        [Display(Name = "Opening Kgs")]
         public decimal OpeningKgs { get; set; } = 0.00m;
+
+        [Display(Name = "Closing")]
         public decimal Closing { get; set; } = 0.00m;
+
+        [Display(Name = "Sliver Breaks")]
         public decimal SliverBreaks { get; set; } = 0.00m;
+
+        [Display(Name = "Expected Production")]
         public decimal ExpectedProduction { get; set; } = 0.00m;
+
+        [Display(Name = "Production Drop")]
         public decimal ProductionDrop { get; set; } = 0.00m;
 
-        // Waste entries (optional subform logic)
+        [BindNever]
         public ICollection<WasteType>? Wastes { get; set; } = new List<WasteType>();
     }
 }

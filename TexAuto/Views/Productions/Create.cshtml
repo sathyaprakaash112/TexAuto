@@ -2,15 +2,17 @@
 
 @{
     ViewData["Title"] = "Create";
-    var defaultVal = "0.00";
 }
 
 <h1 class="mb-4">Create Production</h1>
 
 <div class="row">
     <div class="col-md-12">
-        <form asp-action="Create">
+        <form asp-action="Create" method="post">
             <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+            <input type="hidden" asp-for="ShiftId" />
+            <input type="hidden" asp-for="ShiftDetails" id="ShiftDetails" />
 
             <!-- Production Date & Shift -->
             <div class="row mb-4">
@@ -21,20 +23,19 @@
                 </div>
                 <div class="col-md-6">
                     <label class="form-label">Shift</label>
-                    <div class="border rounded p-2" id="ShiftOptions"></div>
-                    <input type="hidden" name="ShiftDetails" id="ShiftDetails" />
+                    <div class="border rounded p-2" id="ShiftOptions">Select a date to load shifts</div>
                 </div>
             </div>
 
             <!-- Department & Machine -->
             <div class="row mb-4">
                 <div class="col-md-6">
-                    <label asp-for="DepartmentId" class="form-label">Department</label>
+                    <label asp-for="DepartmentId" class="form-label"></label>
                     <select asp-for="DepartmentId" asp-items="ViewBag.Departments" class="form-select"></select>
                     <span asp-validation-for="DepartmentId" class="text-danger"></span>
                 </div>
                 <div class="col-md-6">
-                    <label asp-for="MachineId" class="form-label">Machine</label>
+                    <label asp-for="MachineId" class="form-label"></label>
                     <select asp-for="MachineId" asp-items="ViewBag.Machines" class="form-select"></select>
                     <span asp-validation-for="MachineId" class="text-danger"></span>
                 </div>
@@ -44,35 +45,125 @@
             <div class="row mb-4">
                 <div class="col-md-4">
                     <label asp-for="ShiftTime" class="form-label"></label>
-                    <input asp-for="ShiftTime" class="form-control" value="0.0" />
+                    <input asp-for="ShiftTime" class="form-control text-secondary"
+                           value="0.0"
+                           onfocus="if(this.value === '0.0') this.value=''; this.classList.remove('text-secondary');"
+                           onblur="if(this.value === '') { this.value='0.0'; this.classList.add('text-secondary'); }" />
                     <span asp-validation-for="ShiftTime" class="text-danger"></span>
                 </div>
                 <div class="col-md-4">
                     <label asp-for="RunTime" class="form-label"></label>
-                    <input asp-for="RunTime" class="form-control" value="0.0" />
+                    <input asp-for="RunTime" class="form-control text-secondary"
+                           value="0.0"
+                           onfocus="if(this.value === '0.0') this.value=''; this.classList.remove('text-secondary');"
+                           onblur="if(this.value === '') { this.value='0.0'; this.classList.add('text-secondary'); }" />
                     <span asp-validation-for="RunTime" class="text-danger"></span>
                 </div>
                 <div class="col-md-4">
                     <label asp-for="IdleTime" class="form-label"></label>
-                    <input asp-for="IdleTime" class="form-control" value="0.0" />
+                    <input asp-for="IdleTime" class="form-control text-secondary"
+                           value="0.0"
+                           onfocus="if(this.value === '0.0') this.value=''; this.classList.remove('text-secondary');"
+                           onblur="if(this.value === '') { this.value='0.0'; this.classList.add('text-secondary'); }" />
                     <span asp-validation-for="IdleTime" class="text-danger"></span>
                 </div>
             </div>
 
-            <!-- Numeric Production Fields -->
+            <!-- Decimal Production Fields -->
             <div class="row g-3">
-                @foreach (var prop in new[] {
-                "DelHank", "TotalProduction", "ProductionEfficiency", "Bale", "Lap", "Mixing", "NoOfDoffs",
-                "ConeWeight", "OpeningKgs", "Closing", "SliverBreaks", "ExpectedProduction", "ProductionDrop"
-                })
-                {
-                    <div class="col-md-6">
-                        <label class="form-label" for="@prop">@prop</label>
-                        <input name="@prop" id="@prop" class="form-control" value="@defaultVal" />
-                    </div>
-                }
+                <div class="col-md-6">
+                    <label asp-for="DelHank" class="form-label"></label>
+                    <input asp-for="DelHank" class="form-control" value="0.00"
+                           onfocus="if(this.value === '0.00') this.value='';"
+                           onblur="if(this.value === '') this.value='0.00';" />
+                    <span asp-validation-for="DelHank" class="text-danger"></span>
+                </div>
+                <div class="col-md-6">
+                    <label asp-for="TotalProduction" class="form-label"></label>
+                    <input asp-for="TotalProduction" class="form-control" value="0.00"
+                           onfocus="if(this.value === '0.00') this.value='';"
+                           onblur="if(this.value === '') this.value='0.00';" />
+                    <span asp-validation-for="TotalProduction" class="text-danger"></span>
+                </div>
+                <div class="col-md-6">
+                    <label asp-for="ProductionEfficiency" class="form-label"></label>
+                    <input asp-for="ProductionEfficiency" class="form-control" value="0.00"
+                           onfocus="if(this.value === '0.00') this.value='';"
+                           onblur="if(this.value === '') this.value='0.00';" />
+                    <span asp-validation-for="ProductionEfficiency" class="text-danger"></span>
+                </div>
+                <div class="col-md-6">
+                    <label asp-for="Bale" class="form-label"></label>
+                    <input asp-for="Bale" class="form-control" value="0.00"
+                           onfocus="if(this.value === '0.00') this.value='';"
+                           onblur="if(this.value === '') this.value='0.00';" />
+                    <span asp-validation-for="Bale" class="text-danger"></span>
+                </div>
+                <div class="col-md-6">
+                    <label asp-for="Lap" class="form-label"></label>
+                    <input asp-for="Lap" class="form-control" value="0.00"
+                           onfocus="if(this.value === '0.00') this.value='';"
+                           onblur="if(this.value === '') this.value='0.00';" />
+                    <span asp-validation-for="Lap" class="text-danger"></span>
+                </div>
+                <div class="col-md-6">
+                    <label asp-for="Mixing" class="form-label"></label>
+                    <input asp-for="Mixing" class="form-control" value="0.00"
+                           onfocus="if(this.value === '0.00') this.value='';"
+                           onblur="if(this.value === '') this.value='0.00';" />
+                    <span asp-validation-for="Mixing" class="text-danger"></span>
+                </div>
+                <div class="col-md-6">
+                    <label asp-for="NoOfDoffs" class="form-label"></label>
+                    <input asp-for="NoOfDoffs" class="form-control" value="0.00"
+                           onfocus="if(this.value === '0.00') this.value='';"
+                           onblur="if(this.value === '') this.value='0.00';" />
+                    <span asp-validation-for="NoOfDoffs" class="text-danger"></span>
+                </div>
+                <div class="col-md-6">
+                    <label asp-for="ConeWeight" class="form-label"></label>
+                    <input asp-for="ConeWeight" class="form-control" value="0.00"
+                           onfocus="if(this.value === '0.00') this.value='';"
+                           onblur="if(this.value === '') this.value='0.00';" />
+                    <span asp-validation-for="ConeWeight" class="text-danger"></span>
+                </div>
+                <div class="col-md-6">
+                    <label asp-for="OpeningKgs" class="form-label"></label>
+                    <input asp-for="OpeningKgs" class="form-control" value="0.00"
+                           onfocus="if(this.value === '0.00') this.value='';"
+                           onblur="if(this.value === '') this.value='0.00';" />
+                    <span asp-validation-for="OpeningKgs" class="text-danger"></span>
+                </div>
+                <div class="col-md-6">
+                    <label asp-for="Closing" class="form-label"></label>
+                    <input asp-for="Closing" class="form-control" value="0.00"
+                           onfocus="if(this.value === '0.00') this.value='';"
+                           onblur="if(this.value === '') this.value='0.00';" />
+                    <span asp-validation-for="Closing" class="text-danger"></span>
+                </div>
+                <div class="col-md-6">
+                    <label asp-for="SliverBreaks" class="form-label"></label>
+                    <input asp-for="SliverBreaks" class="form-control" value="0.00"
+                           onfocus="if(this.value === '0.00') this.value='';"
+                           onblur="if(this.value === '') this.value='0.00';" />
+                    <span asp-validation-for="SliverBreaks" class="text-danger"></span>
+                </div>
+                <div class="col-md-6">
+                    <label asp-for="ExpectedProduction" class="form-label"></label>
+                    <input asp-for="ExpectedProduction" class="form-control" value="0.00"
+                           onfocus="if(this.value === '0.00') this.value='';"
+                           onblur="if(this.value === '') this.value='0.00';" />
+                    <span asp-validation-for="ExpectedProduction" class="text-danger"></span>
+                </div>
+                <div class="col-md-6">
+                    <label asp-for="ProductionDrop" class="form-label"></label>
+                    <input asp-for="ProductionDrop" class="form-control" value="0.00"
+                           onfocus="if(this.value === '0.00') this.value='';"
+                           onblur="if(this.value === '') this.value='0.00';" />
+                    <span asp-validation-for="ProductionDrop" class="text-danger"></span>
+                </div>
 
-                <!-- Products -->
+                <!-- Product Selectors -->
                 <div class="col-md-6">
                     <label asp-for="ProductInId" class="form-label">Product In</label>
                     <select asp-for="ProductInId" asp-items="ViewBag.Products" class="form-select"></select>
@@ -106,12 +197,21 @@
                 .then(res => res.json())
                 .then(data => {
                     const shiftContainer = document.getElementById('ShiftOptions');
+                    const shiftIdInput = document.querySelector('[name="ShiftId"]');
                     shiftContainer.innerHTML = '';
+
+                    if (data.length === 0) {
+                        shiftContainer.innerHTML = '<span class="text-danger">No shifts available for the selected date.</span>';
+                        shiftIdInput.value = '';
+                        return;
+                    }
+
+                    const [baseShiftId] = data[0].id.split('_');
+                    shiftIdInput.value = baseShiftId;
 
                     data.forEach((shift, index) => {
                         const shiftText = `${shift.name} (${shift.fromTime} - ${shift.toTime})`;
                         const radioId = `shiftRadio${index}`;
-
                         const radioHTML = `
                             <div class="form-check">
                                 <input class="form-check-input" type="radio" name="ShiftSelection" id="${radioId}" value="${shiftText}">
@@ -126,6 +226,9 @@
                             document.getElementById('ShiftDetails').value = e.target.value;
                         }
                     });
+                })
+                .catch(err => {
+                    document.getElementById('ShiftOptions').innerHTML = `<span class="text-danger">Error loading shifts: ${err}</span>`;
                 });
         });
     </script>
