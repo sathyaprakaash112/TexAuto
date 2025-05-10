@@ -33,10 +33,31 @@ namespace TexAuto.Controllers
 
         public async Task<IActionResult> Create()
         {
+            var lastProduction = await _context.Productions
+             .OrderByDescending(p => p.ProductionDate)
+             .FirstOrDefaultAsync();
+
+            var model = new Production();
+
+            if (lastProduction == null)
+            {
+                // First entry
+                model.ProductionDate = DateOnly.FromDateTime(DateTime.Today);
+                model.ShiftDetails = "Shift 1";
+            }
+            else
+            {
+                model.ProductionDate = lastProduction.ProductionDate.AddDays(1);
+                model.ShiftDetails = lastProduction.ShiftDetails;
+                model.ShiftId = lastProduction.ShiftId;
+            }
+
+
             ViewData["Departments"] = new SelectList(_context.Departments, "Id", "Name");
             ViewData["Machines"] = new SelectList(_context.Machines, "Id", "Name");
             ViewData["Products"] = new SelectList(_context.Products, "Id", "Name");
-            return View();
+
+            return View(model);
         }
 
         [HttpPost]
@@ -98,7 +119,7 @@ namespace TexAuto.Controllers
                 {
                     shiftOptions.Add(new
                     {
-                        id = $"{shift.Id}_{i}", // <-- ensure it's a string
+                        id = $"{shift.Id}_{i}",
                         name = $"Shift {i}",
                         fromTime = start.Value.ToString("hh:mm tt"),
                         toTime = end.Value.ToString("hh:mm tt")
@@ -109,7 +130,6 @@ namespace TexAuto.Controllers
             return Json(shiftOptions);
         }
 
-        // GET: Productions/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -126,7 +146,6 @@ namespace TexAuto.Controllers
             if (production == null)
                 return NotFound();
 
-            // Load dropdowns
             ViewData["Departments"] = new SelectList(_context.Departments, "Id", "Name", production.DepartmentId);
             ViewData["Machines"] = new SelectList(_context.Machines, "Id", "Name", production.MachineId);
             ViewData["Products"] = new SelectList(_context.Products, "Id", "Name");
@@ -134,7 +153,6 @@ namespace TexAuto.Controllers
             return View(production);
         }
 
-        // POST: Productions/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,ProductionDate,ShiftId,DepartmentId,MachineId,ShiftDetails,ShiftTime,RunTime,IdleTime,DelHank,TotalProduction,ProductionEfficiency,Bale,Lap,Mixing,NoOfDoffs,ConeWeight,OpeningKgs,Closing,SliverBreaks,ProductInId,ProductOutId,ExpectedProduction,ProductionDrop")] Production production)
@@ -165,7 +183,7 @@ namespace TexAuto.Controllers
 
             return RedirectToAction(nameof(Index));
         }
-        // GET: Productions/Details/5
+
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -184,13 +202,11 @@ namespace TexAuto.Controllers
 
             return View(production);
         }
-        // GET: Productions/Delete/5
+
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
-            {
                 return NotFound();
-            }
 
             var production = await _context.Productions
                 .Include(p => p.Shift)
@@ -201,14 +217,11 @@ namespace TexAuto.Controllers
                 .FirstOrDefaultAsync(m => m.Id == id);
 
             if (production == null)
-            {
                 return NotFound();
-            }
 
             return View(production);
         }
 
-        // POST: Productions/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
@@ -222,8 +235,5 @@ namespace TexAuto.Controllers
 
             return RedirectToAction(nameof(Index));
         }
-
-
     }
-
 }

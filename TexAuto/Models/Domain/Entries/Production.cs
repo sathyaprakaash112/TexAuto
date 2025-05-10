@@ -11,7 +11,7 @@ namespace TexAuto.Models.Domain.Entries
     {
         public int Id { get; set; }
 
-        [Display(Name = "Production Date")]
+        [Display(Name = "Date")]
         public DateOnly ProductionDate { get; set; }
 
         [Display(Name = "Shift")]

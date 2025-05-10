@@ -143,10 +143,7 @@
             document.querySelector('[name="IdleTime"]').value = idleTime;
         }
 
-        document.getElementById('ProductionDate').addEventListener('change', function () {
-            const date = this.value;
-            if (!date) return;
-
+        function loadShifts(date) {
             fetch(`/Productions/GetShiftsByDate?productionDate=${date}`)
                 .then(res => res.json())
                 .then(data => {
@@ -166,13 +163,11 @@
                     data.forEach((shift, index) => {
                         const shiftText = `${shift.name} (${shift.fromTime} - ${shift.toTime})`;
                         const radioId = `shiftRadio${index}`;
-
                         const radioHTML = `
                             <div class="form-check">
                                 <input class="form-check-input" type="radio" name="ShiftSelection" id="${radioId}" value="${shiftText}">
                                 <label class="form-check-label" for="${radioId}">${shiftText}</label>
-                            </div>
-                        `;
+                            </div>`;
                         shiftContainer.insertAdjacentHTML('beforeend', radioHTML);
                     });
 
@@ -197,6 +192,20 @@
                 .catch(err => {
                     document.getElementById('ShiftOptions').innerHTML = `<span class="text-danger">Error loading shifts: ${err}</span>`;
                 });
+        }
+
+        document.getElementById('ProductionDate').addEventListener('change', function () {
+            const date = this.value;
+            if (date) loadShifts(date);
+        });
+
+        // ✅ This was nested before — now it's outside and runs on page load
+        window.addEventListener('DOMContentLoaded', function () {
+            const dateInput = document.getElementById('ProductionDate');
+            if (dateInput && dateInput.value) {
+                const event = new Event('change');
+                dateInput.dispatchEvent(event);
+            }
         });
     </script>
 }
