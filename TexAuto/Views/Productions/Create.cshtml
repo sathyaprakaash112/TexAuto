@@ -3,7 +3,7 @@
 @{
     ViewData["Title"] = "Create";
     var decimalFields = new Dictionary<string, string>
-    {
+    {   
         { "DelHank", "Del Hank" },
         { "TotalProduction", "Total Production" },
         { "ProductionEfficiency", "Production Efficiency" },
@@ -39,9 +39,11 @@
                 </div>
                 <div class="col-md-6">
                     <label class="form-label">Shift</label>
-                    <div class="border rounded p-2" id="ShiftOptions">Select a date to load shifts</div>
+                    <div class="border rounded p-2" id="ShiftOptions">Select a production date to load shifts</div>
                 </div>
             </div>
+
+
 
             <!-- Time Fields -->
             <div class="row mb-4">
@@ -68,6 +70,20 @@
                            value="0.0"
                            readonly />
                     <span asp-validation-for="IdleTime" class="text-danger"></span>
+                </div>
+            </div>
+
+            <!-- Department & Machine -->
+            <div class="row mb-4">
+                <div class="col-md-6">
+                    <label asp-for="DepartmentId" class="form-label">Department</label>
+                    <select asp-for="DepartmentId" asp-items="ViewBag.Departments" class="form-select"></select>
+                    <span asp-validation-for="DepartmentId" class="text-danger"></span>
+                </div>
+                <div class="col-md-6">
+                    <label asp-for="MachineId" class="form-label">Machine</label>
+                    <select asp-for="MachineId" asp-items="ViewBag.Machines" class="form-select"></select>
+                    <span asp-validation-for="MachineId" class="text-danger"></span>
                 </div>
             </div>
 
