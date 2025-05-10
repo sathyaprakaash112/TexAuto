@@ -74,6 +74,20 @@ namespace TexAuto.Data
                 new Product { Id = 3, Name = "Yarn 30s", ProductTypeId = 6 }
             );
 
+            modelBuilder.Entity<Shift>().HasData(
+                new Shift
+                {
+                    Id = 1,
+                    EffectiveDate = new DateOnly(2024, 1, 1), // You can adjust this
+                    TotalShifts = 2,
+                    StartTime1 = new TimeOnly(8, 0),
+                    EndTime1 = new TimeOnly(20, 0),
+                    StartTime2 = new TimeOnly(20, 0),
+                    EndTime2 = new TimeOnly(8, 0)
+                }
+);
+
+
             ConfigureProduction(modelBuilder);
         }
 
