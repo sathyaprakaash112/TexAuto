@@ -1,36 +1,30 @@
-﻿@model TexAuto.Models.Domain.Creation.ProductType
+﻿@model TexAuto.Models.Domain.Entries.Production
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "Production Details";
 }
 
-<h1>Details</h1>
+<h1 class="mb-4">Production Details</h1>
 
-<div>
-    <h4>ProductType</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Name)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Name)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Description)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Description)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Department)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Department.Id)
-        </dd>
-    </dl>
+<div class="table-responsive">
+    <table class="table table-bordered">
+        <tbody>
+            @foreach (var prop in Model.GetType().GetProperties())
+            {
+                var label = prop.GetCustomAttributes(typeof(System.ComponentModel.DataAnnotations.DisplayAttribute), false)
+                .Cast<System.ComponentModel.DataAnnotations.DisplayAttribute>()
+                .FirstOrDefault()?.Name ?? prop.Name;
+
+                <tr>
+                    <th style="width: 30%">@label</th>
+                    <td>@Html.DisplayFor(m => prop.GetValue(Model))</td>
+                </tr>
+            }
+        </tbody>
+    </table>
 </div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+
+<div class="mt-3">
+    <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary">Edit</a>
+    <a asp-action="Index" class="btn btn-secondary ms-2">Back to List</a>
 </div>
