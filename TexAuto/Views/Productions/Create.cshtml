@@ -3,9 +3,7 @@
 @{
     ViewData["Title"] = "Create";
     var decimalFields = new Dictionary<string, string>
-    {   
-        { "DelHank", "Del Hank" },
-        { "TotalProduction", "Total Production" },
+    {
         { "ProductionEfficiency", "Production Efficiency" },
         { "Bale", "Bale" },
         { "Lap", "Lap" },
@@ -18,13 +16,15 @@
         { "ExpectedProduction", "Expected Production" },
         { "ProductionDrop", "Production Drop" }
     };
+
+    string? previousShift = ViewBag.PreviousShiftDetails as string;
 }
 
 <h1 class="mb-4">Create Production</h1>
 
 <div class="row">
     <div class="col-md-12">
-        <form asp-action="Create" method="post">
+        <form asp-action="Create" method="post" class="p-4 shadow-sm rounded bg-white">
             <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
 
             <input type="hidden" asp-for="ShiftId" />
@@ -43,36 +43,6 @@
                 </div>
             </div>
 
-
-
-            <!-- Time Fields -->
-            <div class="row mb-4">
-                <div class="col-md-4">
-                    <label asp-for="ShiftTime" class="form-label"></label>
-                    <input asp-for="ShiftTime" class="form-control text-secondary"
-                           value="0.0"
-                           onfocus="if(this.value === '0.0') this.value=''; this.classList.remove('text-secondary');"
-                           onblur="if(this.value === '') { this.value='0.0'; this.classList.add('text-secondary'); }" />
-                    <span asp-validation-for="ShiftTime" class="text-danger"></span>
-                </div>
-                <div class="col-md-4">
-                    <label asp-for="RunTime" class="form-label"></label>
-                    <input asp-for="RunTime" class="form-control text-secondary"
-                           value="0.0"
-                           oninput="updateIdleTime()"
-                           onfocus="if(this.value === '0.0') this.value=''; this.classList.remove('text-secondary');"
-                           onblur="if(this.value === '') { this.value='0.0'; this.classList.add('text-secondary'); }" />
-                    <span asp-validation-for="RunTime" class="text-danger"></span>
-                </div>
-                <div class="col-md-4">
-                    <label asp-for="IdleTime" class="form-label"></label>
-                    <input asp-for="IdleTime" class="form-control text-secondary"
-                           value="0.0"
-                           readonly />
-                    <span asp-validation-for="IdleTime" class="text-danger"></span>
-                </div>
-            </div>
-
             <!-- Department & Machine -->
             <div class="row mb-4">
                 <div class="col-md-6">
@@ -87,20 +57,8 @@
                 </div>
             </div>
 
-            <!-- Decimal Production Fields -->
-            <div class="row g-3">
-                @foreach (var field in decimalFields)
-                {
-                    <div class="col-md-6">
-                        <label class="form-label" for="@field.Key">@field.Value</label>
-                        <input name="@field.Key" id="@field.Key" class="form-control text-secondary"
-                               value="0.00"
-                               onfocus="if(this.value === '0.00') this.value='';"
-                               onblur="if(this.value === '') this.value='0.00';" />
-                    </div>
-                }
-
-                <!-- Product Dropdowns -->
+            <!-- Product Dropdowns -->
+            <div class="row mb-4">
                 <div class="col-md-6">
                     <label asp-for="ProductInId" class="form-label">Product In</label>
                     <select asp-for="ProductInId" asp-items="ViewBag.Products" class="form-select"></select>
@@ -113,10 +71,88 @@
                 </div>
             </div>
 
+            <!-- Time Fields -->
+            <div class="row mb-4">
+                <div class="col-md-4">
+                    <label asp-for="ShiftTime" class="form-label"></label>
+                    <input asp-for="ShiftTime" class="form-control text-secondary" value="0.0"
+                           onfocus="if(this.value === '0.0') this.value=''; this.classList.remove('text-secondary');"
+                           onblur="if(this.value === '') { this.value='0.0'; this.classList.add('text-secondary'); }" />
+                    <span asp-validation-for="ShiftTime" class="text-danger"></span>
+                </div>
+                <div class="col-md-4">
+                    <label asp-for="RunTime" class="form-label"></label>
+                    <input asp-for="RunTime" class="form-control text-secondary" value="0.0" oninput="updateIdleTime()"
+                           onfocus="if(this.value === '0.0') this.value=''; this.classList.remove('text-secondary');"
+                           onblur="if(this.value === '') { this.value='0.0'; this.classList.add('text-secondary'); }" />
+                    <span asp-validation-for="RunTime" class="text-danger"></span>
+                </div>
+                <div class="col-md-4">
+                    <label asp-for="IdleTime" class="form-label"></label>
+                    <input asp-for="IdleTime" class="form-control text-secondary" value="0.0" readonly />
+                    <span asp-validation-for="IdleTime" class="text-danger"></span>
+                </div>
+            </div>
+
+            <!-- Hank Fields -->
+            <div class="row mb-4">
+                <div class="col-md-4" id="openingHankField" style="display:none;">
+                    <label asp-for="OpeningHank" class="form-label"></label>
+                    <input asp-for="OpeningHank" class="form-control" value="0.00"
+                           id="OpeningHank"
+                           oninput="calculateDelHank()"
+                           onfocus="if(this.value === '0.00') this.value='';"
+                           onblur="if(this.value === '') this.value='0.00';" />
+
+                    <span asp-validation-for="OpeningHank" class="text-danger"></span>
+                </div>
+                <div class="col-md-4" id="closingHankField" style="display:none;">
+                    <label asp-for="ClosingHank" class="form-label"></label>
+                    <input asp-for="ClosingHank" class="form-control" value="0.00"
+                           id="ClosingHank"
+                           oninput="calculateDelHank()"
+                           onfocus="if(this.value === '0.00') this.value='';"
+                           onblur="if(this.value === '') this.value='0.00';" />
+                    <span asp-validation-for="ClosingHank" class="text-danger"></span>
+                </div>
+                <div class="col-md-4" id="delHankField" style="display:none;">
+                    <label asp-for="DelHank" class="form-label"></label>
+                    <input asp-for="DelHank" class="form-control" id="DelHank" readonly />
+                    <span asp-validation-for="DelHank" class="text-danger"></span>
+                    <br />
+                </div>
+                
+                <div class="col-md-4">
+                    <label asp-for="TotalProduction" class="form-label"></label>
+                    <input asp-for="TotalProduction" class="form-control text-secondary"
+                           id="TotalProduction"
+                           value="0.00"
+                           onfocus="if(this.value === '0.00') this.value='';"
+                           onblur="if(this.value === '') this.value='0.00';" />
+                    <span asp-validation-for="TotalProduction" class="text-danger"></span>
+                </div>
+
+            </div>
+
+            
+
+            <!-- Decimal Fields -->
+            <div class="row g-3">
+                @foreach (var field in decimalFields)
+                {
+                    <div class="col-md-6">
+                        <label class="form-label" for="@field.Key">@field.Value</label>
+                        <input name="@field.Key" id="@field.Key" class="form-control text-secondary" value="0.00"
+                               onfocus="if(this.value === '0.00') this.value='';"
+                               onblur="if(this.value === '') this.value='0.00';" />
+                    </div>
+                }
+            </div>
+
             <!-- Actions -->
-            <div class="mt-4">
-                <input type="submit" value="Create" class="btn btn-primary" />
-                <a asp-action="Index" class="btn btn-secondary ms-2">Back to List</a>
+            <div class="mt-4 text-end">
+                <input type="submit" value="Create" class="btn btn-primary px-4" />
+                <a asp-action="Index" class="btn btn-outline-secondary ms-2">Back to List</a>
             </div>
         </form>
     </div>
@@ -126,13 +162,14 @@
     <partial name="_ValidationScriptsPartial" />
 
     <script>
+        const previousShiftDetails = '@ViewBag.PreviousShiftDetails';
+        const defaultShiftNumber = '@ViewBag.DefaultShiftNumber';
+
         function parseTimeToDecimal(timeStr) {
             const [time, modifier] = timeStr.split(" ");
             let [hours, minutes] = time.split(":").map(Number);
-
             if (modifier === "PM" && hours < 12) hours += 12;
             if (modifier === "AM" && hours === 12) hours = 0;
-
             return hours + minutes / 60;
         }
 
@@ -163,12 +200,26 @@
                     data.forEach((shift, index) => {
                         const shiftText = `${shift.name} (${shift.fromTime} - ${shift.toTime})`;
                         const radioId = `shiftRadio${index}`;
+                        const isChecked = previousShiftDetails === shiftText || (index === 0 && !previousShiftDetails);
+
                         const radioHTML = `
                             <div class="form-check">
-                                <input class="form-check-input" type="radio" name="ShiftSelection" id="${radioId}" value="${shiftText}">
+                                <input class="form-check-input" type="radio" name="ShiftSelection" id="${radioId}"
+                                       value="${shiftText}" ${isChecked ? "checked" : ""}>
                                 <label class="form-check-label" for="${radioId}">${shiftText}</label>
                             </div>`;
+
                         shiftContainer.insertAdjacentHTML('beforeend', radioHTML);
+
+                        if (isChecked) {
+                            document.getElementById('ShiftDetails').value = shiftText;
+                            const start = parseTimeToDecimal(shift.fromTime);
+                            const end = parseTimeToDecimal(shift.toTime);
+                            let duration = end - start;
+                            if (duration < 0) duration += 24;
+                            document.querySelector('[name="ShiftTime"]').value = duration.toFixed(2);
+                            updateIdleTime();
+                        }
                     });
 
                     shiftContainer.addEventListener('change', function (e) {
@@ -188,9 +239,6 @@
                             updateIdleTime();
                         }
                     });
-                })
-                .catch(err => {
-                    document.getElementById('ShiftOptions').innerHTML = `<span class="text-danger">Error loading shifts: ${err}</span>`;
                 });
         }
 
@@ -199,14 +247,92 @@
             if (date) loadShifts(date);
         });
 
-        // ✅ This was nested before — now it's outside and runs on page load
-        window.addEventListener('DOMContentLoaded', function () {
+            window.addEventListener('DOMContentLoaded', function () {
             const dateInput = document.getElementById('ProductionDate');
             if (dateInput && dateInput.value) {
                 const event = new Event('change');
                 dateInput.dispatchEvent(event);
             }
+
+            const machineSelect = document.getElementById("MachineId");
+            if (machineSelect && machineSelect.value) {
+                const machineId = machineSelect.value;
+                fetch(`/Productions/GetMachineCalculationType?machineId=${machineId}`)
+                    .then(res => res.json())
+                    .then(data => {
+                        const isHank = data === "Hank";
+                        document.getElementById("openingHankField").style.display = isHank ? "block" : "none";
+                        document.getElementById("closingHankField").style.display = isHank ? "block" : "none";
+                        document.getElementById("delHankField").style.display = isHank ? "block" : "none";
+                    });
+            }
+
         });
+
+
+
+        document.getElementById("MachineId").addEventListener("change", function () {
+            const machineId = this.value;
+
+            fetch(`/Productions/GetMachineCalculationType?machineId=${machineId}`)
+                .then(res => res.json())
+                .then(data => {
+                    const isHank = data === "Hank";
+
+                    // Toggle Hank fields
+                    document.getElementById("openingHankField").style.display = isHank ? "block" : "none";
+                    document.getElementById("closingHankField").style.display = isHank ? "block" : "none";
+                    document.getElementById("delHankField").style.display = isHank ? "block" : "none";
+
+                    // Toggle readonly for TotalProduction
+                    const totalProdInput = document.getElementById("TotalProduction");
+                    if (totalProdInput) {
+                        totalProdInput.readOnly = isHank;
+                        totalProdInput.classList.toggle("bg-light", isHank);
+                    }
+
+                    // Set OpeningHank if blank
+                    if (isHank) {
+                        fetch(`/Productions/GetLastClosingHank?machineId=${machineId}`)
+                            .then(res => res.json())
+                            .then(closingHank => {
+                                const openingInput = document.getElementById("OpeningHank");
+                                if (openingInput && (!openingInput.value || openingInput.value === "0.00")) {
+                                    openingInput.value = parseFloat(closingHank).toFixed(2);
+                                    calculateDelHank();
+                                }
+                            });
+                    }
+                });
+        });
+
+
+
+        function calculateDelHank() {
+            const opening = parseInt(document.getElementById('OpeningHank')?.value) || 0;
+            const closing = parseInt(document.getElementById('ClosingHank')?.value) || 0;
+
+            const max = Math.max(opening, closing);
+            const digits = max.toString().length;
+            const maxHank = Math.pow(10, digits) - 1;
+
+            let result = 0;
+            if (closing >= opening) {
+                result = closing - opening;
+            } else {
+                result = (maxHank + 1 - opening) + closing;
+            }
+
+            document.getElementById('DelHank').value = result.toFixed(2);
+        }
+                window.addEventListener('DOMContentLoaded', function () {
+            const machineSelect = document.getElementById("MachineId");
+            if (machineSelect && machineSelect.value) {
+                const event = new Event('change');
+                machineSelect.dispatchEvent(event);
+            }
+        });
+
     </script>
 }
 
@@ -214,4 +340,26 @@
     #ShiftOptions .form-check {
         margin-bottom: 0.5rem;
     }
+
+    form {
+        transition: all 0.3s ease-in-out;
+    }
+
+    .form-control:focus, .form-select:focus {
+        border-color: #0d6efd;
+        box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.25);
+    }
+
+    .btn-primary {
+        transition: background-color 0.2s ease-in-out;
+    }
+
+        .btn-primary:hover {
+            background-color: #0b5ed7;
+        }
+
+    input[readonly] {
+        background-color: #f8f9fa;
+    }
+
 </style>

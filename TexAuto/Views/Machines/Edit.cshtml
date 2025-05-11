@@ -33,6 +33,20 @@
                 <select asp-for="MachineTypeId" class="form-control" asp-items="ViewBag.MachineTypeId"></select>
                 <span asp-validation-for="MachineTypeId" class="text-danger"></span>
             </div>
+            <div class="mb-3">
+                <label asp-for="CalculationType" class="form-label">Calculation Type</label>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" asp-for="CalculationType" value="Production" id="calcProduction" />
+                    <label class="form-check-label" for="calcProduction">Production</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" asp-for="CalculationType" value="Hank" id="calcHank" />
+                    <label class="form-check-label" for="calcHank">Hank</label>
+                </div>
+                <span asp-validation-for="CalculationType" class="text-danger"></span>
+            </div>
+
+
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />
             </div>

@@ -31,34 +31,95 @@ namespace TexAuto.Controllers
             return View(await productions.ToListAsync());
         }
 
+        [HttpGet]
+        public async Task<IActionResult> GetMachineCalculationType(int machineId)
+        {
+            var machine = await _context.Machines.FirstOrDefaultAsync(m => m.Id == machineId);
+            return Json(machine?.CalculationType ?? "Production"); // fallback
+        }
+
+
         public async Task<IActionResult> Create()
         {
             var lastProduction = await _context.Productions
-             .OrderByDescending(p => p.ProductionDate)
-             .FirstOrDefaultAsync();
+                .OrderByDescending(p => p.ProductionDate)
+                .ThenByDescending(p => p.Id)
+                .FirstOrDefaultAsync();
 
             var model = new Production();
 
             if (lastProduction == null)
             {
-                // First entry
                 model.ProductionDate = DateOnly.FromDateTime(DateTime.Today);
                 model.ShiftDetails = "Shift 1";
+                ViewBag.DefaultShiftNumber = 1;
+                model.ProductInId = 0;
+                model.ProductOutId = 0;
             }
             else
             {
                 model.ProductionDate = lastProduction.ProductionDate.AddDays(1);
                 model.ShiftDetails = lastProduction.ShiftDetails;
                 model.ShiftId = lastProduction.ShiftId;
+
+                // Carry forward machine
+                model.MachineId = lastProduction.MachineId;
+                model.DepartmentId = lastProduction.DepartmentId;
+
+                // Try to find previous products for same machine
+                var prev = await _context.Productions
+                    .Where(p => p.MachineId == lastProduction.MachineId)
+                    .OrderByDescending(p => p.ProductionDate)
+                    .FirstOrDefaultAsync();
+
+                model.ProductInId = prev?.ProductInId ?? 0;
+                model.ProductOutId = prev?.ProductOutId ?? 0;
+
+                ViewBag.DefaultShiftNumber = GetShiftNumberFromDetails(lastProduction.ShiftDetails);
+            }
+
+            // Load products filtered by department (if already selected)
+            var departmentId = model.DepartmentId;
+            var filteredProducts = _context.Products.AsQueryable();
+            if (departmentId != 0)
+            {
+                filteredProducts = filteredProducts.Where(p => p.ProductType.DepartmentId == departmentId);
+            }
+
+            if (lastProduction == null)
+            {
+                model.OpeningHank = null;
+            }
+            else
+            {
+                var lastSameMachine = await _context.Productions
+                    .Where(p => p.MachineId == lastProduction.MachineId)
+                    .OrderByDescending(p => p.ProductionDate)
+                    .ThenByDescending(p => p.Id)
+                    .FirstOrDefaultAsync();
+
+                model.OpeningHank = lastSameMachine?.ClosingHank;
             }
 
 
-            ViewData["Departments"] = new SelectList(_context.Departments, "Id", "Name");
-            ViewData["Machines"] = new SelectList(_context.Machines, "Id", "Name");
-            ViewData["Products"] = new SelectList(_context.Products, "Id", "Name");
+            ViewBag.PreviousShiftDetails = model.ShiftDetails;
+            ViewData["Departments"] = new SelectList(_context.Departments, "Id", "Name", model.DepartmentId);
+            ViewData["Machines"] = new SelectList(_context.Machines, "Id", "Name", model.MachineId);
+            ViewData["Products"] = new SelectList(await filteredProducts.ToListAsync(), "Id", "Name");
 
             return View(model);
         }
+
+
+
+        private int GetShiftNumberFromDetails(string? shiftDetails)
+        {
+            if (string.IsNullOrWhiteSpace(shiftDetails)) return 1;
+
+            var match = System.Text.RegularExpressions.Regex.Match(shiftDetails, @"Shift\s*(\d+)");
+            return match.Success ? int.Parse(match.Groups[1].Value) : 1;
+        }
+
 
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -77,6 +138,20 @@ namespace TexAuto.Controllers
                 }
             }
 
+            // ✅ Calculate DelHank
+            if (production.OpeningHank.HasValue && production.ClosingHank.HasValue)
+            {
+                int open = (int)production.OpeningHank.Value;
+                int close = (int)production.ClosingHank.Value;
+                int max = Math.Max(open, close);
+                int digits = max.ToString().Length;
+                int maxHank = (int)Math.Pow(10, digits) - 1;
+
+                production.DelHank = close >= open
+                    ? close - open
+                    : (maxHank + 1 - open) + close;
+            }
+
             if (ModelState.IsValid)
             {
                 _context.Add(production);
@@ -90,6 +165,8 @@ namespace TexAuto.Controllers
 
             return View(production);
         }
+
+
 
         [HttpGet]
         public async Task<IActionResult> GetShiftsByDate(DateOnly productionDate)
@@ -183,6 +260,19 @@ namespace TexAuto.Controllers
 
             return RedirectToAction(nameof(Index));
         }
+
+        [HttpGet]
+        public async Task<IActionResult> GetLastClosingHank(int machineId)
+        {
+            var last = await _context.Productions
+                .Where(p => p.MachineId == machineId)
+                .OrderByDescending(p => p.ProductionDate)
+                .ThenByDescending(p => p.Id)
+                .FirstOrDefaultAsync();
+
+            return Json(last?.ClosingHank ?? 0.00m);
+        }
+
 
         public async Task<IActionResult> Details(int? id)
         {

@@ -43,21 +43,21 @@ namespace TexAuto.Controllers
             return View();
         }
 
-        // POST: Machines/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Number,Name,Description,MachineTypeId")] Machine machine)
+        public async Task<IActionResult> Create(Machine machine)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-                _context.Add(machine);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                ViewData["MachineTypeId"] = new SelectList(_context.MachineTypes, "Id", "Name", machine.MachineTypeId);
+                return View(machine);
             }
 
-            ViewData["MachineTypeId"] = new SelectList(_context.MachineTypes, "Id", "Name", machine.MachineTypeId);
-            return View(machine);
+            _context.Add(machine);
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
         }
+
 
         // GET: Machines/Edit/5
         public async Task<IActionResult> Edit(int? id)

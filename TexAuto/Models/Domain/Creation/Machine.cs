@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+
 namespace TexAuto.Models.Domain.Creation
 {
     public class Machine
@@ -16,6 +17,8 @@ namespace TexAuto.Models.Domain.Creation
         public int MachineTypeId { get; set; }
 
         public MachineType? MachineType { get; set; }
-    }
 
+        [Display(Name = "Calculation Type")]
+        public string CalculationType { get; set; } = "Production"; // Default value
+    }
 }

@@ -52,6 +52,13 @@ namespace TexAuto.Models.Domain.Entries
         [Display(Name = "Shift Details")]
         public string? ShiftDetails { get; set; }
 
+        [Display(Name = "Opening Hank")]
+        public decimal? OpeningHank { get; set; } = 0.00m; // Nullable to support first-entry nulls
+
+        [Display(Name = "Closing Hank")]
+        public decimal? ClosingHank { get; set; } = 0.00m;  // Nullable to support first-entry nulls
+
+
         [Display(Name = "Shift Time")]
         public double ShiftTime { get; set; } = 0.0;
 
@@ -61,7 +68,7 @@ namespace TexAuto.Models.Domain.Entries
         [Display(Name = "Idle Time")]
         public double IdleTime { get; set; } = 0.0;
 
-        [Display(Name = "Del Hank")]
+        [Display(Name = "Delivered Hank")]
         public decimal DelHank { get; set; } = 0.00m;
 
         [Display(Name = "Total Production")]

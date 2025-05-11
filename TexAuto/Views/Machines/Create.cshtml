@@ -1,49 +1,64 @@
 ﻿@model TexAuto.Models.Domain.Creation.Machine
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Create Machine";
 }
 
-<h1>Create</h1>
+<h1 class="mb-4">Create Machine</h1>
 
-<h4>Machine</h4>
-<hr />
 <div class="row">
-    <div class="col-md-4">
-        <form asp-action="Create">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="Number" class="control-label"></label>
-                <input asp-for="Number" class="form-control" />
-                <span asp-validation-for="Number" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Name" class="control-label"></label>
-                <input asp-for="Name" class="form-control" />
-                <span asp-validation-for="Name" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Description" class="control-label"></label>
-                <input asp-for="Description" class="form-control" />
-                <span asp-validation-for="Description" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="MachineTypeId" class="control-label">Machine Type</label>
-                <select asp-for="MachineTypeId" class="form-control" asp-items="ViewBag.MachineTypeId"></select>
-                <span asp-validation-for="MachineTypeId" class="text-danger"></span>
+    <div class="col-md-7">
+        <form asp-action="Create" class="p-4 border rounded shadow-sm bg-white">
+            <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+            <div class="mb-3">
+                <label asp-for="Number" class="form-label">Number</label>
+                <input asp-for="Number" class="form-control" placeholder="Enter machine number" />
+                <span asp-validation-for="Number" class="text-danger small"></span>
             </div>
 
-            <div class="form-group">
+            <div class="mb-3">
+                <label asp-for="Name" class="form-label">Name</label>
+                <input asp-for="Name" class="form-control" placeholder="Enter machine name" />
+                <span asp-validation-for="Name" class="text-danger small"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="Description" class="form-label">Description</label>
+                <input asp-for="Description" class="form-control" placeholder="Enter short description" />
+                <span asp-validation-for="Description" class="text-danger small"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="MachineTypeId" class="form-label">Machine Type</label>
+                <select asp-for="MachineTypeId" class="form-select" asp-items="ViewBag.MachineTypeId">
+                    <option value="">-- Select Type --</option>
+                </select>
+                <span asp-validation-for="MachineTypeId" class="text-danger small"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="CalculationType" class="form-label">Calculation Type</label>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" asp-for="CalculationType" value="Production" id="calcProduction" />
+                    <label class="form-check-label" for="calcProduction">Production</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" asp-for="CalculationType" value="Hank" id="calcHank" />
+                    <label class="form-check-label" for="calcHank">Hank</label>
+                </div>
+                <span asp-validation-for="CalculationType" class="text-danger"></span>
+            </div>
+
+
+            <div class="d-flex gap-2">
                 <input type="submit" value="Create" class="btn btn-primary" />
+                <a asp-action="Index" class="btn btn-outline-secondary">Back to List</a>
             </div>
         </form>
     </div>
 </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
-
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <partial name="_ValidationScriptsPartial" />
 }
