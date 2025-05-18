@@ -34,7 +34,7 @@ namespace TexAuto.Data
                 new Department { Id = 5, Name = "Drawing Finisher", Description = "Drawing Finisher" },
                 new Department { Id = 6, Name = "Simplex", Description = "Simplex" },
                 new Department { Id = 7, Name = "Spinning", Description = "Spinning" },
-                new Department { Id = 8, Name = "Cone Winsing", Description = "Cone Winsing" },
+                new Department { Id = 8, Name = "Cone Winding", Description = "Cone Winding" },
                 new Department { Id = 9, Name = "Autoconer", Description = "Autoconer" },
                 new Department { Id = 10, Name = "Packing", Description = "Packing" },
                 new Department { Id = 11, Name = "Sweeping", Description = "Sweeping" },
@@ -50,7 +50,7 @@ namespace TexAuto.Data
                 new MachineType { Id = 5, Name = "Drawing Finisher", DepartmentId = 5 },
                 new MachineType { Id = 6, Name = "Simplex", DepartmentId = 6 },
                 new MachineType { Id = 7, Name = "Spinning", DepartmentId = 7 },
-                new MachineType { Id = 8, Name = "Cone Winsing", DepartmentId = 8 },
+                new MachineType { Id = 8, Name = "Cone Winding", DepartmentId = 8 },
                 new MachineType { Id = 9, Name = "Autoconer", DepartmentId = 9 }
             );
 

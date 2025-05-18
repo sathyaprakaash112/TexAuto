@@ -39,10 +39,11 @@ namespace TexAuto.Controllers
         }
 
         // GET: Products/Create
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
-            ViewData["ProductTypeId"] = new SelectList(_context.ProductTypes, "Id", "Name");
-            return View();
+
+            var productTypes = await _context.ProductTypes.Include(p => p.Department).ToListAsync();
+            ViewBag.ProductTypes = productTypes; return View();
         }
 
         // POST: Products/Create
@@ -50,6 +51,9 @@ namespace TexAuto.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,Name,Description,ProductTypeId")] Product product)
         {
+            var productTypes = await _context.ProductTypes.Include(p => p.Department).ToListAsync();
+            ViewBag.ProductTypes = productTypes; // Used for Select2 rendering
+
             if (ModelState.IsValid)
             {
                 _context.Add(product);
@@ -57,9 +61,13 @@ namespace TexAuto.Controllers
                 return RedirectToAction(nameof(Index));
             }
 
-            ViewData["ProductTypeId"] = new SelectList(_context.ProductTypes, "Id", "Name", product.ProductTypeId);
+            // This is not needed if you're using ViewBag.ProductTypes + Select2 in the view.
+            // You can remove the following line if ViewBag is used consistently:
+            // ViewData["ProductTypeId"] = new SelectList(productTypes, "Id", "Name", product.ProductTypeId);
+
             return View(product);
         }
+
 
         // GET: Products/Edit/5
         public async Task<IActionResult> Edit(int? id)

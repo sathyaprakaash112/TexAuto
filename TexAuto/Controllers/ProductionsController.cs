@@ -78,13 +78,20 @@ namespace TexAuto.Controllers
                 ViewBag.DefaultShiftNumber = GetShiftNumberFromDetails(lastProduction.ShiftDetails);
             }
 
-            // Load products filtered by department (if already selected)
+            // Load all products for Product In
+            var allProducts = await _context.Products.ToListAsync();
+            ViewData["Products"] = new SelectList(allProducts, "Id", "Name");
+
+            // Load Product Out filtered by department
             var departmentId = model.DepartmentId;
-            var filteredProducts = _context.Products.AsQueryable();
+            var filteredProductOuts = _context.Products.AsQueryable();
             if (departmentId != 0)
             {
-                filteredProducts = filteredProducts.Where(p => p.ProductType.DepartmentId == departmentId);
+                filteredProductOuts = filteredProductOuts
+                    .Where(p => p.ProductType.DepartmentId == departmentId);
             }
+            ViewData["FilteredProductOuts"] = new SelectList(await filteredProductOuts.ToListAsync(), "Id", "Name");
+
 
             if (lastProduction == null)
             {
@@ -105,7 +112,6 @@ namespace TexAuto.Controllers
             ViewBag.PreviousShiftDetails = model.ShiftDetails;
             ViewData["Departments"] = new SelectList(_context.Departments, "Id", "Name", model.DepartmentId);
             ViewData["Machines"] = new SelectList(_context.Machines, "Id", "Name", model.MachineId);
-            ViewData["Products"] = new SelectList(await filteredProducts.ToListAsync(), "Id", "Name");
 
             return View(model);
         }
@@ -325,5 +331,17 @@ namespace TexAuto.Controllers
 
             return RedirectToAction(nameof(Index));
         }
+
+        [HttpGet]
+        public async Task<IActionResult> GetProductsByDepartment(int departmentId)
+        {
+            var products = await _context.Products
+                .Where(p => p.ProductType.DepartmentId == departmentId)
+                .Select(p => new { p.Id, p.Name })
+                .ToListAsync();
+
+            return Json(products);
+        }
+
     }
 }

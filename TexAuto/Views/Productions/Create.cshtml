@@ -58,18 +58,24 @@
             </div>
 
             <!-- Product Dropdowns -->
+            <!-- Product In: show all -->
             <div class="row mb-4">
                 <div class="col-md-6">
                     <label asp-for="ProductInId" class="form-label">Product In</label>
                     <select asp-for="ProductInId" asp-items="ViewBag.Products" class="form-select"></select>
                     <span asp-validation-for="ProductInId" class="text-danger"></span>
                 </div>
+
+                <!-- Product Out: filtered -->
                 <div class="col-md-6">
                     <label asp-for="ProductOutId" class="form-label">Product Out</label>
-                    <select asp-for="ProductOutId" asp-items="ViewBag.Products" class="form-select"></select>
+                    <select asp-for="ProductOutId" asp-items="ViewBag.FilteredProductOuts" class="form-select" id="ProductOutId"></select>
                     <span asp-validation-for="ProductOutId" class="text-danger"></span>
                 </div>
             </div>
+
+            
+
 
             <!-- Time Fields -->
             <div class="row mb-4">
@@ -331,6 +337,23 @@
                 const event = new Event('change');
                 machineSelect.dispatchEvent(event);
             }
+        });
+
+            document.getElementById("DepartmentId").addEventListener("change", function () {
+            const deptId = this.value;
+            fetch(`/Productions/GetProductsByDepartment?departmentId=${deptId}`)
+                .then(res => res.json())
+                .then(products => {
+                    const productOutSelect = document.getElementById("ProductOutId");
+                    productOutSelect.innerHTML = "";
+
+                    products.forEach(product => {
+                        const option = document.createElement("option");
+                        option.value = product.id;
+                        option.text = product.name;
+                        productOutSelect.appendChild(option);
+                    });
+                });
         });
 
     </script>
