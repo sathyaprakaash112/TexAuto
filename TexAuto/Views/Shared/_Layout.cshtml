@@ -13,7 +13,6 @@
 
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 
-
     <style>
         html, body {
             height: 100%;
@@ -31,37 +30,23 @@
 
         .main-content {
             flex: 1 0 auto;
-            padding-top: 20px;
+            padding-top: 30px;
             padding-bottom: 60px;
         }
 
-        .footer {
-            background-color: #e0ecff;
-            color: #1a3b5d;
-        }
-
-            .footer a {
-                color: #1a3b5d;
-                text-decoration: underline;
-            }
-
-                .footer a:hover {
-                    color: #0d2b4a;
-                }
-
         .navbar {
-            background-color: #e0ecff;
+            background-color: #1a3b5d;
             border-bottom: 1px solid #c0d3ef;
         }
 
         .navbar-brand,
         .nav-link {
-            color: #1a3b5d !important;
+            color: #ffffff !important;
             font-weight: 500;
         }
 
             .nav-link:hover {
-                color: #0d2b4a !important;
+                color: #cfe2ff !important;
             }
 
         .dropdown-menu {
@@ -88,15 +73,26 @@
                 transform: scale(1.05);
             }
 
-        
+        footer.footer {
+            background-color: #1a3b5d;
+            color: #ffffff;
+            padding: 20px 0;
+        }
 
-        
+            footer.footer a {
+                color: #ffffff;
+                text-decoration: underline;
+            }
+
+                footer.footer a:hover {
+                    color: #cfe2ff;
+                }
     </style>
 </head>
 <body>
     <div class="page-wrapper">
         <header>
-            <nav class="navbar navbar-expand-sm navbar-light shadow-sm">
+            <nav class="navbar navbar-expand-sm navbar-dark shadow-sm">
                 <div class="container-fluid">
                     <a class="navbar-brand fw-bold" asp-controller="Home" asp-action="Index">TexAuto</a>
                     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse"
@@ -110,40 +106,27 @@
                                 <a class="nav-link" asp-controller="Home" asp-action="Index">Home</a>
                             </li>
 
-                            <!-- Master Dropdown -->
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle" href="#" id="masterDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                     Master
                                 </a>
                                 <ul class="dropdown-menu" aria-labelledby="masterDropdown">
-                                    <li class="d-flex align-items-center justify-content-between px-3">
-                                        <a class="dropdown-item p-0" asp-controller="Departments" asp-action="Index">Department</a>
-                                        <a class="btn btn-sm btn-outline-primary ms-2" asp-controller="Departments" asp-action="Create">+</a>
-                                    </li>
-                                    <li class="d-flex align-items-center justify-content-between px-3 mt-2">
-                                        <a class="dropdown-item p-0" asp-controller="Machines" asp-action="Index">Machine</a>
-                                        <a class="btn btn-sm btn-outline-primary ms-2" asp-controller="Machines" asp-action="Create">+</a>
-                                    </li>
-                                    <li class="d-flex align-items-center justify-content-between px-3 mt-2">
-                                        <a class="dropdown-item p-0" asp-controller="Shift" asp-action="Index">Shift</a>
-                                        <a class="btn btn-sm btn-outline-primary ms-2" asp-controller="Shift" asp-action="Create">+</a>
-                                    </li>
-                                    <li class="d-flex align-items-center justify-content-between px-3 mt-2">
-                                        <a class="dropdown-item p-0" asp-controller="MachineTypes" asp-action="Index">Machine Types</a>
-                                        <a class="btn btn-sm btn-outline-primary ms-2" asp-controller="MachineTypes" asp-action="Create">+</a>
-                                    </li>
-                                    <li class="d-flex align-items-center justify-content-between px-3 mt-2">
-                                        <a class="dropdown-item p-0" asp-controller="Products" asp-action="Index">Products</a>
-                                        <a class="btn btn-sm btn-outline-primary ms-2" asp-controller="Products" asp-action="Create">+</a>
-                                    </li>
-                                    <li class="d-flex align-items-center justify-content-between px-3 mt-2">
-                                        <a class="dropdown-item p-0" asp-controller="ProductTypes" asp-action="Index">Product Types</a>
-                                        <a class="btn btn-sm btn-outline-primary ms-2" asp-controller="ProductTypes" asp-action="Create">+</a>
-                                    </li>
+                                    @foreach (var item in new[] {
+                                    ("Departments", "Department"),
+                                    ("Machines", "Machine"),
+                                    ("Shift", "Shift"),
+                                    ("MachineTypes", "Machine Types"),
+                                    ("Products", "Products"),
+                                    ("ProductTypes", "Product Types") })
+                                    {
+                                        <li class="d-flex align-items-center justify-content-between px-3 mt-2">
+                                            <a class="dropdown-item p-0" asp-controller="@item.Item1" asp-action="Index">@item.Item2</a>
+                                            <a class="btn btn-sm btn-outline-primary ms-2" asp-controller="@item.Item1" asp-action="Create">+</a>
+                                        </li>
+                                    }
                                 </ul>
                             </li>
 
-                            <!-- Productions Dropdown -->
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle" href="#" id="productionsDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                     Productions
@@ -164,12 +147,8 @@
                 @RenderBody()
             </div>
         </main>
-
-        
     </div>
 
-
-    <!-- JS -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
