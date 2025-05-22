@@ -3,10 +3,12 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
+#pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
+
 namespace TexAuto.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialCleanMigration : Migration
+    public partial class CleanBuildAfterAddingNewFields : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -75,7 +77,8 @@ namespace TexAuto.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    DepartmentId = table.Column<int>(type: "int", nullable: false)
+                    DepartmentId = table.Column<int>(type: "int", nullable: false),
+                    Tradable = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -98,6 +101,7 @@ namespace TexAuto.Migrations
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     MachineTypeId = table.Column<int>(type: "int", nullable: false),
+                    CalculationType = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     DepartmentId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
@@ -122,9 +126,11 @@ namespace TexAuto.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    ProductTypeId = table.Column<int>(type: "int", nullable: false)
+                    Name = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: true),
+                    ProductTypeId = table.Column<int>(type: "int", nullable: false),
+                    SetHank = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
+                    NetWeight = table.Column<decimal>(type: "decimal(18,2)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -150,6 +156,8 @@ namespace TexAuto.Migrations
                     ProductInId = table.Column<int>(type: "int", nullable: false),
                     ProductOutId = table.Column<int>(type: "int", nullable: false),
                     ShiftDetails = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    OpeningHank = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
+                    ClosingHank = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
                     ShiftTime = table.Column<double>(type: "float", nullable: false),
                     RunTime = table.Column<double>(type: "float", nullable: false),
                     IdleTime = table.Column<double>(type: "float", nullable: false),
@@ -249,6 +257,82 @@ namespace TexAuto.Migrations
                         principalTable: "WasteType",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.InsertData(
+                table: "Departments",
+                columns: new[] { "Id", "Description", "Name" },
+                values: new object[,]
+                {
+                    { 1, "Mixing", "Mixing" },
+                    { 2, "Blowroom", "Blowroom" },
+                    { 3, "Carding", "Carding" },
+                    { 4, "Drawing Breaker", "Drawing Breaker" },
+                    { 5, "Drawing Finisher", "Drawing Finisher" },
+                    { 6, "Simplex", "Simplex" },
+                    { 7, "Spinning", "Spinning" },
+                    { 8, "Cone Winding", "Cone Winding" },
+                    { 9, "Autoconer", "Autoconer" },
+                    { 10, "Packing", "Packing" },
+                    { 11, "Sweeping", "Sweeping" },
+                    { 12, "Extra Work", "Extra Work" },
+                    { 13, "Others", "Others" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Shifts",
+                columns: new[] { "Id", "EffectiveDate", "EndTime1", "EndTime2", "EndTime3", "EndTime4", "StartTime1", "StartTime2", "StartTime3", "StartTime4", "TotalShifts" },
+                values: new object[] { 1, new DateOnly(2024, 1, 1), new TimeOnly(20, 0, 0), new TimeOnly(8, 0, 0), null, null, new TimeOnly(8, 0, 0), new TimeOnly(20, 0, 0), null, null, 2 });
+
+            migrationBuilder.InsertData(
+                table: "MachineTypes",
+                columns: new[] { "Id", "DepartmentId", "Name" },
+                values: new object[,]
+                {
+                    { 1, 1, "Bale Plucker" },
+                    { 2, 2, "Blowroom" },
+                    { 3, 3, "Carding" },
+                    { 4, 4, "Drawing Breaker" },
+                    { 5, 5, "Drawing Finisher" },
+                    { 6, 6, "Simplex" },
+                    { 7, 7, "Spinning" },
+                    { 8, 8, "Cone Winding" },
+                    { 9, 9, "Autoconer" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "ProductTypes",
+                columns: new[] { "Id", "DepartmentId", "Description", "Name", "Tradable" },
+                values: new object[,]
+                {
+                    { 1, 13, null, "Cotton", false },
+                    { 2, 3, null, "Carding Sliver", false },
+                    { 3, 4, null, "Breaker Sliver", false },
+                    { 4, 5, null, "Finisher Sliver", false },
+                    { 5, 6, null, "Roving", false },
+                    { 6, 7, null, "Spin Yarn", false },
+                    { 7, 8, null, "Winded Yarn", false },
+                    { 8, 9, null, "Autoconed Yarn", false },
+                    { 9, 10, null, "Bag", false },
+                    { 10, 1, null, "Mixed Bale", false }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Products",
+                columns: new[] { "Id", "Description", "Name", "NetWeight", "ProductTypeId", "SetHank" },
+                values: new object[,]
+                {
+                    { 1, null, "Cotton", 0.0m, 1, "" },
+                    { 2, null, "Mixed Bale", 0.0m, 10, "" },
+                    { 3, null, "Carding Sliver 0.092ne", 0.0m, 2, "0.092ne" },
+                    { 4, null, "Breaker Sliver 0.095ne", 0.0m, 3, "0.095ne" },
+                    { 5, null, "Finisher Sliver 0.097ne", 0.0m, 4, "0.097ne" },
+                    { 6, null, "Roving 0.95ne", 0.0m, 5, "0.95ne" },
+                    { 7, null, "Spin Yarn 60s", 0.0m, 6, "60s" },
+                    { 8, null, "Autoconed Yarn 1.5Kgs 60s", 1.5m, 8, "60s" },
+                    { 9, null, "Winded Yarn 1.5Kgs 60s", 1.5m, 7, "60s" },
+                    { 10, null, "Autoconed Bag 60Kgs 60s", 60m, 9, "60s" },
+                    { 11, null, "Winded Bag 60Kgs 60s", 60m, 9, "60s" }
                 });
 
             migrationBuilder.CreateIndex(

@@ -277,6 +277,7 @@ namespace TexAuto.Migrations
                         {
                             Id = 1,
                             Name = "Cotton",
+                            NetWeight = 0.0m,
                             ProductTypeId = 1,
                             SetHank = ""
                         },
@@ -284,48 +285,54 @@ namespace TexAuto.Migrations
                         {
                             Id = 2,
                             Name = "Mixed Bale",
+                            NetWeight = 0.0m,
                             ProductTypeId = 10,
                             SetHank = ""
                         },
                         new
                         {
                             Id = 3,
-                            Name = "Carding Sliver",
+                            Name = "Carding Sliver 0.092ne",
+                            NetWeight = 0.0m,
                             ProductTypeId = 2,
                             SetHank = "0.092ne"
                         },
                         new
                         {
                             Id = 4,
-                            Name = "Breaker Sliver",
+                            Name = "Breaker Sliver 0.095ne",
+                            NetWeight = 0.0m,
                             ProductTypeId = 3,
                             SetHank = "0.095ne"
                         },
                         new
                         {
                             Id = 5,
-                            Name = "Finisher Sliver",
+                            Name = "Finisher Sliver 0.097ne",
+                            NetWeight = 0.0m,
                             ProductTypeId = 4,
                             SetHank = "0.097ne"
                         },
                         new
                         {
                             Id = 6,
-                            Name = "Roving",
+                            Name = "Roving 0.95ne",
+                            NetWeight = 0.0m,
                             ProductTypeId = 5,
                             SetHank = "0.95ne"
                         },
                         new
                         {
                             Id = 7,
-                            Name = "Spin Yarn",
+                            Name = "Spin Yarn 60s",
+                            NetWeight = 0.0m,
                             ProductTypeId = 6,
                             SetHank = "60s"
                         },
                         new
                         {
                             Id = 8,
-                            Name = "Autoconed Yarn",
+                            Name = "Autoconed Yarn 1.5Kgs 60s",
                             NetWeight = 1.5m,
                             ProductTypeId = 8,
                             SetHank = "60s"
@@ -333,7 +340,7 @@ namespace TexAuto.Migrations
                         new
                         {
                             Id = 9,
-                            Name = "Winded Yarn",
+                            Name = "Winded Yarn 1.5Kgs 60s",
                             NetWeight = 1.5m,
                             ProductTypeId = 7,
                             SetHank = "60s"
@@ -341,7 +348,7 @@ namespace TexAuto.Migrations
                         new
                         {
                             Id = 10,
-                            Name = "Autoconed Bag",
+                            Name = "Autoconed Bag 60Kgs 60s",
                             NetWeight = 60m,
                             ProductTypeId = 9,
                             SetHank = "60s"
@@ -349,7 +356,7 @@ namespace TexAuto.Migrations
                         new
                         {
                             Id = 11,
-                            Name = "Winded Bag",
+                            Name = "Winded Bag 60Kgs 60s",
                             NetWeight = 60m,
                             ProductTypeId = 9,
                             SetHank = "60s"

@@ -12,8 +12,8 @@ using TexAuto.Data;
 namespace TexAuto.Migrations
 {
     [DbContext(typeof(TexAutoContext))]
-    [Migration("20250510183532_SeedShitsData")]
-    partial class SeedShitsData
+    [Migration("20250522150003_CleanBuildAfterAddingNewFields")]
+    partial class CleanBuildAfterAddingNewFields
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -91,8 +91,8 @@ namespace TexAuto.Migrations
                         new
                         {
                             Id = 8,
-                            Description = "Cone Winsing",
-                            Name = "Cone Winsing"
+                            Description = "Cone Winding",
+                            Name = "Cone Winding"
                         },
                         new
                         {
@@ -117,6 +117,12 @@ namespace TexAuto.Migrations
                             Id = 12,
                             Description = "Extra Work",
                             Name = "Extra Work"
+                        },
+                        new
+                        {
+                            Id = 13,
+                            Description = "Others",
+                            Name = "Others"
                         });
                 });
 
@@ -127,6 +133,10 @@ namespace TexAuto.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("CalculationType")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int?>("DepartmentId")
                         .HasColumnType("int");
@@ -222,7 +232,7 @@ namespace TexAuto.Migrations
                         {
                             Id = 8,
                             DepartmentId = 8,
-                            Name = "Cone Winsing"
+                            Name = "Cone Winding"
                         },
                         new
                         {
@@ -249,8 +259,15 @@ namespace TexAuto.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
+                    b.Property<decimal?>("NetWeight")
+                        .HasColumnType("decimal(18,2)");
+
                     b.Property<int>("ProductTypeId")
                         .HasColumnType("int");
+
+                    b.Property<string>("SetHank")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.HasKey("Id");
 
@@ -262,20 +279,90 @@ namespace TexAuto.Migrations
                         new
                         {
                             Id = 1,
-                            Name = "Cotton Raw",
-                            ProductTypeId = 1
+                            Name = "Cotton",
+                            NetWeight = 0.0m,
+                            ProductTypeId = 1,
+                            SetHank = ""
                         },
                         new
                         {
                             Id = 2,
-                            Name = "Sliver Type A",
-                            ProductTypeId = 2
+                            Name = "Mixed Bale",
+                            NetWeight = 0.0m,
+                            ProductTypeId = 10,
+                            SetHank = ""
                         },
                         new
                         {
                             Id = 3,
-                            Name = "Yarn 30s",
-                            ProductTypeId = 6
+                            Name = "Carding Sliver 0.092ne",
+                            NetWeight = 0.0m,
+                            ProductTypeId = 2,
+                            SetHank = "0.092ne"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Name = "Breaker Sliver 0.095ne",
+                            NetWeight = 0.0m,
+                            ProductTypeId = 3,
+                            SetHank = "0.095ne"
+                        },
+                        new
+                        {
+                            Id = 5,
+                            Name = "Finisher Sliver 0.097ne",
+                            NetWeight = 0.0m,
+                            ProductTypeId = 4,
+                            SetHank = "0.097ne"
+                        },
+                        new
+                        {
+                            Id = 6,
+                            Name = "Roving 0.95ne",
+                            NetWeight = 0.0m,
+                            ProductTypeId = 5,
+                            SetHank = "0.95ne"
+                        },
+                        new
+                        {
+                            Id = 7,
+                            Name = "Spin Yarn 60s",
+                            NetWeight = 0.0m,
+                            ProductTypeId = 6,
+                            SetHank = "60s"
+                        },
+                        new
+                        {
+                            Id = 8,
+                            Name = "Autoconed Yarn 1.5Kgs 60s",
+                            NetWeight = 1.5m,
+                            ProductTypeId = 8,
+                            SetHank = "60s"
+                        },
+                        new
+                        {
+                            Id = 9,
+                            Name = "Winded Yarn 1.5Kgs 60s",
+                            NetWeight = 1.5m,
+                            ProductTypeId = 7,
+                            SetHank = "60s"
+                        },
+                        new
+                        {
+                            Id = 10,
+                            Name = "Autoconed Bag 60Kgs 60s",
+                            NetWeight = 60m,
+                            ProductTypeId = 9,
+                            SetHank = "60s"
+                        },
+                        new
+                        {
+                            Id = 11,
+                            Name = "Winded Bag 60Kgs 60s",
+                            NetWeight = 60m,
+                            ProductTypeId = 9,
+                            SetHank = "60s"
                         });
                 });
 
@@ -297,6 +384,9 @@ namespace TexAuto.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<bool>("Tradable")
+                        .HasColumnType("bit");
+
                     b.HasKey("Id");
 
                     b.HasIndex("DepartmentId");
@@ -307,56 +397,72 @@ namespace TexAuto.Migrations
                         new
                         {
                             Id = 1,
-                            DepartmentId = 1,
-                            Name = "Cotton"
+                            DepartmentId = 13,
+                            Name = "Cotton",
+                            Tradable = false
                         },
                         new
                         {
                             Id = 2,
                             DepartmentId = 3,
-                            Name = "Carding Sliver"
+                            Name = "Carding Sliver",
+                            Tradable = false
                         },
                         new
                         {
                             Id = 3,
                             DepartmentId = 4,
-                            Name = "Breaker Sliver"
+                            Name = "Breaker Sliver",
+                            Tradable = false
                         },
                         new
                         {
                             Id = 4,
                             DepartmentId = 5,
-                            Name = "Finisher Sliver"
+                            Name = "Finisher Sliver",
+                            Tradable = false
                         },
                         new
                         {
                             Id = 5,
                             DepartmentId = 6,
-                            Name = "Roving"
+                            Name = "Roving",
+                            Tradable = false
                         },
                         new
                         {
                             Id = 6,
                             DepartmentId = 7,
-                            Name = "Spin Yarn"
+                            Name = "Spin Yarn",
+                            Tradable = false
                         },
                         new
                         {
                             Id = 7,
                             DepartmentId = 8,
-                            Name = "Winded Yarn"
+                            Name = "Winded Yarn",
+                            Tradable = false
                         },
                         new
                         {
                             Id = 8,
                             DepartmentId = 9,
-                            Name = "Autoconed Yarn"
+                            Name = "Autoconed Yarn",
+                            Tradable = false
                         },
                         new
                         {
                             Id = 9,
                             DepartmentId = 10,
-                            Name = "Bag"
+                            Name = "Bag",
+                            Tradable = false
+                        },
+                        new
+                        {
+                            Id = 10,
+                            DepartmentId = 1,
+                            Name = "Mixed Bale",
+                            Tradable = false
                         });
                 });
 
@@ -408,6 +514,9 @@ namespace TexAuto.Migrations
                     b.Property<decimal>("Closing")
                         .HasColumnType("decimal(18,2)");
 
+                    b.Property<decimal?>("ClosingHank")
+                        .HasColumnType("decimal(18,2)");
+
                     b.Property<decimal>("ConeWeight")
                         .HasColumnType("decimal(18,2)");
 
@@ -433,6 +542,9 @@ namespace TexAuto.Migrations
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<decimal>("NoOfDoffs")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal?>("OpeningHank")
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<decimal>("OpeningKgs")

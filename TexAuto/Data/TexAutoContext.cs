@@ -71,18 +71,19 @@ namespace TexAuto.Data
             );
 
             modelBuilder.Entity<Product>().HasData(
-                new Product { Id = 1, Name = "Cotton", ProductTypeId = 1, SetHank = "", NetWeight = null },
-                new Product { Id = 2, Name = "Mixed Bale", ProductTypeId = 10, SetHank = "", NetWeight = null },
-                new Product { Id = 3, Name = "Carding Sliver", ProductTypeId = 2, SetHank = "0.092ne", NetWeight = null },
-                new Product { Id = 4, Name = "Breaker Sliver", ProductTypeId = 3, SetHank = "0.095ne", NetWeight = null },
-                new Product { Id = 5, Name = "Finisher Sliver", ProductTypeId = 4, SetHank = "0.097ne", NetWeight = null },
-                new Product { Id = 6, Name = "Roving", ProductTypeId = 5, SetHank = "0.95ne", NetWeight = null },
-                new Product { Id = 7, Name = "Spin Yarn", ProductTypeId = 6, SetHank = "60s", NetWeight = null },
-                new Product { Id = 8, Name = "Autoconed Yarn", ProductTypeId = 8, SetHank = "60s", NetWeight = 1.5m },
-                new Product { Id = 9, Name = "Winded Yarn", ProductTypeId = 7, SetHank = "60s", NetWeight = 1.5m },
-                new Product { Id = 10, Name = "Autoconed Bag", ProductTypeId = 9, SetHank = "60s", NetWeight = 60m },
-                new Product { Id = 11, Name = "Winded Bag", ProductTypeId = 9, SetHank = "60s", NetWeight = 60m }
+                new Product { Id = 1, Name = "Cotton", ProductTypeId = 1, SetHank = "", NetWeight = 0.0m },
+                new Product { Id = 2, Name = "Mixed Bale", ProductTypeId = 10, SetHank = "", NetWeight = 0.0m },
+                new Product { Id = 3, Name = "Carding Sliver 0.092ne", ProductTypeId = 2, SetHank = "0.092ne", NetWeight = 0.0m },
+                new Product { Id = 4, Name = "Breaker Sliver 0.095ne", ProductTypeId = 3, SetHank = "0.095ne", NetWeight = 0.0m },
+                new Product { Id = 5, Name = "Finisher Sliver 0.097ne", ProductTypeId = 4, SetHank = "0.097ne", NetWeight = 0.0m },
+                new Product { Id = 6, Name = "Roving 0.95ne", ProductTypeId = 5, SetHank = "0.95ne", NetWeight = 0.0m },
+                new Product { Id = 7, Name = "Spin Yarn 60s", ProductTypeId = 6, SetHank = "60s", NetWeight = 0.0m },
+                new Product { Id = 8, Name = "Autoconed Yarn 1.5Kgs 60s", ProductTypeId = 8, SetHank = "60s", NetWeight = 1.5m },
+                new Product { Id = 9, Name = "Winded Yarn 1.5Kgs 60s", ProductTypeId = 7, SetHank = "60s", NetWeight = 1.5m },
+                new Product { Id = 10, Name = "Autoconed Bag 60Kgs 60s", ProductTypeId = 9, SetHank = "60s", NetWeight = 60m },
+                new Product { Id = 11, Name = "Winded Bag 60Kgs 60s", ProductTypeId = 9, SetHank = "60s", NetWeight = 60m }
             );
+
 
 
             modelBuilder.Entity<Shift>().HasData(
