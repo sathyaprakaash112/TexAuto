@@ -18,5 +18,10 @@ namespace TexAuto.Models.Domain.Creation
         public ProductType? ProductType { get; set; }
 
         public int ProductTypeId { get; set; }
+
+        [StringLength(100)]
+        public string? SetHank { get; set; } = string.Empty;
+
+        public decimal? NetWeight { get; set; } = 0.0m;
     }
 }

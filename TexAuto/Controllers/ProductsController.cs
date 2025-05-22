@@ -1,7 +1,6 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using TexAuto.Data;
 using TexAuto.Models.Domain.Creation;
@@ -20,8 +19,12 @@ namespace TexAuto.Controllers
         // GET: Products
         public async Task<IActionResult> Index()
         {
-            var products = _context.Products.Include(p => p.ProductType);
-            return View(await products.ToListAsync());
+            var products = await _context.Products
+                .Include(p => p.ProductType)
+                .ThenInclude(pt => pt.Department)
+                .ToListAsync();
+
+            return View(products);
         }
 
         // GET: Products/Details/5
@@ -31,6 +34,7 @@ namespace TexAuto.Controllers
 
             var product = await _context.Products
                 .Include(p => p.ProductType)
+                .ThenInclude(pt => pt.Department)
                 .FirstOrDefaultAsync(m => m.Id == id);
 
             if (product == null) return NotFound();
@@ -41,18 +45,21 @@ namespace TexAuto.Controllers
         // GET: Products/Create
         public async Task<IActionResult> Create()
         {
+            ViewBag.ProductTypes = await _context.ProductTypes
+                .Include(pt => pt.Department)
+                .ToListAsync();
 
-            var productTypes = await _context.ProductTypes.Include(p => p.Department).ToListAsync();
-            ViewBag.ProductTypes = productTypes; return View();
+            return View();
         }
 
         // POST: Products/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,Description,ProductTypeId")] Product product)
+        public async Task<IActionResult> Create([Bind("Id,Name,Description,ProductTypeId,NetWeight,SetHank")] Product product)
         {
-            var productTypes = await _context.ProductTypes.Include(p => p.Department).ToListAsync();
-            ViewBag.ProductTypes = productTypes; // Used for Select2 rendering
+            ViewBag.ProductTypes = await _context.ProductTypes
+                .Include(pt => pt.Department)
+                .ToListAsync();
 
             if (ModelState.IsValid)
             {
@@ -61,13 +68,8 @@ namespace TexAuto.Controllers
                 return RedirectToAction(nameof(Index));
             }
 
-            // This is not needed if you're using ViewBag.ProductTypes + Select2 in the view.
-            // You can remove the following line if ViewBag is used consistently:
-            // ViewData["ProductTypeId"] = new SelectList(productTypes, "Id", "Name", product.ProductTypeId);
-
             return View(product);
         }
-
 
         // GET: Products/Edit/5
         public async Task<IActionResult> Edit(int? id)
@@ -77,16 +79,23 @@ namespace TexAuto.Controllers
             var product = await _context.Products.FindAsync(id);
             if (product == null) return NotFound();
 
-            ViewData["ProductTypeId"] = new SelectList(_context.ProductTypes, "Id", "Name", product.ProductTypeId);
+            ViewBag.ProductTypes = await _context.ProductTypes
+                .Include(pt => pt.Department)
+                .ToListAsync();
+
             return View(product);
         }
 
         // POST: Products/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Description,ProductTypeId")] Product product)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Description,ProductTypeId,NetWeight,SetHank")] Product product)
         {
             if (id != product.Id) return NotFound();
+
+            ViewBag.ProductTypes = await _context.ProductTypes
+                .Include(pt => pt.Department)
+                .ToListAsync();
 
             if (ModelState.IsValid)
             {
@@ -94,6 +103,7 @@ namespace TexAuto.Controllers
                 {
                     _context.Update(product);
                     await _context.SaveChangesAsync();
+                    return RedirectToAction(nameof(Index));
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -102,10 +112,8 @@ namespace TexAuto.Controllers
                     else
                         throw;
                 }
-                return RedirectToAction(nameof(Index));
             }
 
-            ViewData["ProductTypeId"] = new SelectList(_context.ProductTypes, "Id", "Name", product.ProductTypeId);
             return View(product);
         }
 
@@ -116,6 +124,7 @@ namespace TexAuto.Controllers
 
             var product = await _context.Products
                 .Include(p => p.ProductType)
+                .ThenInclude(pt => pt.Department)
                 .FirstOrDefaultAsync(m => m.Id == id);
 
             if (product == null) return NotFound();

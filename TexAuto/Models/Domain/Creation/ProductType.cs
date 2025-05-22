@@ -11,5 +11,7 @@ namespace TexAuto.Models.Domain.Creation
 
         public Department? Department { get; set; }
         public int  DepartmentId { get; set; }
+
+        public bool Tradable { get; set; } = false;
     }
 }

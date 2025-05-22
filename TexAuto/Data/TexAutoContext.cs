@@ -38,7 +38,8 @@ namespace TexAuto.Data
                 new Department { Id = 9, Name = "Autoconer", Description = "Autoconer" },
                 new Department { Id = 10, Name = "Packing", Description = "Packing" },
                 new Department { Id = 11, Name = "Sweeping", Description = "Sweeping" },
-                new Department { Id = 12, Name = "Extra Work", Description = "Extra Work" }
+                new Department { Id = 12, Name = "Extra Work", Description = "Extra Work" },
+                new Department { Id = 13, Name = "Others", Description = "Others" }
             );
 
             // MachineTypes
@@ -56,7 +57,7 @@ namespace TexAuto.Data
 
             // ProductTypes
             modelBuilder.Entity<ProductType>().HasData(
-                new ProductType { Id = 1, Name = "Cotton", DepartmentId = 1 },
+                new ProductType { Id = 1, Name = "Cotton", DepartmentId = 13 },
                 new ProductType { Id = 2, Name = "Carding Sliver", DepartmentId = 3 },
                 new ProductType { Id = 3, Name = "Breaker Sliver", DepartmentId = 4 },
                 new ProductType { Id = 4, Name = "Finisher Sliver", DepartmentId = 5 },
@@ -64,15 +65,25 @@ namespace TexAuto.Data
                 new ProductType { Id = 6, Name = "Spin Yarn", DepartmentId = 7 },
                 new ProductType { Id = 7, Name = "Winded Yarn", DepartmentId = 8 },
                 new ProductType { Id = 8, Name = "Autoconed Yarn", DepartmentId = 9 },
-                new ProductType { Id = 9, Name = "Bag", DepartmentId = 10 }
+                new ProductType { Id = 9, Name = "Bag", DepartmentId = 10 },
+                new ProductType { Id = 10, Name = "Mixed Bale", DepartmentId = 1 }
+
             );
 
-            // Optional: Products (Example entries)
             modelBuilder.Entity<Product>().HasData(
-                new Product { Id = 1, Name = "Cotton Raw", ProductTypeId = 1 },
-                new Product { Id = 2, Name = "Sliver Type A", ProductTypeId = 2 },
-                new Product { Id = 3, Name = "Yarn 30s", ProductTypeId = 6 }
+                new Product { Id = 1, Name = "Cotton", ProductTypeId = 1, SetHank = "", NetWeight = null },
+                new Product { Id = 2, Name = "Mixed Bale", ProductTypeId = 10, SetHank = "", NetWeight = null },
+                new Product { Id = 3, Name = "Carding Sliver", ProductTypeId = 2, SetHank = "0.092ne", NetWeight = null },
+                new Product { Id = 4, Name = "Breaker Sliver", ProductTypeId = 3, SetHank = "0.095ne", NetWeight = null },
+                new Product { Id = 5, Name = "Finisher Sliver", ProductTypeId = 4, SetHank = "0.097ne", NetWeight = null },
+                new Product { Id = 6, Name = "Roving", ProductTypeId = 5, SetHank = "0.95ne", NetWeight = null },
+                new Product { Id = 7, Name = "Spin Yarn", ProductTypeId = 6, SetHank = "60s", NetWeight = null },
+                new Product { Id = 8, Name = "Autoconed Yarn", ProductTypeId = 8, SetHank = "60s", NetWeight = 1.5m },
+                new Product { Id = 9, Name = "Winded Yarn", ProductTypeId = 7, SetHank = "60s", NetWeight = 1.5m },
+                new Product { Id = 10, Name = "Autoconed Bag", ProductTypeId = 9, SetHank = "60s", NetWeight = 60m },
+                new Product { Id = 11, Name = "Winded Bag", ProductTypeId = 9, SetHank = "60s", NetWeight = 60m }
             );
+
 
             modelBuilder.Entity<Shift>().HasData(
                 new Shift

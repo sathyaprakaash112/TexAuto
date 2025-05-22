@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TexAuto.Data;
 
@@ -11,9 +12,11 @@ using TexAuto.Data;
 namespace TexAuto.Migrations
 {
     [DbContext(typeof(TexAutoContext))]
-    partial class TexAutoContextModelSnapshot : ModelSnapshot
+    [Migration("20250518131603_AddedNewFields")]
+    partial class AddedNewFields
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -277,6 +280,7 @@ namespace TexAuto.Migrations
                         {
                             Id = 1,
                             Name = "Cotton",
+                            NetWeight = 0.0m,
                             ProductTypeId = 1,
                             SetHank = ""
                         },
@@ -284,6 +288,7 @@ namespace TexAuto.Migrations
                         {
                             Id = 2,
                             Name = "Mixed Bale",
+                            NetWeight = 0.0m,
                             ProductTypeId = 10,
                             SetHank = ""
                         },
@@ -291,68 +296,73 @@ namespace TexAuto.Migrations
                         {
                             Id = 3,
                             Name = "Carding Sliver",
+                            NetWeight = 0.0m,
                             ProductTypeId = 2,
-                            SetHank = "0.092ne"
+                            SetHank = ""
                         },
                         new
                         {
                             Id = 4,
                             Name = "Breaker Sliver",
+                            NetWeight = 0.0m,
                             ProductTypeId = 3,
-                            SetHank = "0.095ne"
+                            SetHank = ""
                         },
                         new
                         {
                             Id = 5,
                             Name = "Finisher Sliver",
+                            NetWeight = 0.0m,
                             ProductTypeId = 4,
-                            SetHank = "0.097ne"
+                            SetHank = ""
                         },
                         new
                         {
                             Id = 6,
                             Name = "Roving",
+                            NetWeight = 0.0m,
                             ProductTypeId = 5,
-                            SetHank = "0.95ne"
+                            SetHank = ""
                         },
                         new
                         {
                             Id = 7,
                             Name = "Spin Yarn",
+                            NetWeight = 0.0m,
                             ProductTypeId = 6,
-                            SetHank = "60s"
+                            SetHank = ""
                         },
                         new
                         {
                             Id = 8,
                             Name = "Autoconed Yarn",
-                            NetWeight = 1.5m,
+                            NetWeight = 0.0m,
                             ProductTypeId = 8,
-                            SetHank = "60s"
+                            SetHank = ""
                         },
                         new
                         {
                             Id = 9,
                             Name = "Winded Yarn",
-                            NetWeight = 1.5m,
+                            NetWeight = 0.0m,
                             ProductTypeId = 7,
-                            SetHank = "60s"
+                            SetHank = ""
                         },
                         new
                         {
                             Id = 10,
                             Name = "Autoconed Bag",
-                            NetWeight = 60m,
+                            NetWeight = 0.0m,
                             ProductTypeId = 9,
-                            SetHank = "60s"
+                            SetHank = ""
                         },
                         new
                         {
                             Id = 11,
                             Name = "Winded Bag",
-                            NetWeight = 60m,
+                            NetWeight = 0.0m,
                             ProductTypeId = 9,
-                            SetHank = "60s"
+                            SetHank = ""
                         });
                 });
 

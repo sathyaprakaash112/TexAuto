@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TexAuto.Data;
 
@@ -11,9 +12,11 @@ using TexAuto.Data;
 namespace TexAuto.Migrations
 {
     [DbContext(typeof(TexAutoContext))]
-    partial class TexAutoContextModelSnapshot : ModelSnapshot
+    [Migration("20250518120418_AddedNewDepartmentAndProductsInSeeding")]
+    partial class AddedNewDepartmentAndProductsInSeeding
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -256,15 +259,8 @@ namespace TexAuto.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
-                    b.Property<decimal?>("NetWeight")
-                        .HasColumnType("decimal(18,2)");
-
                     b.Property<int>("ProductTypeId")
                         .HasColumnType("int");
-
-                    b.Property<string>("SetHank")
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
 
                     b.HasKey("Id");
 
@@ -277,82 +273,67 @@ namespace TexAuto.Migrations
                         {
                             Id = 1,
                             Name = "Cotton",
-                            ProductTypeId = 1,
-                            SetHank = ""
+                            ProductTypeId = 1
                         },
                         new
                         {
                             Id = 2,
                             Name = "Mixed Bale",
-                            ProductTypeId = 10,
-                            SetHank = ""
+                            ProductTypeId = 10
                         },
                         new
                         {
                             Id = 3,
                             Name = "Carding Sliver",
-                            ProductTypeId = 2,
-                            SetHank = "0.092ne"
+                            ProductTypeId = 2
                         },
                         new
                         {
                             Id = 4,
                             Name = "Breaker Sliver",
-                            ProductTypeId = 3,
-                            SetHank = "0.095ne"
+                            ProductTypeId = 3
                         },
                         new
                         {
                             Id = 5,
                             Name = "Finisher Sliver",
-                            ProductTypeId = 4,
-                            SetHank = "0.097ne"
+                            ProductTypeId = 4
                         },
                         new
                         {
                             Id = 6,
                             Name = "Roving",
-                            ProductTypeId = 5,
-                            SetHank = "0.95ne"
+                            ProductTypeId = 5
                         },
                         new
                         {
                             Id = 7,
                             Name = "Spin Yarn",
-                            ProductTypeId = 6,
-                            SetHank = "60s"
+                            ProductTypeId = 6
                         },
                         new
                         {
                             Id = 8,
                             Name = "Autoconed Yarn",
-                            NetWeight = 1.5m,
-                            ProductTypeId = 8,
-                            SetHank = "60s"
+                            ProductTypeId = 8
                         },
                         new
                         {
                             Id = 9,
                             Name = "Winded Yarn",
-                            NetWeight = 1.5m,
-                            ProductTypeId = 7,
-                            SetHank = "60s"
+                            ProductTypeId = 7
                         },
                         new
                         {
                             Id = 10,
                             Name = "Autoconed Bag",
-                            NetWeight = 60m,
-                            ProductTypeId = 9,
-                            SetHank = "60s"
+                            ProductTypeId = 9
                         },
                         new
                         {
                             Id = 11,
                             Name = "Winded Bag",
-                            NetWeight = 60m,
-                            ProductTypeId = 9,
-                            SetHank = "60s"
+                            ProductTypeId = 9
                         });
                 });
 
@@ -374,9 +355,6 @@ namespace TexAuto.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool>("Tradable")
-                        .HasColumnType("bit");
-
                     b.HasKey("Id");
 
                     b.HasIndex("DepartmentId");
@@ -388,71 +366,61 @@ namespace TexAuto.Migrations
                         {
                             Id = 1,
                             DepartmentId = 13,
-                            Name = "Cotton",
-                            Tradable = false
+                            Name = "Cotton"
                         },
                         new
                         {
                             Id = 2,
                             DepartmentId = 3,
-                            Name = "Carding Sliver",
-                            Tradable = false
+                            Name = "Carding Sliver"
                         },
                         new
                         {
                             Id = 3,
                             DepartmentId = 4,
-                            Name = "Breaker Sliver",
-                            Tradable = false
+                            Name = "Breaker Sliver"
                         },
                         new
                         {
                             Id = 4,
                             DepartmentId = 5,
-                            Name = "Finisher Sliver",
-                            Tradable = false
+                            Name = "Finisher Sliver"
                         },
                         new
                         {
                             Id = 5,
                             DepartmentId = 6,
-                            Name = "Roving",
-                            Tradable = false
+                            Name = "Roving"
                         },
                         new
                         {
                             Id = 6,
                             DepartmentId = 7,
-                            Name = "Spin Yarn",
-                            Tradable = false
+                            Name = "Spin Yarn"
                         },
                         new
                         {
                             Id = 7,
                             DepartmentId = 8,
-                            Name = "Winded Yarn",
-                            Tradable = false
+                            Name = "Winded Yarn"
                         },
                         new
                         {
                             Id = 8,
                             DepartmentId = 9,
-                            Name = "Autoconed Yarn",
-                            Tradable = false
+                            Name = "Autoconed Yarn"
                         },
                         new
                         {
                             Id = 9,
                             DepartmentId = 10,
-                            Name = "Bag",
-                            Tradable = false
+                            Name = "Bag"
                         },
                         new
                         {
                             Id = 10,
                             DepartmentId = 1,
-                            Name = "Mixed Bale",
-                            Tradable = false
+                            Name = "Mixed Bale"
                         });
                 });
 

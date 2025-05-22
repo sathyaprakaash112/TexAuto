@@ -16,6 +16,8 @@
             <th>@Html.DisplayNameFor(model => model.Name)</th>
             <th>@Html.DisplayNameFor(model => model.Description)</th>
             <th>Product Type</th>
+            <th>Set Hank</th>
+            <th>Net Weight (Kgs)</th>
             <th class="text-center">Actions</th>
         </tr>
     </thead>
@@ -26,6 +28,8 @@
                 <td>@Html.DisplayFor(modelItem => item.Name)</td>
                 <td>@Html.DisplayFor(modelItem => item.Description)</td>
                 <td>@item.ProductType?.Name</td>
+                <td>@item.SetHank</td>
+                <td>@(item.NetWeight?.ToString("0.##") ?? "-")</td>
                 <td class="text-center">
                     <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-outline-secondary me-1">Edit</a>
                     <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-outline-info me-1">Details</a>
