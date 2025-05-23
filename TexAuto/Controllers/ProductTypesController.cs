@@ -48,7 +48,7 @@ namespace TexAuto.Controllers
         // POST: ProductTypes/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,Description,DepartmentId")] ProductType productType)
+        public async Task<IActionResult> Create([Bind("Id,Name,Description,DepartmentId,Tradable")] ProductType productType)
         {
             if (ModelState.IsValid)
             {
@@ -76,10 +76,10 @@ namespace TexAuto.Controllers
         // POST: ProductTypes/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Description,DepartmentId")] ProductType productType)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Description,DepartmentId,Tradable")] ProductType productType)
         {
             if (id != productType.Id) return NotFound();
-
+            
             if (ModelState.IsValid)
             {
                 try
