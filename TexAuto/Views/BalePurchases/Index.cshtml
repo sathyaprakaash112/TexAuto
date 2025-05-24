@@ -1,0 +1,115 @@
+﻿@model IPagedList<Project.Models.Domain.Creation.BalePurchase>
+@using X.PagedList
+@using X.PagedList.Mvc.Core;
+
+@{
+    ViewData["Title"] = "Bale Purchases";
+}
+<h2 class="mb-4">📦 Bale Purchases</h2>
+<a asp-action="Create" class="btn btn-primary mb-3">+ New Purchase</a>
+
+<div class="table-responsive mb-4" style="max-height: 75vh; overflow-x: auto;">
+    <table class="table table-bordered table-hover table-sm align-middle text-nowrap">
+        <thead class="sticky-top bg-lightblue">
+            <tr>
+                <th>Inward No</th>
+                <th>Inward Date</th>
+                <th>Purchase Type</th>
+                <th>Supplier</th>
+                <th>Bill No</th>
+                <th>Bill Date</th>
+                <th>Lot No</th>
+                <th>Fibre Type</th>
+                <th>Commission/Bale</th>
+                <th>Transport Vendor</th>
+                <th>Freight</th>
+                <th>Unloading</th>
+                <th>Delivery At</th>
+                <th>Due Days</th>
+                <th>CGST (%)</th>
+                <th>SGST (%)</th>
+                <th>IGST (%)</th>
+                <th>Round Off</th>
+                <th>Bale Out</th>
+                <th>Bale Used</th>
+                <th>Slip No</th>
+                <th>Gross (Kg)</th>
+                <th>Tare (Kg)</th>
+                <th>Net Amount</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr ondblclick="location.href='@Url.Action("Edit", new { id = item.Id })';" style="cursor:pointer;">
+                    <td>@item.InwardNo</td>
+                    <td>@item.InwardDate.ToShortDateString()</td>
+                    <td>@item.PurchaseType</td>
+                    <td>@item.Supplier</td>
+                    <td>@item.BillNo</td>
+                    <td>@item.BillDate.ToShortDateString()</td>
+                    <td>@item.LotNo</td>
+                    <td>@item.BaleType</td>
+                    <td>@item.CommissionPerBale</td>
+                    <td>@item.TransportVendor</td>
+                    <td>@item.FreightCharges</td>
+                    <td>@item.UnloadingCharges</td>
+                    <td>@item.DeliveryAt</td>
+                    <td>@item.DueDays</td>
+                    <td>@item.CgstPercent</td>
+                    <td>@item.SgstPercent</td>
+                    <td>@item.IgstPercent</td>
+                    <td>@item.RoundOff</td>
+                    <td>@item.BaleOut</td>
+                    <td>@item.BaleUsed</td>
+                    <td>@item.WeighbridgeSlipNo</td>
+                    <td>@item.GrossWeightKg</td>
+                    <td>@item.TareWeightKg</td>
+                    <td class="fw-bold">@item.NetAmount</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<div class="d-flex justify-content-center mb-5">
+    @Html.PagedListPager(Model, page => Url.Action("Index", new { page }), new PagedListRenderOptions
+{
+    DisplayLinkToFirstPage = PagedListDisplayMode.Always,
+    DisplayLinkToLastPage = PagedListDisplayMode.Always,
+    DisplayLinkToPreviousPage = PagedListDisplayMode.Always,
+    DisplayLinkToNextPage = PagedListDisplayMode.Always,
+    MaximumPageNumbersToDisplay = 7,
+    LiElementClasses = new[] { "page-item" },
+    PageClasses = new[] { "page-link" }
+})
+</div>
+
+<style>
+    .bg-lightblue {
+        background-color: #e6f0fa;
+    }
+
+        .bg-lightblue th {
+            color: #1f2d3d;
+            font-weight: 600;
+        }
+
+    .table-hover tbody tr:hover {
+        background-color: #f1f3f5;
+    }
+
+    .table-responsive::-webkit-scrollbar {
+        height: 8px;
+    }
+
+    .table-responsive::-webkit-scrollbar-thumb {
+        background-color: #ced4da;
+        border-radius: 10px;
+    }
+
+    th, td {
+        white-space: nowrap;
+        vertical-align: middle;
+    }
+</style>

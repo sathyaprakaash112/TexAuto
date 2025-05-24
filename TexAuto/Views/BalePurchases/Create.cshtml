@@ -1,0 +1,202 @@
+@model Project.Models.Domain.Creation.BalePurchase
+@{
+    ViewData["Title"] = "Create Bale Purchase";
+}
+<h1>Create Bale Purchase</h1>
+<form asp-action="Create" method="post">
+
+    <!-- 🧾 Main Form -->
+    <hr />
+    <div class="mb-3">
+        <h5 class="d-flex justify-content-between align-items-center" data-bs-toggle="collapse" href="#mainForm" role="button" aria-expanded="true" aria-controls="mainForm">
+            🧾 Main Form <span class="arrow">▼</span>
+        </h5>
+        <div class="collapse show" id="mainForm">
+            <div class="row">
+                <div class="col-md-6">
+                    <label class="form-label">Inward Date</label>
+                    <input asp-for="InwardDate" class="form-control" />
+                    <label class="form-label">Purchase Type</label>
+                    <input asp-for="PurchaseType" class="form-control" />
+                    <label class="form-label">Supplier</label>
+                    <input asp-for="Supplier" class="form-control" />
+                    <label class="form-label">Bill No</label>
+                    <input asp-for="BillNo" class="form-control" />
+                    <label class="form-label">Bill Date</label>
+                    <input asp-for="BillDate" class="form-control" />
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Lot No</label>
+                    <input asp-for="LotNo" class="form-control" />
+                    <label class="form-label">Fibre Type</label>
+                    <input asp-for="BaleType" class="form-control" />
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 📦 Bale Details -->
+    <hr />
+    <div class="mb-3 bg-light p-3 rounded shadow-sm">
+        <h5 class="d-flex justify-content-between align-items-center" data-bs-toggle="collapse" href="#baleDetails" role="button" aria-expanded="true" aria-controls="baleDetails">
+            📦 Bale Details <span class="arrow">▼</span>
+        </h5>
+        <div class="collapse show" id="baleDetails">
+            <div id="baleDetailsContainer">
+                <div class="row bale-detail-item mb-2">
+                    <div class="col-md-3">
+                        <input name="BaleDetails[0].NumberOfBales" class="form-control" type="number" placeholder="No. of Bales" />
+                    </div>
+                    <div class="col-md-3">
+                        <input name="BaleDetails[0].NetWeightKg" class="form-control" type="number" step="0.01" placeholder="Net Weight (Kg)" />
+                    </div>
+                    <div class="col-md-3">
+                        <input name="BaleDetails[0].RatePerKg" class="form-control" type="number" step="0.01" placeholder="Rate/Kg" />
+                    </div>
+                    <div class="col-md-3">
+                        <input name="BaleDetails[0].MoisturePercent" class="form-control" type="number" step="0.01" placeholder="Moisture (%)" />
+                    </div>
+                </div>
+            </div>
+            <button type="button" class="btn btn-outline-success btn-sm mt-2" id="addBaleDetailBtn">+ Add Bale Detail</button>
+        </div>
+    </div>
+
+
+
+    <!-- 🚚 Charges & Logistics -->
+    <hr />
+    <div class="mb-3">
+        <h5 class="d-flex justify-content-between align-items-center" data-bs-toggle="collapse" href="#chargesLogistics" role="button" aria-expanded="true" aria-controls="chargesLogistics">
+            🚚 Charges & Logistics <span class="arrow">▼</span>
+        </h5>
+        <div class="collapse show" id="chargesLogistics">
+            <div class="row">
+                <div class="col-md-4">
+                    <label class="form-label">Purchase A/C</label>
+                    <input asp-for="PurchaseAccount" class="form-control" />
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">Agent</label>
+                    <input asp-for="Agent" class="form-control" />
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">Commission/Bale</label>
+                    <input asp-for="CommissionPerBale" class="form-control" />
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 💰 Tax & Total Calculation -->
+    <hr />
+    <div class="mb-3">
+        <h5 class="d-flex justify-content-between align-items-center" data-bs-toggle="collapse" href="#taxSection" role="button" aria-expanded="true" aria-controls="taxSection">
+            💰 Tax & Total Calculation <span class="arrow">▼</span>
+        </h5>
+        <div class="collapse show" id="taxSection">
+            <div class="row">
+                <div class="col-md-3">
+                    <label class="form-label">CGST (%)</label>
+                    <input asp-for="CgstPercent" class="form-control" />
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">SGST (%)</label>
+                    <input asp-for="SgstPercent" class="form-control" />
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">IGST (%)</label>
+                    <input asp-for="IgstPercent" class="form-control" />
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">Round Off</label>
+                    <input asp-for="RoundOff" class="form-control" />
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 📊 Stock Tracking Fields -->
+    <hr />
+    <div class="mb-3">
+        <h5 class="d-flex justify-content-between align-items-center" data-bs-toggle="collapse" href="#stockSection" role="button" aria-expanded="true" aria-controls="stockSection">
+            📊 Stock Tracking Fields <span class="arrow">▼</span>
+        </h5>
+        <div class="collapse show" id="stockSection">
+            <div class="row">
+                <div class="col-md-4">
+                    <label class="form-label">Bale Out</label>
+                    <input asp-for="BaleOut" class="form-control" />
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">Bale Used</label>
+                    <input asp-for="BaleUsed" class="form-control" />
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ⚖️ Weighbridge Details -->
+    <hr />
+    <div class="mb-3">
+        <h5 class="d-flex justify-content-between align-items-center" data-bs-toggle="collapse" href="#weighbridge" role="button" aria-expanded="true" aria-controls="weighbridge">
+            ⚖️ Weighbridge Details <span class="arrow">▼</span>
+        </h5>
+        <div class="collapse show" id="weighbridge">
+            <div class="row">
+                <div class="col-md-6">
+                    <label class="form-label">Weighbridge Slip No</label>
+                    <input asp-for="WeighbridgeSlipNo" class="form-control" />
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">Gross Weight (Kg)</label>
+                    <input asp-for="GrossWeightKg" class="form-control" />
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">Tare Weight (Kg)</label>
+                    <input asp-for="TareWeightKg" class="form-control" />
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <button type="submit" class="btn btn-primary mt-3">Submit</button>
+</form>
+
+@section Scripts {
+    <script>
+        document.querySelectorAll('[data-bs-toggle="collapse"]').forEach(header => {
+            header.addEventListener('click', function () {
+                const arrow = this.querySelector('.arrow');
+                arrow.textContent = arrow.textContent === '▼' ? '▲' : '▼';
+            });
+        });
+
+             let baleDetailIndex = 1;
+        document.getElementById("addBaleDetailBtn").addEventListener("click", function () {
+            const container = document.getElementById("baleDetailsContainer");
+
+            const row = document.createElement("div");
+            row.className = "row bale-detail-item mb-2";
+
+            row.innerHTML = `
+                <div class="col-md-3">
+                    <input name="BaleDetails[${baleDetailIndex}].NumberOfBales" class="form-control" type="number" placeholder="No. of Bales" />
+                </div>
+                <div class="col-md-3">
+                    <input name="BaleDetails[${baleDetailIndex}].NetWeightKg" class="form-control" type="number" step="0.01" placeholder="Net Weight (Kg)" />
+                </div>
+                <div class="col-md-3">
+                    <input name="BaleDetails[${baleDetailIndex}].RatePerKg" class="form-control" type="number" step="0.01" placeholder="Rate/Kg" />
+                </div>
+                <div class="col-md-3">
+                    <input name="BaleDetails[${baleDetailIndex}].MoisturePercent" class="form-control" type="number" step="0.01" placeholder="Moisture (%)" />
+                </div>
+            `;
+            container.appendChild(row);
+            baleDetailIndex++;
+        });
+    </script>
+
+
+}

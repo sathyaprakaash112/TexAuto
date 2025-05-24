@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TexAuto.Data;
 
@@ -11,9 +12,11 @@ using TexAuto.Data;
 namespace TexAuto.Migrations
 {
     [DbContext(typeof(TexAutoContext))]
-    partial class TexAutoContextModelSnapshot : ModelSnapshot
+    [Migration("20250524070855_AddedBalePurchase")]
+    partial class AddedBalePurchase
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -21,36 +24,6 @@ namespace TexAuto.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
-
-            modelBuilder.Entity("Project.Models.Domain.Creation.BaleDetail", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("BalePurchaseId")
-                        .HasColumnType("int");
-
-                    b.Property<decimal>("MoisturePercent")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<decimal>("NetWeightKg")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<int>("NumberOfBales")
-                        .HasColumnType("int");
-
-                    b.Property<decimal>("RatePerKg")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("BalePurchaseId");
-
-                    b.ToTable("BaleDetails");
-                });
 
             modelBuilder.Entity("Project.Models.Domain.Creation.BalePurchase", b =>
                 {
@@ -108,11 +81,23 @@ namespace TexAuto.Migrations
                     b.Property<string>("LotNo")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<decimal>("MoisturePercent")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("NetWeightKg")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<int>("NumberOfBales")
+                        .HasColumnType("int");
+
                     b.Property<string>("PurchaseAccount")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PurchaseType")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal>("RatePerKg")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<string>("Remarks")
                         .HasColumnType("nvarchar(max)");
@@ -803,17 +788,6 @@ namespace TexAuto.Migrations
                     b.ToTable("Wastes");
                 });
 
-            modelBuilder.Entity("Project.Models.Domain.Creation.BaleDetail", b =>
-                {
-                    b.HasOne("Project.Models.Domain.Creation.BalePurchase", "BalePurchase")
-                        .WithMany("BaleDetails")
-                        .HasForeignKey("BalePurchaseId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("BalePurchase");
-                });
-
             modelBuilder.Entity("TexAuto.Models.Domain.Creation.Machine", b =>
                 {
                     b.HasOne("TexAuto.Models.Domain.Creation.Department", null)
@@ -929,11 +903,6 @@ namespace TexAuto.Migrations
                         .IsRequired();
 
                     b.Navigation("WasteType");
-                });
-
-            modelBuilder.Entity("Project.Models.Domain.Creation.BalePurchase", b =>
-                {
-                    b.Navigation("BaleDetails");
                 });
 
             modelBuilder.Entity("TexAuto.Models.Domain.Creation.Department", b =>

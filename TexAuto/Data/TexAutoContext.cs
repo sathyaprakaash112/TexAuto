@@ -1,5 +1,6 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore;
+using Project.Models.Domain.Creation;
 using TexAuto.Models.Domain.Creation;
 using TexAuto.Models.Domain.Entries;
 
@@ -20,6 +21,9 @@ namespace TexAuto.Data
         public DbSet<MachineType> MachineTypes { get; set; }
         public DbSet<Product> Products { get; set; } = default!;
         public DbSet<ProductType> ProductTypes { get; set; }
+        public DbSet<BalePurchase> BalePurchases { get; set; }
+        public DbSet<BaleDetail> BaleDetails { get; set; }
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
