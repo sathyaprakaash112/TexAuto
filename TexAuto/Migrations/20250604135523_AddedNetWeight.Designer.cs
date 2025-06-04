@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TexAuto.Data;
 
@@ -11,9 +12,11 @@ using TexAuto.Data;
 namespace TexAuto.Migrations
 {
     [DbContext(typeof(TexAutoContext))]
-    partial class TexAutoContextModelSnapshot : ModelSnapshot
+    [Migration("20250604135523_AddedNetWeight")]
+    partial class AddedNetWeight
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -105,8 +108,8 @@ namespace TexAuto.Migrations
                     b.Property<int>("InwardNo")
                         .HasColumnType("int");
 
-                    b.Property<int?>("LotNo")
-                        .HasColumnType("int");
+                    b.Property<string>("LotNo")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<decimal>("NetWeightKg")
                         .HasColumnType("decimal(18,2)");

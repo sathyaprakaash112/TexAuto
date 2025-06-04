@@ -41,8 +41,21 @@ namespace Project.Controllers
 
         public IActionResult Create()
         {
-            return View();
+            // Get max Inward No from DB
+            int maxInward = _context.BalePurchases.Max(x => (int?)x.InwardNo) ?? 0;
+
+            // Create a default instance with pre-filled values
+            var newPurchase = new BalePurchase
+            {
+                InwardNo = maxInward + 1,
+                LotNo = (maxInward + 1), // If LotNo is text
+                InwardDate = DateTime.Today,
+                BillDate = DateTime.Today
+            };
+
+            return View(newPurchase);
         }
+
 
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -53,6 +66,7 @@ namespace Project.Controllers
                 // Auto increment InwardNo safely
                 int maxInward = _context.BalePurchases.Max(x => (int?)x.InwardNo) ?? 0;
                 purchase.InwardNo = maxInward + 1;
+                purchase.LotNo = maxInward + 1;
 
                 _context.BalePurchases.Add(purchase);
                 _context.SaveChanges();

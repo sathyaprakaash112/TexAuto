@@ -16,7 +16,7 @@ namespace Project.Models.Domain.Creation
         public string? Supplier { get; set; }
         public string? BillNo { get; set; }
         public DateTime BillDate { get; set; }
-        public string? LotNo { get; set; }
+        public int? LotNo { get; set; }
         public string? BaleType { get; set; }
 
         // Charges & Logistics
@@ -83,6 +83,9 @@ namespace Project.Models.Domain.Creation
         public string? WeighbridgeSlipNo { get; set; }
         public decimal GrossWeightKg { get; set; } = 0;
         public decimal TareWeightKg { get; set; } = 0;
+
+        public decimal NetWeightKg { get; set; } = 0;
+
 
         [NotMapped]
         public decimal WeighbridgeNetWeightKg => GrossWeightKg - TareWeightKg;

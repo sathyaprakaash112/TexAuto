@@ -1,202 +1,308 @@
 @model Project.Models.Domain.Creation.BalePurchase
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
 @{
     ViewData["Title"] = "Create Bale Purchase";
 }
-<h1>Create Bale Purchase</h1>
+
+<h2 class="mb-4">Create Bale Purchase</h2>
+
 <form asp-action="Create" method="post">
+    <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
 
-    <!-- 🧾 Main Form -->
-    <hr />
-    <div class="mb-3">
-        <h5 class="d-flex justify-content-between align-items-center" data-bs-toggle="collapse" href="#mainForm" role="button" aria-expanded="true" aria-controls="mainForm">
-            🧾 Main Form <span class="arrow">▼</span>
-        </h5>
-        <div class="collapse show" id="mainForm">
-            <div class="row">
-                <div class="col-md-6">
-                    <label class="form-label">Inward Date</label>
-                    <input asp-for="InwardDate" class="form-control" />
-                    <label class="form-label">Purchase Type</label>
-                    <input asp-for="PurchaseType" class="form-control" />
-                    <label class="form-label">Supplier</label>
-                    <input asp-for="Supplier" class="form-control" />
-                    <label class="form-label">Bill No</label>
-                    <input asp-for="BillNo" class="form-control" />
-                    <label class="form-label">Bill Date</label>
-                    <input asp-for="BillDate" class="form-control" />
-                </div>
-                <div class="col-md-6">
-                    <label class="form-label">Lot No</label>
-                    <input asp-for="LotNo" class="form-control" />
-                    <label class="form-label">Fibre Type</label>
-                    <input asp-for="BaleType" class="form-control" />
-                </div>
-            </div>
+    <!-- 🌐 General Purchase Info -->
+    <div class="row mb-3">
+        <div class="col-md-3">
+            <label asp-for="InwardNo" class="form-label">Inward No</label>
+            <input asp-for="InwardNo" class="form-control" readonly />
+        </div>
+        <div class="col-md-3">
+            <label asp-for="InwardDate" class="form-label">Inward Date</label>
+            <input asp-for="InwardDate" class="form-control" type="date" value="@DateTime.Now.ToString("yyyy-MM-dd")" />
+        </div>
+        <div class="col-md-3">
+            <label asp-for="PurchaseType" class="form-label">Purchase Type</label>
+            <select asp-for="PurchaseType" class="form-select">
+                <option value="">-- Select --</option>
+                <option value="DIRECT">DIRECT</option>
+                <option value="AGENT">AGENT</option>
+                <option value="OTHERS">OTHERS</option>
+            </select>
+        </div>
+        <div class="col-md-3">
+            <label asp-for="Supplier" class="form-label">Supplier</label>
+            <input asp-for="Supplier" class="form-control" />
         </div>
     </div>
 
-    <!-- 📦 Bale Details -->
-    <hr />
-    <div class="mb-3 bg-light p-3 rounded shadow-sm">
-        <h5 class="d-flex justify-content-between align-items-center" data-bs-toggle="collapse" href="#baleDetails" role="button" aria-expanded="true" aria-controls="baleDetails">
-            📦 Bale Details <span class="arrow">▼</span>
-        </h5>
-        <div class="collapse show" id="baleDetails">
-            <div id="baleDetailsContainer">
-                <div class="row bale-detail-item mb-2">
-                    <div class="col-md-3">
-                        <input name="BaleDetails[0].NumberOfBales" class="form-control" type="number" placeholder="No. of Bales" />
-                    </div>
-                    <div class="col-md-3">
-                        <input name="BaleDetails[0].NetWeightKg" class="form-control" type="number" step="0.01" placeholder="Net Weight (Kg)" />
-                    </div>
-                    <div class="col-md-3">
-                        <input name="BaleDetails[0].RatePerKg" class="form-control" type="number" step="0.01" placeholder="Rate/Kg" />
-                    </div>
-                    <div class="col-md-3">
-                        <input name="BaleDetails[0].MoisturePercent" class="form-control" type="number" step="0.01" placeholder="Moisture (%)" />
-                    </div>
-                </div>
-            </div>
-            <button type="button" class="btn btn-outline-success btn-sm mt-2" id="addBaleDetailBtn">+ Add Bale Detail</button>
+    <div class="row mb-3">
+        <div class="col-md-3">
+            <label asp-for="BillNo" class="form-label">Bill No</label>
+            <input asp-for="BillNo" class="form-control" />
+        </div>
+        <div class="col-md-3">
+            <label asp-for="BillDate" class="form-label">Bill Date</label>
+            <input asp-for="BillDate" class="form-control" type="date" value="@DateTime.Now.ToString("yyyy-MM-dd")" />
+        </div>
+        <div class="col-md-3">
+            <label asp-for="LotNo" class="form-label">Lot No</label>
+            <input asp-for="LotNo" class="form-control" />
+        </div>
+        <div class="col-md-3">
+            <label asp-for="BaleType" class="form-label">Fibre Type</label>
+            <select asp-for="BaleType" class="form-select">
+                <option value="">-- Select --</option>
+                <option value="Cotton">Cotton</option>
+                <option value="Viscose">Viscose</option>
+                <option value="Lyocel">Lyocel</option>
+            </select>
         </div>
     </div>
 
-
+    <hr class="my-4" />
+    <!-- 📦 Bale Details Subform -->
+    <h5>Bale Details</h5>
+    <table class="table table-bordered">
+        <thead class="table-light">
+            <tr>
+                <th>No. of Bales</th>
+                <th>Net Weight (Kg)</th>
+                <th>Rate/Kg</th>
+                <th>Amount</th>
+                <th>Moisture (%)</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody id="baleDetailsBody">
+            <tr>
+                <td><input name="BaleDetails[0].NumberOfBales" class="form-control numberOfBales" type="number" oninput="calculateAll()" /></td>
+                <td><input name="BaleDetails[0].NetWeightKg" class="form-control netWeight" type="number" step="0.01" oninput="calculateAll()" /></td>
+                <td><input name="BaleDetails[0].RatePerKg" class="form-control rate" type="number" step="0.01" oninput="calculateAll()" /></td>
+                <td><input name="BaleDetails[0].Amount" class="form-control amount" type="number" step="0.01" readonly /></td>
+                <td><input name="BaleDetails[0].MoisturePercent" class="form-control" type="number" step="0.01" /></td>
+                <td><button type="button" class="btn btn-danger btn-sm" onclick="removeRow(this)">X</button></td>
+            </tr>
+        </tbody>
+    </table>
+    <button type="button" class="btn btn-secondary btn-sm mb-4" onclick="addRow()">+ Add Row</button>
 
     <!-- 🚚 Charges & Logistics -->
-    <hr />
-    <div class="mb-3">
-        <h5 class="d-flex justify-content-between align-items-center" data-bs-toggle="collapse" href="#chargesLogistics" role="button" aria-expanded="true" aria-controls="chargesLogistics">
-            🚚 Charges & Logistics <span class="arrow">▼</span>
-        </h5>
-        <div class="collapse show" id="chargesLogistics">
-            <div class="row">
-                <div class="col-md-4">
-                    <label class="form-label">Purchase A/C</label>
-                    <input asp-for="PurchaseAccount" class="form-control" />
-                </div>
-                <div class="col-md-4">
-                    <label class="form-label">Agent</label>
-                    <input asp-for="Agent" class="form-control" />
-                </div>
-                <div class="col-md-4">
-                    <label class="form-label">Commission/Bale</label>
-                    <input asp-for="CommissionPerBale" class="form-control" />
-                </div>
-            </div>
+    <h5>Charges & Logistics</h5>
+    <div class="row mb-3">
+        <div class="col-md-3">
+            <label asp-for="PurchaseAccount" class="form-label">Purchase A/C</label>
+            <input asp-for="PurchaseAccount" class="form-control" />
+        </div>
+        <div class="col-md-3" id="agentField" style="display:none;">
+            <label asp-for="Agent" class="form-label">Agent</label>
+            <input asp-for="Agent" class="form-control" />
+        </div>
+        <div class="col-md-3">
+            <label asp-for="CommissionPerBale" class="form-label">Commission/Bale</label>
+            <input asp-for="CommissionPerBale" class="form-control" type="number" step="0.01" oninput="calculateAll()" id="commissionPerBale" />
+        </div>
+        <div class="col-md-3">
+            <label asp-for="CommissionAmount" class="form-label">Commission Amount</label>
+            <input asp-for="CommissionAmount" class="form-control" type="number" step="0.01" readonly id="commissionAmount" />
         </div>
     </div>
 
-    <!-- 💰 Tax & Total Calculation -->
-    <hr />
-    <div class="mb-3">
-        <h5 class="d-flex justify-content-between align-items-center" data-bs-toggle="collapse" href="#taxSection" role="button" aria-expanded="true" aria-controls="taxSection">
-            💰 Tax & Total Calculation <span class="arrow">▼</span>
-        </h5>
-        <div class="collapse show" id="taxSection">
-            <div class="row">
-                <div class="col-md-3">
-                    <label class="form-label">CGST (%)</label>
-                    <input asp-for="CgstPercent" class="form-control" />
-                </div>
-                <div class="col-md-3">
-                    <label class="form-label">SGST (%)</label>
-                    <input asp-for="SgstPercent" class="form-control" />
-                </div>
-                <div class="col-md-3">
-                    <label class="form-label">IGST (%)</label>
-                    <input asp-for="IgstPercent" class="form-control" />
-                </div>
-                <div class="col-md-3">
-                    <label class="form-label">Round Off</label>
-                    <input asp-for="RoundOff" class="form-control" />
-                </div>
-            </div>
+    <div class="row mb-3">
+        <div class="col-md-3">
+            <label asp-for="TransportVendor" class="form-label">Transport Vendor</label>
+            <input asp-for="TransportVendor" class="form-control" />
+        </div>
+        <div class="col-md-3">
+            <label asp-for="FreightCharges" class="form-label">Freight Charges</label>
+            <input asp-for="FreightCharges" class="form-control" type="number" step="0.01" />
+        </div>
+        <div class="col-md-3">
+            <label asp-for="UnloadingCharges" class="form-label">Unloading Charges</label>
+            <input asp-for="UnloadingCharges" class="form-control" type="number" step="0.01" />
+        </div>
+        <div class="col-md-3">
+            <label asp-for="DeliveryAt" class="form-label">Delivery At</label>
+            <input asp-for="DeliveryAt" class="form-control" />
         </div>
     </div>
 
-    <!-- 📊 Stock Tracking Fields -->
-    <hr />
-    <div class="mb-3">
-        <h5 class="d-flex justify-content-between align-items-center" data-bs-toggle="collapse" href="#stockSection" role="button" aria-expanded="true" aria-controls="stockSection">
-            📊 Stock Tracking Fields <span class="arrow">▼</span>
-        </h5>
-        <div class="collapse show" id="stockSection">
-            <div class="row">
-                <div class="col-md-4">
-                    <label class="form-label">Bale Out</label>
-                    <input asp-for="BaleOut" class="form-control" />
-                </div>
-                <div class="col-md-4">
-                    <label class="form-label">Bale Used</label>
-                    <input asp-for="BaleUsed" class="form-control" />
-                </div>
-            </div>
+    <!-- 💰 Tax & Totals -->
+    <hr class="my-4" />
+    <h5>Tax & Total Calculation</h5>
+    <div class="row mb-3">
+        <div class="col-md-3">
+            <label asp-for="TaxableAmount" class="form-label">Taxable Amount</label>
+            <input asp-for="TaxableAmount" class="form-control" readonly id="taxableAmount" />
+        </div>
+        <div class="col-md-2">
+            <label asp-for="CgstPercent" class="form-label">CGST %</label>
+            <input asp-for="CgstPercent" class="form-control" value="2.5" id="cgstPercent" oninput="calculateAll()" />
+        </div>
+        <div class="col-md-2">
+            <label asp-for="CgstAmount" class="form-label">CGST Amount</label>
+            <input asp-for="CgstAmount" class="form-control" readonly id="cgstAmount" />
+        </div>
+        <div class="col-md-2">
+            <label asp-for="SgstPercent" class="form-label">SGST %</label>
+            <input asp-for="SgstPercent" class="form-control" value="2.5" id="sgstPercent" oninput="calculateAll()" />
+        </div>
+        <div class="col-md-2">
+            <label asp-for="SgstAmount" class="form-label">SGST Amount</label>
+            <input asp-for="SgstAmount" class="form-control" readonly id="sgstAmount" />
         </div>
     </div>
 
-    <!-- ⚖️ Weighbridge Details -->
-    <hr />
-    <div class="mb-3">
-        <h5 class="d-flex justify-content-between align-items-center" data-bs-toggle="collapse" href="#weighbridge" role="button" aria-expanded="true" aria-controls="weighbridge">
-            ⚖️ Weighbridge Details <span class="arrow">▼</span>
-        </h5>
-        <div class="collapse show" id="weighbridge">
-            <div class="row">
-                <div class="col-md-6">
-                    <label class="form-label">Weighbridge Slip No</label>
-                    <input asp-for="WeighbridgeSlipNo" class="form-control" />
-                </div>
-                <div class="col-md-3">
-                    <label class="form-label">Gross Weight (Kg)</label>
-                    <input asp-for="GrossWeightKg" class="form-control" />
-                </div>
-                <div class="col-md-3">
-                    <label class="form-label">Tare Weight (Kg)</label>
-                    <input asp-for="TareWeightKg" class="form-control" />
-                </div>
-            </div>
+    <div class="row mb-3">
+        <div class="col-md-3">
+            <label asp-for="IgstPercent" class="form-label">IGST %</label>
+            <input asp-for="IgstPercent" class="form-control" id="igstPercent" oninput="calculateAll()" />
+        </div>
+        <div class="col-md-3">
+            <label asp-for="IgstAmount" class="form-label">IGST Amount</label>
+            <input asp-for="IgstAmount" class="form-control" readonly id="igstAmount" />
+        </div>
+        <div class="col-md-3">
+            <label asp-for="TcsAmount" class="form-label">TCS Amount</label>
+            <input asp-for="TcsAmount" class="form-control" oninput="calculateAll()" id="tcsAmount" />
+        </div>
+        <div class="col-md-3">
+            <label asp-for="RoundOff" class="form-label">Round Off</label>
+            <input asp-for="RoundOff" class="form-control" value="0" oninput="calculateAll()" id="roundOff" />
         </div>
     </div>
 
-    <button type="submit" class="btn btn-primary mt-3">Submit</button>
+    <div class="row mb-3">
+        <div class="col-md-3">
+            <label asp-for="NetAmount" class="form-label">Net Amount</label>
+            <input asp-for="NetAmount" class="form-control" readonly id="netAmount" />
+        </div>
+        <div class="col-md-3">
+            <label asp-for="TdsPercent" class="form-label">TDS %</label>
+            <input asp-for="TdsPercent" class="form-control" id="tdsPercent" oninput="calculateAll()" />
+        </div>
+        <div class="col-md-3">
+            <label asp-for="TdsAmount" class="form-label">TDS Amount</label>
+            <input asp-for="TdsAmount" class="form-control" readonly id="tdsAmount" />
+        </div>
+        <div class="col-md-3">
+            <label asp-for="PayableAmount" class="form-label">Payable Amount</label>
+            <input asp-for="PayableAmount" class="form-control" readonly id="payableAmount" />
+        </div>
+    </div>
+
+    <!-- 🏗️ Weighbridge -->
+    <hr class="my-4" />
+    <h5>Weighbridge Details</h5>
+    <div class="row mb-3">
+        <div class="col-md-3">
+            <label asp-for="WeighbridgeSlipNo" class="form-label">Slip No</label>
+            <input asp-for="WeighbridgeSlipNo" class="form-control" />
+        </div>
+        <div class="col-md-3">
+            <label asp-for="GrossWeightKg" class="form-label">Gross Weight (Kg)</label>
+            <input asp-for="GrossWeightKg" class="form-control" id="grossWeight" oninput="calculateWeighbridge()" />
+        </div>
+        <div class="col-md-3">
+            <label asp-for="TareWeightKg" class="form-label">Tare Weight (Kg)</label>
+            <input asp-for="TareWeightKg" class="form-control" id="tareWeight" oninput="calculateWeighbridge()" />
+        </div>
+        <div class="col-md-3">
+            <label asp-for="NetWeightKg" class="form-label">Net Weight (Kg)</label>
+            <input asp-for="NetWeightKg" class="form-control" readonly id="netWeightResult" />
+        </div>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Submit</button>
 </form>
 
 @section Scripts {
     <script>
-        document.querySelectorAll('[data-bs-toggle="collapse"]').forEach(header => {
-            header.addEventListener('click', function () {
-                const arrow = this.querySelector('.arrow');
-                arrow.textContent = arrow.textContent === '▼' ? '▲' : '▼';
+        function addRow() {
+            const index = document.querySelectorAll('#baleDetailsBody tr').length;
+            const row = `<tr>
+                <td><input name="BaleDetails[${index}].NumberOfBales" class="form-control numberOfBales" type="number" oninput="calculateAll()" /></td>
+                <td><input name="BaleDetails[${index}].NetWeightKg" class="form-control netWeight" type="number" step="0.01" oninput="calculateAll()" /></td>
+                <td><input name="BaleDetails[${index}].RatePerKg" class="form-control rate" type="number" step="0.01" oninput="calculateAll()" /></td>
+                <td><input name="BaleDetails[${index}].Amount" class="form-control amount" type="number" step="0.01" readonly /></td>
+                <td><input name="BaleDetails[${index}].MoisturePercent" class="form-control" type="number" step="0.01" /></td>
+                <td><button type="button" class="btn btn-danger btn-sm" onclick="removeRow(this)">X</button></td>
+            </tr>`;
+            document.getElementById("baleDetailsBody").insertAdjacentHTML('beforeend', row);
+        }
+
+        function removeRow(button) {
+            const row = button.closest('tr');
+            row.remove();
+            calculateAll();
+        }
+
+        function calculateAll() {
+            let totalAmount = 0;
+            let totalBales = 0;
+
+            document.querySelectorAll("#baleDetailsBody tr").forEach(row => {
+                const net = parseFloat(row.querySelector(".netWeight")?.value || 0);
+                const rate = parseFloat(row.querySelector(".rate")?.value || 0);
+                const amountField = row.querySelector(".amount");
+                const baleCount = parseInt(row.querySelector(".numberOfBales")?.value || 0);
+
+                const amount = net * rate;
+                amountField.value = amount.toFixed(2);
+
+                totalAmount += amount;
+                totalBales += baleCount;
             });
+
+            document.getElementById("taxableAmount").value = totalAmount.toFixed(2);
+
+            const cgstPercent = parseFloat(document.getElementById("cgstPercent").value || 0);
+            const sgstPercent = parseFloat(document.getElementById("sgstPercent").value || 0);
+            const igstPercent = parseFloat(document.getElementById("igstPercent").value || 0);
+            const tcsAmount = parseFloat(document.getElementById("tcsAmount").value || 0);
+            const roundOff = parseFloat(document.getElementById("roundOff").value || 0);
+            const tdsPercent = parseFloat(document.getElementById("tdsPercent").value || 0);
+            const commissionPerBale = parseFloat(document.getElementById("commissionPerBale").value || 0);
+
+            const cgstAmt = totalAmount * cgstPercent / 100;
+            const sgstAmt = totalAmount * sgstPercent / 100;
+            const igstAmt = totalAmount * igstPercent / 100;
+            const commissionAmt = commissionPerBale * totalBales;
+
+            const netAmt = totalAmount + cgstAmt + sgstAmt + igstAmt + tcsAmount - roundOff;
+            const tdsAmt = netAmt * tdsPercent / 100;
+            const payableAmt = netAmt - tdsAmt;
+
+            document.getElementById("cgstAmount").value = cgstAmt.toFixed(2);
+            document.getElementById("sgstAmount").value = sgstAmt.toFixed(2);
+            document.getElementById("igstAmount").value = igstAmt.toFixed(2);
+            document.getElementById("netAmount").value = netAmt.toFixed(2);
+            document.getElementById("tdsAmount").value = tdsAmt.toFixed(2);
+            document.getElementById("payableAmount").value = payableAmt.toFixed(2);
+            document.getElementById("commissionAmount").value = commissionAmt.toFixed(2);
+        }
+
+        function calculateWeighbridge() {
+            const gross = parseFloat(document.getElementById("grossWeight").value || 0);
+            const tare = parseFloat(document.getElementById("tareWeight").value || 0);
+            document.getElementById("netWeightResult").value = (gross - tare).toFixed(2);
+        }
+
+        document.querySelector('[name="PurchaseType"]').addEventListener('change', function () {
+            const selected = this.value;
+            const agentDiv = document.getElementById("agentField");
+            if (selected === "AGENT") {
+                agentDiv.style.display = "block";
+            } else {
+                agentDiv.style.display = "none";
+            }
         });
 
-             let baleDetailIndex = 1;
-        document.getElementById("addBaleDetailBtn").addEventListener("click", function () {
-            const container = document.getElementById("baleDetailsContainer");
-
-            const row = document.createElement("div");
-            row.className = "row bale-detail-item mb-2";
-
-            row.innerHTML = `
-                <div class="col-md-3">
-                    <input name="BaleDetails[${baleDetailIndex}].NumberOfBales" class="form-control" type="number" placeholder="No. of Bales" />
-                </div>
-                <div class="col-md-3">
-                    <input name="BaleDetails[${baleDetailIndex}].NetWeightKg" class="form-control" type="number" step="0.01" placeholder="Net Weight (Kg)" />
-                </div>
-                <div class="col-md-3">
-                    <input name="BaleDetails[${baleDetailIndex}].RatePerKg" class="form-control" type="number" step="0.01" placeholder="Rate/Kg" />
-                </div>
-                <div class="col-md-3">
-                    <input name="BaleDetails[${baleDetailIndex}].MoisturePercent" class="form-control" type="number" step="0.01" placeholder="Moisture (%)" />
-                </div>
-            `;
-            container.appendChild(row);
-            baleDetailIndex++;
+        // Initialize on page load in case of validation postback
+        window.addEventListener('DOMContentLoaded', function () {
+            const event = new Event('change');
+            document.querySelector('[name="PurchaseType"]').dispatchEvent(event);
         });
+        
+
     </script>
-
-
-}
+    }
