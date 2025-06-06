@@ -1,0 +1,143 @@
+﻿@model IEnumerable<Project.Models.Domain.Masters.LedgerMaster>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.LedgerName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.GroupMaster)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.LedgerType)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.IsActive)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.MobileNumber)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Email)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Address)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.State)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PinCode)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.GstNumber)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PanNumber)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.IsTdsApplicable)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.OpeningBalance)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.BalanceType)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.AccountCode)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.BankName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.BankAccountNumber)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.IfscCode)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Remarks)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.LedgerName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.GroupMaster.GroupName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.LedgerType)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.IsActive)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.MobileNumber)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Email)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Address)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.State)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PinCode)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.GstNumber)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PanNumber)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.IsTdsApplicable)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.OpeningBalance)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.BalanceType)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.AccountCode)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.BankName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.BankAccountNumber)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.IfscCode)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Remarks)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

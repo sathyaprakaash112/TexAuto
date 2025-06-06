@@ -1,0 +1,140 @@
+﻿@model Project.Models.Domain.Masters.LedgerMaster
+
+@{
+    ViewData["Title"] = "Edit Ledger";
+}
+
+<h2 class="mb-4 text-dark">Create Ledger</h2>
+
+<div class="card shadow-sm border-0">
+    <div class="card-body">
+        <form asp-action="Edit" method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+            <!-- 📌 SECTION 1: Basic Details -->
+            <h5 class="text-primary border-bottom pb-2">Basic Details</h5>
+            <div class="row mb-4">
+                <div class="col-md-6">
+                    <label asp-for="LedgerName" class="form-label">Ledger Name</label>
+                    <input asp-for="LedgerName" class="form-control" />
+                    <span asp-validation-for="LedgerName" class="text-danger"></span>
+                </div>
+                <div class="col-md-6">
+                    <label asp-for="GroupMasterId" class="form-label">Ledger Group</label>
+                    <select asp-for="GroupMasterId" class="form-select" asp-items="ViewBag.GroupMasterId"></select>
+                </div>
+                <div class="col-md-6">
+                    <label asp-for="LedgerType" class="form-label">Ledger Type</label>
+                    <select asp-for="LedgerType" class="form-select" asp-items="ViewBag.LedgerTypes"></select>
+                    <span asp-validation-for="LedgerType" class="text-danger"></span>
+                </div>
+                <div class="col-md-6 d-flex align-items-center pt-4">
+                    <div class="form-check">
+                        <input class="form-check-input" asp-for="IsActive" />
+                        <label class="form-check-label" asp-for="IsActive"></label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 📞 SECTION 2: Contact & Address -->
+            <h5 class="text-primary border-bottom pb-2">Contact & Address</h5>
+            <div class="row mb-4">
+                <div class="col-md-6">
+                    <label asp-for="MobileNumber" class="form-label">Mobile Number</label>
+                    <input asp-for="MobileNumber" class="form-control" />
+                </div>
+                <div class="col-md-6">
+                    <label asp-for="Email" class="form-label">Email</label>
+                    <input asp-for="Email" class="form-control" />
+                </div>
+                <div class="col-md-12">
+                    <label asp-for="Address" class="form-label">Address</label>
+                    <textarea asp-for="Address" class="form-control"></textarea>
+                </div>
+                <div class="col-md-6">
+                    <label asp-for="State" class="form-label">State</label>
+                    <select asp-for="State" class="form-select" asp-items="ViewBag.States"></select>
+                    <span asp-validation-for="State" class="text-danger"></span>
+                </div>
+
+                <div class="col-md-6">
+                    <label asp-for="PinCode" class="form-label">Pin Code</label>
+                    <input asp-for="PinCode" class="form-control" />
+                </div>
+            </div>
+
+            <!-- 🧾 SECTION 3: Statutory Details -->
+            <h5 class="text-primary border-bottom pb-2">Statutory Details</h5>
+            <div class="row mb-4">
+                <div class="col-md-6">
+                    <label asp-for="GstNumber" class="form-label">GST Number</label>
+                    <input asp-for="GstNumber" class="form-control" />
+                </div>
+                <div class="col-md-6">
+                    <label asp-for="PanNumber" class="form-label">PAN Number</label>
+                    <input asp-for="PanNumber" class="form-control" />
+                </div>
+                <div class="col-md-12 d-flex align-items-center pt-2">
+                    <div class="form-check">
+                        <input class="form-check-input" asp-for="IsTdsApplicable" />
+                        <label class="form-check-label" asp-for="IsTdsApplicable"></label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 💰 SECTION 4: Opening & Financial Info -->
+            <h5 class="text-primary border-bottom pb-2">Opening & Financial Info</h5>
+            <div class="row mb-4">
+                <div class="col-md-4">
+                    <label asp-for="OpeningBalance" class="form-label">Opening Balance</label>
+                    <input asp-for="OpeningBalance" class="form-control" />
+                </div>
+                <div class="col-md-4">
+                    <label asp-for="BalanceType" class="form-label">Balance Type</label>
+                    <select asp-for="BalanceType" class="form-select" asp-items="ViewBag.BalanceTypes"></select>
+                    <span asp-validation-for="BalanceType" class="text-danger"></span>
+                </div>
+
+                <div class="col-md-4">
+                    <label asp-for="AccountCode" class="form-label">Account Code</label>
+                    <input asp-for="AccountCode" class="form-control" />
+                </div>
+            </div>
+
+            <!-- 🏦 SECTION 5: Bank Details -->
+            <h5 class="text-primary border-bottom pb-2">Bank Details</h5>
+            <div class="row mb-4">
+                <div class="col-md-4">
+                    <label asp-for="BankName" class="form-label">Bank Name</label>
+                    <input asp-for="BankName" class="form-control" />
+                </div>
+                <div class="col-md-4">
+                    <label asp-for="BankAccountNumber" class="form-label">Bank Account No</label>
+                    <input asp-for="BankAccountNumber" class="form-control" />
+                </div>
+                <div class="col-md-4">
+                    <label asp-for="IfscCode" class="form-label">IFSC Code</label>
+                    <input asp-for="IfscCode" class="form-control" />
+                </div>
+            </div>
+
+            <!-- 📝 SECTION 7: Other Information -->
+            <h5 class="text-primary border-bottom pb-2">Other Information</h5>
+            <div class="mb-4">
+                <label asp-for="Remarks" class="form-label">Remarks</label>
+                <textarea asp-for="Remarks" class="form-control"></textarea>
+            </div>
+
+            <div class="d-flex justify-content-end">
+                <button type="submit" class="btn btn-primary px-4">Save</button>
+                <a asp-action="Index" class="btn btn-outline-secondary ms-3">Back to List</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

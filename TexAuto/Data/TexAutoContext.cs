@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Project.Models.Domain.Creation;
 using TexAuto.Models.Domain.Creation;
 using TexAuto.Models.Domain.Entries;
+using Project.Models.Domain.Masters;
 
 namespace TexAuto.Data
 {
@@ -88,6 +89,103 @@ namespace TexAuto.Data
                 new Product { Id = 11, Name = "Winded Bag 60Kgs 60s", ProductTypeId = 9, SetHank = "60s", NetWeight = 60m }
             );
 
+            modelBuilder.Entity<GroupMaster>().HasData(
+                new GroupMaster { Id = 1, GroupName = "Capital Account", NatureOfGroup = "Capital", AffectsInventory = false, IsDefault = true, IsActive = true },
+                new GroupMaster { Id = 2, GroupName = "Partner’s Capital", UnderGroupId = 1, NatureOfGroup = "Capital", AffectsInventory = false, IsDefault = true, IsActive = true },
+                new GroupMaster { Id = 3, GroupName = "Reserves & Surplus", UnderGroupId = 1, NatureOfGroup = "Capital", AffectsInventory = false, IsDefault = true, IsActive = true },
+
+                new GroupMaster { Id = 4, GroupName = "Fixed Assets", NatureOfGroup = "Asset", AffectsInventory = false, IsDefault = true, IsActive = true },
+                new GroupMaster { Id = 5, GroupName = "Building", UnderGroupId = 4, NatureOfGroup = "Asset", AffectsInventory = false, IsDefault = true, IsActive = true },
+                new GroupMaster { Id = 6, GroupName = "Machinery", UnderGroupId = 4, NatureOfGroup = "Asset", AffectsInventory = false, IsDefault = true, IsActive = true },
+                new GroupMaster { Id = 7, GroupName = "Vehicles", UnderGroupId = 4, NatureOfGroup = "Asset", AffectsInventory = false, IsDefault = true, IsActive = true },
+                new GroupMaster { Id = 8, GroupName = "Furniture & Fixtures", UnderGroupId = 4, NatureOfGroup = "Asset", AffectsInventory = false, IsDefault = true, IsActive = true },
+                new GroupMaster { Id = 9, GroupName = "Computer Equipment", UnderGroupId = 4, NatureOfGroup = "Asset", AffectsInventory = false, IsDefault = true, IsActive = true },
+
+                new GroupMaster { Id = 10, GroupName = "Investments", NatureOfGroup = "Asset", AffectsInventory = false, IsDefault = true, IsActive = true },
+                new GroupMaster { Id = 11, GroupName = "Loans (Liability)", NatureOfGroup = "Liability", AffectsInventory = false, IsDefault = true, IsActive = true },
+                new GroupMaster { Id = 12, GroupName = "Secured Loans", UnderGroupId = 11, NatureOfGroup = "Liability", AffectsInventory = false, IsDefault = true, IsActive = true },
+                new GroupMaster { Id = 13, GroupName = "Bank Loans", UnderGroupId = 12, NatureOfGroup = "Liability", AffectsInventory = false, IsDefault = true, IsActive = true },
+                new GroupMaster { Id = 14, GroupName = "Vehicle Loans", UnderGroupId = 12, NatureOfGroup = "Liability", AffectsInventory = false, IsDefault = true, IsActive = true },
+                new GroupMaster { Id = 15, GroupName = "Unsecured Loans", UnderGroupId = 11, NatureOfGroup = "Liability", AffectsInventory = false, IsDefault = true, IsActive = true },
+
+                new GroupMaster { Id = 16, GroupName = "Current Liabilities", NatureOfGroup = "Liability", AffectsInventory = false, IsDefault = true, IsActive = true },
+                new GroupMaster { Id = 17, GroupName = "Sundry Creditors", UnderGroupId = 16, NatureOfGroup = "Liability", AffectsInventory = false, IsDefault = true, IsActive = true },
+                new GroupMaster { Id = 18, GroupName = "Duties & Taxes", UnderGroupId = 16, NatureOfGroup = "Liability", AffectsInventory = false, IsDefault = true, IsActive = true },
+                new GroupMaster { Id = 19, GroupName = "GST Payable", UnderGroupId = 18, NatureOfGroup = "Liability", AffectsInventory = false, IsDefault = true, IsActive = true },
+                new GroupMaster { Id = 20, GroupName = "TDS Payable", UnderGroupId = 18, NatureOfGroup = "Liability", AffectsInventory = false, IsDefault = true, IsActive = true },
+                new GroupMaster { Id = 21, GroupName = "TCS Payable", UnderGroupId = 18, NatureOfGroup = "Liability", AffectsInventory = false, IsDefault = true, IsActive = true },
+                new GroupMaster { Id = 22, GroupName = "Outstanding Expenses", UnderGroupId = 16, NatureOfGroup = "Liability", AffectsInventory = false, IsDefault = true, IsActive = true },
+                new GroupMaster { Id = 23, GroupName = "Advance from Customers", UnderGroupId = 16, NatureOfGroup = "Liability", AffectsInventory = false, IsDefault = true, IsActive = true },
+
+                new GroupMaster { Id = 24, GroupName = "Provisions", NatureOfGroup = "Liability", AffectsInventory = false, IsDefault = true, IsActive = true },
+                new GroupMaster { Id = 25, GroupName = "Salary Payable", UnderGroupId = 24, NatureOfGroup = "Liability", AffectsInventory = false, IsDefault = true, IsActive = true },
+                new GroupMaster { Id = 26, GroupName = "Bonus Payable", UnderGroupId = 24, NatureOfGroup = "Liability", AffectsInventory = false, IsDefault = true, IsActive = true },
+
+                new GroupMaster { Id = 27, GroupName = "Bank Accounts", NatureOfGroup = "Asset", AffectsInventory = false, IsDefault = true, IsActive = true },
+                new GroupMaster { Id = 28, GroupName = "Cash-in-Hand", NatureOfGroup = "Asset", AffectsInventory = false, IsDefault = true, IsActive = true },
+                new GroupMaster { Id = 29, GroupName = "Cash Office", UnderGroupId = 28, NatureOfGroup = "Asset", AffectsInventory = false, IsDefault = true, IsActive = true },
+                new GroupMaster { Id = 30, GroupName = "Petty Cash", UnderGroupId = 28, NatureOfGroup = "Asset", AffectsInventory = false, IsDefault = true, IsActive = true },
+
+                new GroupMaster { Id = 31, GroupName = "Deposits (Assets)", NatureOfGroup = "Asset", AffectsInventory = false, IsDefault = true, IsActive = true },
+                new GroupMaster { Id = 32, GroupName = "Rent Deposit", UnderGroupId = 31, NatureOfGroup = "Asset", AffectsInventory = false, IsDefault = true, IsActive = true },
+                new GroupMaster { Id = 33, GroupName = "Security Deposit", UnderGroupId = 31, NatureOfGroup = "Asset", AffectsInventory = false, IsDefault = true, IsActive = true },
+
+                new GroupMaster { Id = 34, GroupName = "Current Assets", NatureOfGroup = "Asset", AffectsInventory = false, IsDefault = true, IsActive = true },
+                new GroupMaster { Id = 35, GroupName = "Sundry Debtors", UnderGroupId = 34, NatureOfGroup = "Asset", AffectsInventory = false, IsDefault = true, IsActive = true },
+                new GroupMaster { Id = 36, GroupName = "Advance to Suppliers", UnderGroupId = 34, NatureOfGroup = "Asset", AffectsInventory = false, IsDefault = true, IsActive = true },
+                new GroupMaster { Id = 37, GroupName = "Prepaid Expenses", UnderGroupId = 34, NatureOfGroup = "Asset", AffectsInventory = false, IsDefault = true, IsActive = true },
+                new GroupMaster { Id = 38, GroupName = "Input GST Credit", UnderGroupId = 34, NatureOfGroup = "Asset", AffectsInventory = false, IsDefault = true, IsActive = true },
+                new GroupMaster { Id = 39, GroupName = "TDS Receivable", UnderGroupId = 34, NatureOfGroup = "Asset", AffectsInventory = false, IsDefault = true, IsActive = true },
+
+                new GroupMaster { Id = 40, GroupName = "Stock-in-Hand", NatureOfGroup = "Asset", AffectsInventory = true, IsDefault = true, IsActive = true },
+                new GroupMaster { Id = 41, GroupName = "Yarn", UnderGroupId = 40, NatureOfGroup = "Asset", AffectsInventory = true, IsDefault = true, IsActive = true },
+                new GroupMaster { Id = 42, GroupName = "Cotton Bale", UnderGroupId = 40, NatureOfGroup = "Asset", AffectsInventory = true, IsDefault = true, IsActive = true },
+                new GroupMaster { Id = 43, GroupName = "Wastage", UnderGroupId = 40, NatureOfGroup = "Asset", AffectsInventory = true, IsDefault = true, IsActive = true },
+
+            // (Existing entries from 1 to 43 already added)
+
+            // 🛒 Purchase Accounts
+            new GroupMaster { Id = 44, GroupName = "Purchase Accounts", NatureOfGroup = "Expense", AffectsInventory = false, IsDefault = true, IsActive = true },
+            new GroupMaster { Id = 45, GroupName = "Yarn Purchase A/C", UnderGroupId = 44, NatureOfGroup = "Expense", AffectsInventory = false, IsDefault = true, IsActive = true },
+            new GroupMaster { Id = 46, GroupName = "Bale Purchase A/C", UnderGroupId = 44, NatureOfGroup = "Expense", AffectsInventory = false, IsDefault = true, IsActive = true },
+            new GroupMaster { Id = 47, GroupName = "Packing Material Purchase", UnderGroupId = 44, NatureOfGroup = "Expense", AffectsInventory = false, IsDefault = true, IsActive = true },
+
+            // 💸 Sales Accounts
+            new GroupMaster { Id = 48, GroupName = "Sales Accounts", NatureOfGroup = "Income", AffectsInventory = false, IsDefault = true, IsActive = true },
+            new GroupMaster { Id = 49, GroupName = "Yarn Sales", UnderGroupId = 48, NatureOfGroup = "Income", AffectsInventory = false, IsDefault = true, IsActive = true },
+            new GroupMaster { Id = 50, GroupName = "Bale Sales", UnderGroupId = 48, NatureOfGroup = "Income", AffectsInventory = false, IsDefault = true, IsActive = true },
+            new GroupMaster { Id = 51, GroupName = "Waste Sales", UnderGroupId = 48, NatureOfGroup = "Income", AffectsInventory = false, IsDefault = true, IsActive = true },
+
+            // 💼 Direct Expenses
+            new GroupMaster { Id = 52, GroupName = "Direct Expenses", NatureOfGroup = "Expense", AffectsInventory = false, IsDefault = true, IsActive = true },
+            new GroupMaster { Id = 53, GroupName = "Freight Inward", UnderGroupId = 52, NatureOfGroup = "Expense", AffectsInventory = false, IsDefault = true, IsActive = true },
+            new GroupMaster { Id = 54, GroupName = "Loading Charges", UnderGroupId = 52, NatureOfGroup = "Expense", AffectsInventory = false, IsDefault = true, IsActive = true },
+            new GroupMaster { Id = 55, GroupName = "Commission Paid", UnderGroupId = 52, NatureOfGroup = "Expense", AffectsInventory = false, IsDefault = true, IsActive = true },
+            new GroupMaster { Id = 56, GroupName = "Transport Charges", UnderGroupId = 52, NatureOfGroup = "Expense", AffectsInventory = false, IsDefault = true, IsActive = true },
+
+            // 🏢 Indirect Expenses
+            new GroupMaster { Id = 57, GroupName = "Indirect Expenses", NatureOfGroup = "Expense", AffectsInventory = false, IsDefault = true, IsActive = true },
+            new GroupMaster { Id = 58, GroupName = "Rent", UnderGroupId = 57, NatureOfGroup = "Expense", AffectsInventory = false, IsDefault = true, IsActive = true },
+            new GroupMaster { Id = 59, GroupName = "Salary", UnderGroupId = 57, NatureOfGroup = "Expense", AffectsInventory = false, IsDefault = true, IsActive = true },
+            new GroupMaster { Id = 60, GroupName = "Office Expenses", UnderGroupId = 57, NatureOfGroup = "Expense", AffectsInventory = false, IsDefault = true, IsActive = true },
+            new GroupMaster { Id = 61, GroupName = "Misc. Expenses", UnderGroupId = 57, NatureOfGroup = "Expense", AffectsInventory = false, IsDefault = true, IsActive = true },
+
+            // 📥 Indirect Incomes
+            new GroupMaster { Id = 62, GroupName = "Indirect Incomes", NatureOfGroup = "Income", AffectsInventory = false, IsDefault = true, IsActive = true },
+            new GroupMaster { Id = 63, GroupName = "Discount Received", UnderGroupId = 62, NatureOfGroup = "Income", AffectsInventory = false, IsDefault = true, IsActive = true },
+            new GroupMaster { Id = 64, GroupName = "Interest Received", UnderGroupId = 62, NatureOfGroup = "Income", AffectsInventory = false, IsDefault = true, IsActive = true },
+
+            // 🌀 Suspense
+            new GroupMaster { Id = 65, GroupName = "Suspense Account", NatureOfGroup = "Asset", AffectsInventory = false, IsDefault = true, IsActive = true },
+
+            // 🏭 Branch / Division
+            new GroupMaster { Id = 66, GroupName = "Branch / Division", NatureOfGroup = "Capital", AffectsInventory = false, IsDefault = true, IsActive = true },
+            new GroupMaster { Id = 67, GroupName = "Unit 1", UnderGroupId = 66, NatureOfGroup = "Capital", AffectsInventory = false, IsDefault = true, IsActive = true },
+            new GroupMaster { Id = 68, GroupName = "Unit 2", UnderGroupId = 66, NatureOfGroup = "Capital", AffectsInventory = false, IsDefault = true, IsActive = true }
+
+            );
+
+
 
 
             modelBuilder.Entity<Shift>().HasData(
@@ -141,5 +239,9 @@ namespace TexAuto.Data
             entity.HasIndex(p => p.ProductionDate);
             entity.HasIndex(p => p.DepartmentId);
         }
+
+
+        public DbSet<Project.Models.Domain.Masters.LedgerMaster> LedgerMaster { get; set; } = default!;
+        public DbSet<Project.Models.Domain.Masters.GroupMaster> GroupMaster { get; set; } = default!;
     }
 }
