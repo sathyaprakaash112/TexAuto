@@ -4,6 +4,9 @@ using Project.Models.Domain.Creation;
 using TexAuto.Models.Domain.Creation;
 using TexAuto.Models.Domain.Entries;
 using Project.Models.Domain.Masters;
+using Project.Models.Domain.Accounting;
+using Project.Models.Domain.Vouchers;
+
 
 namespace TexAuto.Data
 {
@@ -243,5 +246,12 @@ namespace TexAuto.Data
 
         public DbSet<Project.Models.Domain.Masters.LedgerMaster> LedgerMaster { get; set; } = default!;
         public DbSet<Project.Models.Domain.Masters.GroupMaster> GroupMaster { get; set; } = default!;
+
+        public DbSet<StockVoucher> StockVouchers { get; set; }
+        public DbSet<StockVoucherLineItem> StockVoucherLineItems { get; set; }
+
+        public DbSet<AccountingVoucherHeader> AccountingVoucherHeaders { get; set; }
+        public DbSet<AccountingVoucherEntry> AccountingVoucherEntries { get; set; }
+
     }
 }

@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Project.Models.Domain.Creation;
+using Project.Services;
 using System.Linq;
 using TexAuto.Data;
 using X.PagedList;
@@ -11,10 +12,12 @@ namespace Project.Controllers
     public class BalePurchasesController : Controller
     {
         private readonly TexAutoContext _context;
+        private readonly AccountingVoucherHeaderService _voucherHeaderService;
 
-        public BalePurchasesController(TexAutoContext context)
+        public BalePurchasesController(TexAutoContext context,AccountingVoucherHeaderService accountingVoucherHeaderService)
         {
             _context = context;
+            _voucherHeaderService = accountingVoucherHeaderService;
         }
 
         public IActionResult Index(int? page)
@@ -59,22 +62,35 @@ namespace Project.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create(BalePurchase purchase)
+        public async Task<IActionResult> Create(BalePurchase purchase)
         {
             if (ModelState.IsValid)
             {
-                // Auto increment InwardNo safely
-                int maxInward = _context.BalePurchases.Max(x => (int?)x.InwardNo) ?? 0;
-                purchase.InwardNo = maxInward + 1;
-                purchase.LotNo = maxInward + 1;
+                // Get financial year base from purchase date
+                var inwardDate = purchase.InwardDate;
+                int year = inwardDate.Month >= 4 ? inwardDate.Year : inwardDate.Year - 1;
+
+                // Filter existing inward records for the same FY
+                var fyInwards = _context.BalePurchases
+                    .Where(p => (p.InwardDate.Month >= 4 ? p.InwardDate.Year : p.InwardDate.Year - 1) == year);
+
+                int nextInwardNo = (fyInwards.Max(x => (int?)x.InwardNo) ?? 0) + 1;
+
+                // Set inward and lot numbers
+                purchase.InwardNo = nextInwardNo;
+                purchase.LotNo = nextInwardNo;
 
                 _context.BalePurchases.Add(purchase);
-                _context.SaveChanges();
+                await _context.SaveChangesAsync();
+
+                await _voucherHeaderService.CreateVoucherFromBalePurchaseAsync(purchase);
+
                 return RedirectToAction(nameof(Index));
             }
 
             return View(purchase);
         }
+
 
         public IActionResult Edit(int id)
         {
@@ -154,7 +170,20 @@ namespace Project.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        [HttpGet]
+        public IActionResult GetNextInwardNo(DateTime inwardDate)
+        {
+            int year = inwardDate.Month >= 4 ? inwardDate.Year : inwardDate.Year - 1;
 
-        
+            var fyInwards = _context.BalePurchases
+                .Where(p => (p.InwardDate.Month >= 4 ? p.InwardDate.Year : p.InwardDate.Year - 1) == year);
+
+            int nextInwardNo = (fyInwards.Max(x => (int?)x.InwardNo) ?? 0) + 1;
+
+            return Json(new { inwardNo = nextInwardNo });
+        }
+
+
+
     }
 }

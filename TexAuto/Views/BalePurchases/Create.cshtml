@@ -12,13 +12,13 @@
 
     <!-- 🌐 General Purchase Info -->
     <div class="row mb-3">
-        <div class="col-md-3">
+        <div class="col-md-4">
+            <label asp-for="InwardDate" class="form-label">Inward Date</label>
+            <input asp-for="InwardDate" class="form-control" id="inwardDate" type="date" value="@DateTime.Now.ToString("yyyy-MM-dd")" />
+        </div>
+        <div class="col-md-4">
             <label asp-for="InwardNo" class="form-label">Inward No</label>
             <input asp-for="InwardNo" class="form-control" readonly />
-        </div>
-        <div class="col-md-3">
-            <label asp-for="InwardDate" class="form-label">Inward Date</label>
-            <input asp-for="InwardDate" class="form-control" type="date" value="@DateTime.Now.ToString("yyyy-MM-dd")" />
         </div>
         <div class="col-md-3">
             <label asp-for="PurchaseType" class="form-label">Purchase Type</label>
@@ -217,6 +217,20 @@
 
 @section Scripts {
     <script>
+
+        $(document).ready(function () {
+            $('#inwardDate').on('change', function () {
+                const date = $(this).val();
+                if (!date) return;
+
+                $.get('/BalePurchases/GetNextInwardNo', { inwardDate: date }, function (data) {
+                    if (data && data.inwardNo) {
+                        $('#InwardNo').val(data.inwardNo);
+                    }
+                });
+            });
+        });
+
         function addRow() {
             const index = document.querySelectorAll('#baleDetailsBody tr').length;
             const row = `<tr>
