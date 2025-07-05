@@ -23,7 +23,7 @@ namespace Project.Services
                 VoucherDate = purchase.InwardDate,
                 ReferenceNo = purchase.BillNo,
                 Narration = $"Being cotton bale purchased from {purchase.Supplier} including freight and commission",
-                PartyLedger = purchase.Supplier,
+                PartyLedger = purchase.Supplier?.Name,
                 LinkedModule = "BALE_PURCHASE",
                 LinkedRecordId = purchase.InwardNo.ToString(),
                 Status = "POSTED",
@@ -73,7 +73,7 @@ namespace Project.Services
 
             // Credit Entries
             AddCr("TDS Payable A/C", purchase.TdsAmount, "TDS deduction", isTax: true);
-            AddCr(purchase.Supplier, purchase.PayableAmount, "Total payable to party");
+            AddCr(purchase.Supplier?.Name, purchase.PayableAmount, "Total payable to party");
 
 
             // Totals

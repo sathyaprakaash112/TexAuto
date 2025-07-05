@@ -41,6 +41,25 @@ namespace TexAuto.Controllers
 
         public async Task<IActionResult> Create()
         {
+            var prodDate = DateTime.Today;
+            var fyStart = new DateTime(prodDate.Month >= 4 ? prodDate.Year : prodDate.Year - 1, 4, 1);
+            var fyEnd = fyStart.AddYears(1).AddDays(-1);
+
+            var nextNumber = _context.Productions
+    .AsEnumerable() // ⬅️ Forces EF to load data and filter in memory
+    .Where(p =>
+        p.ProductionDate.ToDateTime(TimeOnly.MinValue) >= fyStart &&
+        p.ProductionDate.ToDateTime(TimeOnly.MinValue) <= fyEnd)
+    .Select(p => (int?)p.ProductionNumber)
+    .Max() ?? 0;
+
+
+            var production = new Production
+            {
+                ProductionDate = DateOnly.FromDateTime(prodDate),
+                ProductionNumber = nextNumber + 1
+            };
+
             var lastProduction = await _context.Productions
                 .OrderByDescending(p => p.ProductionDate)
                 .ThenByDescending(p => p.Id)
@@ -160,6 +179,26 @@ namespace TexAuto.Controllers
 
             if (ModelState.IsValid)
             {
+                var prodDate = production.ProductionDate.ToDateTime(TimeOnly.MinValue);
+
+        // Determine financial year
+        var fyStart = new DateTime(prodDate.Year, 4, 1);
+        if (prodDate.Month < 4)
+            fyStart = fyStart.AddYears(-1);
+        var fyEnd = fyStart.AddYears(1).AddDays(-1);
+
+                // Get max ProductionNumber in current FY
+                var nextNumber = _context.Productions
+            .AsEnumerable() // ⬅️ Forces EF to load data and filter in memory
+            .Where(p =>
+                p.ProductionDate.ToDateTime(TimeOnly.MinValue) >= fyStart &&
+                p.ProductionDate.ToDateTime(TimeOnly.MinValue) <= fyEnd)
+            .Select(p => (int?)p.ProductionNumber)
+            .Max() ?? 0;
+
+
+                production.ProductionNumber = nextNumber + 1;
+
                 _context.Add(production);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));

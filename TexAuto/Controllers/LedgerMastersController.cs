@@ -74,7 +74,7 @@ namespace TexAuto.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,LedgerName,GroupMasterId,LedgerType,IsActive,MobileNumber,Email,Address,State,PinCode,GstNumber,PanNumber,IsTdsApplicable,OpeningBalance,BalanceType,AccountCode,BankName,BankAccountNumber,IfscCode,Remarks")] LedgerMaster ledgerMaster)
+        public async Task<IActionResult> Create([Bind("Id,Name,GroupMasterId,LedgerType,IsActive,MobileNumber,Email,Address,State,PinCode,GstNumber,PanNumber,IsTdsApplicable,OpeningBalance,BalanceType,AccountCode,BankName,BankAccountNumber,IfscCode,Remarks")] LedgerMaster ledgerMaster)
         {
             if (ModelState.IsValid)
             {
@@ -125,7 +125,7 @@ namespace TexAuto.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,LedgerName,GroupMasterId,LedgerType,IsActive,MobileNumber,Email,Address,State,PinCode,GstNumber,PanNumber,IsTdsApplicable,OpeningBalance,BalanceType,AccountCode,BankName,BankAccountNumber,IfscCode,Remarks")] LedgerMaster ledgerMaster)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,GroupMasterId,LedgerType,IsActive,MobileNumber,Email,Address,State,PinCode,GstNumber,PanNumber,IsTdsApplicable,OpeningBalance,BalanceType,AccountCode,BankName,BankAccountNumber,IfscCode,Remarks")] LedgerMaster ledgerMaster)
         {
             if (id != ledgerMaster.Id)
             {

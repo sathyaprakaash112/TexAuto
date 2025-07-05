@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Project.Models.Domain.Creation;
 using Project.Services;
@@ -14,7 +15,7 @@ namespace Project.Controllers
         private readonly TexAutoContext _context;
         private readonly AccountingVoucherHeaderService _voucherHeaderService;
 
-        public BalePurchasesController(TexAutoContext context,AccountingVoucherHeaderService accountingVoucherHeaderService)
+        public BalePurchasesController(TexAutoContext context, AccountingVoucherHeaderService accountingVoucherHeaderService)
         {
             _context = context;
             _voucherHeaderService = accountingVoucherHeaderService;
@@ -28,7 +29,7 @@ namespace Project.Controllers
             var balePurchases = _context.BalePurchases
                 .AsNoTracking()
                 .OrderByDescending(b => b.InwardDate)
-                .ToPagedList(pageNumber, pageSize); // Sync pagination
+                .ToPagedList(pageNumber, pageSize);
 
             return View(balePurchases);
         }
@@ -44,21 +45,21 @@ namespace Project.Controllers
 
         public IActionResult Create()
         {
-            // Get max Inward No from DB
             int maxInward = _context.BalePurchases.Max(x => (int?)x.InwardNo) ?? 0;
 
-            // Create a default instance with pre-filled values
             var newPurchase = new BalePurchase
             {
                 InwardNo = maxInward + 1,
-                LotNo = (maxInward + 1), // If LotNo is text
+                LotNo = (maxInward + 1),
                 InwardDate = DateTime.Today,
                 BillDate = DateTime.Today
             };
 
+            ViewBag.LedgerList = new SelectList(_context.LedgerMaster.Where(x => x.IsActive), "Id", "Name");
+            ViewBag.ProductList = new SelectList(_context.Products.Where(x => x.ProductType.Name.Equals("Fibre")), "Name", "Name");
+
             return View(newPurchase);
         }
-
 
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -66,6 +67,10 @@ namespace Project.Controllers
         {
             if (ModelState.IsValid)
             {
+
+                ViewBag.LedgerList = new SelectList(_context.LedgerMaster, "Id", "Name");
+                ViewBag.ProductList = new SelectList(_context.Products.Where(x=>x.ProductType.Name.Equals("Fibre")), "Name", "Name");
+
                 // Get financial year base from purchase date
                 var inwardDate = purchase.InwardDate;
                 int year = inwardDate.Month >= 4 ? inwardDate.Year : inwardDate.Year - 1;
@@ -88,8 +93,12 @@ namespace Project.Controllers
                 return RedirectToAction(nameof(Index));
             }
 
+            // 🔁 Repopulate dropdowns on validation failure
+            ViewBag.LedgerList = new SelectList(_context.LedgerMaster.Where(x => x.IsActive), "Id", "Name");
+
             return View(purchase);
         }
+
 
 
         public IActionResult Edit(int id)
@@ -101,6 +110,8 @@ namespace Project.Controllers
             if (purchase == null)
                 return NotFound();
 
+            ViewBag.LedgerList = new SelectList(_context.LedgerMaster.Where(x => x.IsActive), "Id", "Name");
+
             return View(purchase);
         }
 
@@ -108,38 +119,38 @@ namespace Project.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Edit(int id, BalePurchase purchase)
         {
-            if (id != purchase.Id) return NotFound();
+            if (id != purchase.Id)
+                return NotFound();
 
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-                var existing = _context.BalePurchases
-                    .Include(p => p.BaleDetails)
-                    .FirstOrDefault(p => p.Id == id);
-
-                if (existing == null) return NotFound();
-
-                // Update scalar fields
-                _context.Entry(existing).CurrentValues.SetValues(purchase);
-
-                // Remove existing children
-                _context.BaleDetails.RemoveRange(existing.BaleDetails);
-
-                // Ensure FK is set for new children
-                foreach (var detail in purchase.BaleDetails)
-                {
-                    detail.BalePurchaseId = purchase.Id; // ✅ THIS LINE IS CRUCIAL
-                }
-
-                // Add new children
-                _context.BaleDetails.AddRange(purchase.BaleDetails);
-
-                _context.SaveChanges();
-                return RedirectToAction(nameof(Index));
+                ViewBag.LedgerList = new SelectList(_context.LedgerMaster.Where(x => x.IsActive), "Id", "Name");
+                return View(purchase);
             }
 
-            return View(purchase);
-        }
+            var existing = _context.BalePurchases
+                .Include(p => p.BaleDetails)
+                .FirstOrDefault(p => p.Id == id);
 
+            if (existing == null)
+                return NotFound();
+
+            _context.Entry(existing).CurrentValues.SetValues(purchase);
+            _context.BaleDetails.RemoveRange(existing.BaleDetails);
+
+            if (purchase.BaleDetails != null)
+            {
+                foreach (var detail in purchase.BaleDetails)
+                {
+                    detail.BalePurchaseId = purchase.Id;
+                }
+
+                _context.BaleDetails.AddRange(purchase.BaleDetails);
+            }
+
+            _context.SaveChanges();
+            return RedirectToAction(nameof(Index));
+        }
 
         public IActionResult Delete(int id)
         {
@@ -152,6 +163,7 @@ namespace Project.Controllers
 
             return View(purchase);
         }
+
         [HttpPost, ActionName("DeleteConfirmed")]
         [ValidateAntiForgeryToken]
         public IActionResult DeleteConfirmed(int id)
@@ -182,8 +194,5 @@ namespace Project.Controllers
 
             return Json(new { inwardNo = nextInwardNo });
         }
-
-
-
     }
 }

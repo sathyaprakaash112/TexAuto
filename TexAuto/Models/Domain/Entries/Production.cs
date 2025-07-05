@@ -107,6 +107,10 @@ namespace TexAuto.Models.Domain.Entries
         [Display(Name = "Production Drop")]
         public decimal ProductionDrop { get; set; } = 0.00m;
 
+        [Display(Name = "Production Number")]
+        public int ProductionNumber { get; set; }
+
+
         [BindNever]
         public ICollection<WasteType>? Wastes { get; set; } = new List<WasteType>();
     }

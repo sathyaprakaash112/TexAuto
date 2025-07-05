@@ -11,7 +11,7 @@ namespace Project.Models.Domain.Masters
 
         // SECTION 1: Basic Details
         [Required]
-        public string LedgerName { get; set; } = null!;
+        public string Name { get; set; } = null!;
 
         [Required]
         public int GroupMasterId { get; set; }
@@ -19,9 +19,6 @@ namespace Project.Models.Domain.Masters
         [BindNever]
         [ForeignKey("GroupMasterId")]
         public GroupMaster? GroupMaster { get; set; } = null!;
-
-
-
 
         [Required]
         public string LedgerType { get; set; } = null!; // Supplier / Customer / Agent / Transport / General

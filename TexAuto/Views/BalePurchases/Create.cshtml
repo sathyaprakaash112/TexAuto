@@ -29,9 +29,11 @@
                 <option value="OTHERS">OTHERS</option>
             </select>
         </div>
-        <div class="col-md-3">
-            <label asp-for="Supplier" class="form-label">Supplier</label>
-            <input asp-for="Supplier" class="form-control" />
+        <div class="col-md-4">
+            <label asp-for="SupplierId" class="form-label">Supplier</label>
+            <select asp-for="SupplierId" class="form-select" asp-items="ViewBag.LedgerList">
+                <option value="">-- Select Supplier --</option>
+            </select>
         </div>
     </div>
 
@@ -50,13 +52,11 @@
         </div>
         <div class="col-md-3">
             <label asp-for="BaleType" class="form-label">Fibre Type</label>
-            <select asp-for="BaleType" class="form-select">
-                <option value="">-- Select --</option>
-                <option value="Cotton">Cotton</option>
-                <option value="Viscose">Viscose</option>
-                <option value="Lyocel">Lyocel</option>
+            <select asp-for="BaleType" class="form-select" asp-items="ViewBag.ProductList">
+                <option value="">-- Select Fibre Type --</option>
             </select>
         </div>
+
     </div>
 
     <hr class="my-4" />
@@ -90,12 +90,12 @@
     <h5>Charges & Logistics</h5>
     <div class="row mb-3">
         <div class="col-md-3">
-            <label asp-for="PurchaseAccount" class="form-label">Purchase A/C</label>
-            <input asp-for="PurchaseAccount" class="form-control" />
+            <label asp-for="PurchaseAccountId" class="form-label">Purchase A/C</label>
+            <select asp-for="PurchaseAccountId" class="form-select" asp-items="ViewBag.LedgerList"></select>
         </div>
-        <div class="col-md-3" id="agentField" style="display:none;">
-            <label asp-for="Agent" class="form-label">Agent</label>
-            <input asp-for="Agent" class="form-control" />
+        <div class="col-md-3">
+            <label asp-for="AgentId" class="form-label">Agent</label>
+            <select asp-for="AgentId" class="form-select" asp-items="ViewBag.LedgerList"></select>
         </div>
         <div class="col-md-3">
             <label asp-for="CommissionPerBale" class="form-label">Commission/Bale</label>
@@ -108,9 +108,13 @@
     </div>
 
     <div class="row mb-3">
-        <div class="col-md-3">
-            <label asp-for="TransportVendor" class="form-label">Transport Vendor</label>
-            <input asp-for="TransportVendor" class="form-control" />
+        <div class="col-md-4">
+            <label asp-for="UnloadingManId" class="form-label">Loading Man</label>
+            <select asp-for="UnloadingManId" class="form-select" asp-items="ViewBag.LedgerList"></select>
+        </div>
+        <div class="col-md-4">
+            <label asp-for="TransportVendorId" class="form-label">Transport Vendor</label>
+            <select asp-for="TransportVendorId" class="form-select" asp-items="ViewBag.LedgerList"></select>
         </div>
         <div class="col-md-3">
             <label asp-for="FreightCharges" class="form-label">Freight Charges</label>

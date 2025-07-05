@@ -30,6 +30,12 @@
             <input type="hidden" asp-for="ShiftId" />
             <input type="hidden" asp-for="ShiftDetails" id="ShiftDetails" />
 
+            <div class="mb-3">
+                <label asp-for="ProductionNumber" class="form-label">Production Number</label>
+                <input asp-for="ProductionNumber" class="form-control" disabled tabindex="-1" />
+            </div>
+
+
             <!-- Production Date & Shift -->
             <div class="row mb-4">
                 <div class="col-md-6">
