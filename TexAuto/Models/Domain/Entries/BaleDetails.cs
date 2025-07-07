@@ -21,5 +21,7 @@ namespace Project.Models.Domain.Creation
         public decimal Amount => NetWeightKg * RatePerKg;
 
         public decimal MoisturePercent { get; set; } = 0;
+
+        public int LotNumber { get; set; } = 0;
     }
 }

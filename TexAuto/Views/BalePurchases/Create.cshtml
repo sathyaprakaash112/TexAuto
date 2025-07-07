@@ -52,7 +52,7 @@
         </div>
         <div class="col-md-3">
             <label asp-for="BaleType" class="form-label">Fibre Type</label>
-            <select asp-for="BaleType" class="form-select" asp-items="ViewBag.ProductList">
+            <select asp-for="BaleTypeId" class="form-select" asp-items="ViewBag.ProductList">
                 <option value="">-- Select Fibre Type --</option>
             </select>
         </div>
@@ -93,17 +93,21 @@
             <label asp-for="PurchaseAccountId" class="form-label">Purchase A/C</label>
             <select asp-for="PurchaseAccountId" class="form-select" asp-items="ViewBag.LedgerList"></select>
         </div>
-        <div class="col-md-3">
-            <label asp-for="AgentId" class="form-label">Agent</label>
-            <select asp-for="AgentId" class="form-select" asp-items="ViewBag.LedgerList"></select>
-        </div>
-        <div class="col-md-3">
-            <label asp-for="CommissionPerBale" class="form-label">Commission/Bale</label>
-            <input asp-for="CommissionPerBale" class="form-control" type="number" step="0.01" oninput="calculateAll()" id="commissionPerBale" />
-        </div>
-        <div class="col-md-3">
-            <label asp-for="CommissionAmount" class="form-label">Commission Amount</label>
-            <input asp-for="CommissionAmount" class="form-control" type="number" step="0.01" readonly id="commissionAmount" />
+        <div class="col-md-12" id="commissionFields" style="display:none;">
+            <div class="row">
+                <div class="col-md-4">
+                    <label asp-for="AgentId" class="form-label">Agent</label>
+                    <select asp-for="AgentId" class="form-select" asp-items="ViewBag.LedgerList"></select>
+                </div>
+                <div class="col-md-4">
+                    <label asp-for="CommissionPerBale" class="form-label">Commission/Bale</label>
+                    <input asp-for="CommissionPerBale" class="form-control" type="number" step="0.01" oninput="calculateAll()" id="commissionPerBale" />
+                </div>
+                <div class="col-md-4">
+                    <label asp-for="CommissionAmount" class="form-label">Commission Amount</label>
+                    <input asp-for="CommissionAmount" class="form-control" type="number" step="0.01" readonly id="commissionAmount" />
+                </div>
+            </div>
         </div>
     </div>
 
@@ -305,15 +309,22 @@
             document.getElementById("netWeightResult").value = (gross - tare).toFixed(2);
         }
 
-        document.querySelector('[name="PurchaseType"]').addEventListener('change', function () {
+            document.querySelector('[name="PurchaseType"]').addEventListener('change', function () {
             const selected = this.value;
-            const agentDiv = document.getElementById("agentField");
-            if (selected === "AGENT") {
-                agentDiv.style.display = "block";
-            } else {
-                agentDiv.style.display = "none";
+
+            // Toggle Agent field if you have a dedicated Agent field to show/hide (optional)
+            const agentField = document.getElementById("agentField");
+            if (agentField) {
+                agentField.style.display = selected === "AGENT" ? "block" : "none";
+            }
+
+            // Show/hide Commission fields
+            const commissionFields = document.getElementById("commissionFields");
+            if (commissionFields) {
+                commissionFields.style.display = selected === "AGENT" ? "block" : "none";
             }
         });
+
 
         // Initialize on page load in case of validation postback
         window.addEventListener('DOMContentLoaded', function () {
